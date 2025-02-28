@@ -1,0 +1,191 @@
+body {
+    background-color: #f0f0f0;
+    font-family: unify sans,Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    background-color: #b02d0c;
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+}
+
+h2{
+    padding:0 10px;
+}
+
+.ind {
+    margin: auto;
+    text-align: center;
+    align-items: center;
+}
+
+.index {
+    margin: 50px 75px;
+    display: grid;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    align-items: center;
+    background-color: white;
+    border: 3px solid gray;
+    border-radius: 25px;
+    padding: 30px 40px;
+}
+
+.new_game {
+    font-size: 20px;
+    font-weight: 600;
+    margin: auto;
+    background-color: #b02d0c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 15px;
+}
+
+.rules {
+    text-align: left;
+}
+
+.page {
+    height: auto;
+    display: grid;
+    align-items: center;
+    margin: auto;
+}
+
+.game{
+    display: flex;
+    position:relative;
+    z-index:1;
+}
+
+.player{
+    padding: 10px 0;
+}
+
+.p1-section {
+    height: 100%;
+    width: 50%;
+    padding: 0 50px;
+    position: relative;
+    z-index: 1;
+}
+
+.split {
+    background-color: #b2b2b2;
+    width: 3px;
+    margin: 7px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.p2-section {
+    height: 100%;
+    width: 50%;
+    padding: 0 50px;
+    position: relative;
+    z-index: 1;
+}
+
+.game_over{
+    position: relative;
+    z-index:2;
+    border: 1px solid gray;
+    height:500px;
+    width:700px;
+    border-radius: 10px;
+    background: white;
+    margin:auto;
+    display:none;
+    top: -600px;
+}
+
+.go_container{
+    margin: auto;
+}
+
+.w_l{
+    font-size: 32px;
+    text-align:center;
+}
+
+.image{
+    width:180px;
+    height:180px;
+    margin: auto;
+}
+
+.table {
+    height: 700px;
+    width: 700px;
+    background-image: url(image/painting-background.png);
+    background-size: 700px;
+    background-position: center;
+    padding: 78px 76px;
+    position: relative;
+    z-index: 1;
+    margin: auto;
+}
+
+.row {
+    height: 180px;
+    width: 540px;
+}
+
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8, .tile9 {
+    display: table-cell;
+    width: 180px;
+    height: 180px;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.tile1, .tile10 { 
+    background-position: left top;
+}
+
+.tile2, .tile11{
+    background-position: center top;
+}
+
+.tile3, .tile12{
+    background-position: right top;
+}
+
+.tile4, .tile13 {
+    background-position: left center;
+}
+
+.tile5, .tile14 {
+    background-position: center center;
+}
+
+.tile6, .tile15 {
+    background-position: right center;
+}
+
+.tile7, .tile16 {
+    background-position: left bottom;
+}
+
+.tile8, .tile17 {
+    background-position: center bottom;
+}
+
+.tile9, .title18 {
+    background: white;
+}
+
+.tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17, .tile18 {
+    display: table-cell;
+    width: 180px;
+    height: 180px;
+    border: 1px solid white;
+    cursor: pointer;
+}

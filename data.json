@@ -1,0 +1,29 @@
+{
+  "puzzleImages": [
+    {
+      "name": "Mona Lisa",
+      "path": "image/puzzle1.png",
+      "description": "Un celebre dipinto di Leonardo da Vinci, noto per il suo enigmatico sorriso."
+    },
+    {
+      "name": "Notte Stellata",
+      "path": "image/puzzle2.png",
+      "description": "Un'opera iconica di Vincent van Gogh, caratterizzata da pennellate turbolente e colori vivaci."
+    },
+    {
+      "name": "La Nascita di Venere",
+      "path": "image/puzzle3.png",
+      "description": "Un capolavoro di Sandro Botticelli che raffigura la dea Venere emergere dal mare."
+    },
+    {
+      "name": "Guernica",
+      "path": "image/puzzle4.png",
+      "description": "Un'opera di Pablo Picasso che rappresenta gli orrori della guerra civile spagnola."
+    },
+    {
+      "name": "Il Bacio",
+      "path": "image/puzzle5.png",
+      "description": "Un'opera di Gustav Klimt che esprime amore e intimità attraverso il suo stile dorato."
+    }
+  ]
+}

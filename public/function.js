@@ -1,169 +1,511 @@
-function swapTiles(cell1, cell2) {
-    let temp = document.getElementById(cell1).className;
-    document.getElementById(cell1).className = document.getElementById(cell2).className;
-    document.getElementById(cell2).className = temp;
+let startTime;
+let timerInterval;
+
+function ensureUsername() {
+    let savedUsername = localStorage.getItem("username");
+    let player1 = localStorage.getItem("player1");
+    let player2 = localStorage.getItem("player2");
+
+    if (!savedUsername) {
+        console.error("❌ Nessun username trovato! Reindirizzamento alla homepage.");
+        window.location.href = "index.html"; // 🔄 Torna alla home se non c'è un username
+    } else {
+        console.log("🔒 Username già salvato:", savedUsername);
+
+        // Verifica se l'username è player1 o player2
+        let isPlayer1 = savedUsername === player1;
+        let isPlayer2 = savedUsername === player2;
+
+        localStorage.setItem("isPlayer1", isPlayer1); // ✅ Salva chi è il giocatore
+        localStorage.setItem("isPlayer2", isPlayer2);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("📢 Pagina caricata! Verifica elementi...");
+
+    ensureUsername(); // ✅ Verifica che l'username sia preservato
+
+    if (document.getElementById("player-name")) {
+        console.log("🔄 Caricamento dati puzzle...");
+        loadPuzzleData();
+        setTimeout(attachTileListeners, 300);
+    } else {
+        console.warn("⚠️ Elemento #player-name non trovato! Siamo nella pagina sbagliata?");
+    }
+});
+
+function loadPuzzleData() {
+    console.log("✅ Chiamata loadPuzzleData()...");
+
+    let playerName = localStorage.getItem("username"); // 🔥 Recuperiamo il nome esatto
+
+    if (!playerName) {
+        console.error("❌ Errore: Username non trovato!");
+        return;
+    }
+
+    let player1 = localStorage.getItem("player1") || "Player 1";
+    let player2 = localStorage.getItem("player2") || "Player 2";
+
+    let savedUsername = localStorage.getItem("username");
+    let isPlayer1 = (playerName === player1);
+    let isPlayer2 = (playerName === player2);
+    let img1 = localStorage.getItem("image1");
+    let img2 = localStorage.getItem("image2");
+
+    console.log("👤 Player1:", player1, "| Player2:", player2);
+    console.log("🎨 Immagini ricevute:", img1, img2);
+
+    if (!img1 || !img2) {
+        console.error("❌ Errore: Mancano le immagini nei dati salvati!");
+        return;
+    }
+
+    document.getElementById("player-name").textContent = savedUsername;
+    document.getElementById("opponent-name").textContent = isPlayer1 ? player2 : player1;
+
+    let playerImg = isPlayer1 ? localStorage.getItem("image1") : localStorage.getItem("image2");
+    let opponentImg = isPlayer1 ? localStorage.getItem("image2") : localStorage.getItem("image1");
+
+    setPuzzleImages(playerImg, opponentImg);
+    console.log("✅ Immagini assegnate correttamente!");
+    startGameTimer(); // 🔥 Inizia il timer
+
+    if (localStorage.getItem("gameState")) {
+        console.log("🟢 Stato della partita trovato! Ripristino...");
+        loadGameState();
+    } else {
+        console.log("🟡 Nessuno stato salvato, eseguo shuffle iniziale...");
+        setTimeout(shuffle, 500);
+    }
+
+    setTimeout(() => {
+        attachTileListeners();
+    }, 300);
+}
+
+function setPuzzleImages(playerImg, opponentImg) {
+    console.log(`🖼️ Impostando immagini: player=${playerImg}, opponent=${opponentImg}`);
+
+    let playerTiles = document.querySelectorAll(".table-player-board td");
+    let opponentTiles = document.querySelectorAll(".table-opponent-board td");
+
+    if (!playerImg || !opponentImg) {
+        console.error("❌ Errore: immagini non caricate correttamente!");
+        return;
+    }
+
+    playerTiles.forEach((tile, index) => {
+        let row = Math.floor(index / 3);
+        let col = index % 3;
+
+        tile.style.backgroundImage = `url(${playerImg})`;
+        tile.style.backgroundSize = "540px 540px";
+        tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
+        tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
+
+        if (index === playerTiles.length - 1) {
+            tile.classList.add("tile9");  // Imposta l'ultimo tile come vuoto
+        }
+    });
+
+    opponentTiles.forEach((tile, index) => {
+        let row = Math.floor(index / 3);
+        let col = index % 3;
+
+        tile.style.backgroundImage = `url(${opponentImg})`;
+        tile.style.backgroundSize = "540px 540px";
+        tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
+        tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
+
+        if (index === opponentTiles.length - 1) {
+            tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto
+        }
+    });
+
+    console.log("✅ Immagini e dataset assegnati correttamente!");
+}
+
+function attachTileListeners() {
+    console.log("🔵 Collegando gli eventi di click ai tile...");
+
+    let playerName = localStorage.getItem("username");
+    let player1 = localStorage.getItem("player1");
+    let player2 = localStorage.getItem("player2");
+
+    if (!playerName || !player1 || !player2) {
+        console.error("❌ Errore: Dati dei giocatori mancanti!");
+        return;
+    }
+
+    let isPlayer1 = (playerName === player1);
+    let isPlayer2 = (playerName === player2);
+
+    console.log(`👤 Giocatore attuale: ${playerName} (Player1=${isPlayer1}, Player2=${isPlayer2})`);
+
+    let playerTiles = document.querySelectorAll(isPlayer1 ? ".table-player-board td" : ".table-opponent-board td");
+    console.log("📌 Numero di tiles trovati:", playerTiles.length);
+
+    document.querySelectorAll("td").forEach(tile => {
+        tile.addEventListener("click", function () {
+            let id = tile.id.replace("cell", "");
+            let row = parseInt(id.charAt(0));
+            let col = parseInt(id.charAt(1));
+
+            console.log(`🟢 Click su tile (${row}, ${col})`);
+            moveTile(row, col);
+        });
+    });
+
+    console.log("✅ Eventi di click collegati!");
 }
 
 function shuffle() {
-    //Use nested loops to access each cell of the 3x3 grid
-    for (let row = 1; row <= 3; row++) { //For each row of the 3x3 grid
-        for (let column = 1; column <= 3; column++) { //For each column in this row
+    let player1Tiles = [
+        "cell11", "cell12", "cell13",
+        "cell21", "cell22", "cell23",
+        "cell31", "cell32"
+    ]; // Evitiamo di mischiare "cell33" (tile bianco)
 
-            let row2 = Math.floor(Math.random() * 3 + 1); //Pick a random row from 1 to 3
-            let column2 = Math.floor(Math.random() * 3 + 1); //Pick a random column from 1 to 3
+    let player2Tiles = [
+        "cell44", "cell45", "cell46",
+        "cell54", "cell55", "cell56",
+        "cell64", "cell65"
+    ]; // Evitiamo di mischiare "cell66" (tile bianco)
 
-            swapTiles("cell" + row + column, "cell" + row2 + column2); //Swap the look & feel of both cells
-        }
+    // **Mescola solo i tile del giocatore 1 tra di loro**
+    for (let i = player1Tiles.length - 1; i > 0; i--) {
+        let randIndex = Math.floor(Math.random() * (i + 1));
+        swapTiles(player1Tiles[i], player1Tiles[randIndex]);
     }
 
-    for (let row = 4; row <= 6; row++) { //For each row of the 3x3 grid
-        for (let column = 4; column <= 6; column++) { //For each column in this row
+    // **Mescola solo i tile del giocatore 2 tra di loro**
+    for (let i = player2Tiles.length - 1; i > 0; i--) {
+        let randIndex = Math.floor(Math.random() * (i + 1));
+        swapTiles(player2Tiles[i], player2Tiles[randIndex]);
+    }
 
-            let row2 = Math.floor(Math.random() * 3 + 4); //Pick a random row from 1 to 3
-            let column2 = Math.floor(Math.random() * 3 + 4); //Pick a random column from 1 to 3
+    console.log("✅ Shuffle completato!");
+}
 
-            swapTiles("cell" + row + column, "cell" + row2 + column2); //Swap the look & feel of both cells
-        }
+// Funzione per muovere le tessere
+function moveTile(row, column) {
+    let cell = document.getElementById(`cell${row}${column}`);
+    let blankTile = Array.from(document.querySelectorAll("td")).find(tile =>
+        tile.classList.contains("tile9") || tile.classList.contains("tile18")
+    );
+
+    console.log(`🔍 Tentativo di muovere il tile: ${cell ? cell.id : "❌ Nessuna cella trovata!"}`);
+    console.log(`🔍 Tessera vuota attuale: ${blankTile ? blankTile.id : "❌ Nessuna tessera bianca trovata!"}`);
+
+    if (!cell || !blankTile) {
+        console.error("❌ Errore: Una delle tessere è null. Impossibile spostare!");
+        return;
+    }
+
+    let cellRow = parseInt(cell.id.charAt(4));
+    let cellCol = parseInt(cell.id.charAt(5));
+    let blankRow = parseInt(blankTile.id.charAt(4));
+    let blankCol = parseInt(blankTile.id.charAt(5));
+
+    let isAdjacent =
+        (cellRow === blankRow && Math.abs(cellCol - blankCol) === 1) ||
+        (cellCol === blankCol && Math.abs(cellRow - blankRow) === 1);
+
+    if (isAdjacent) {
+        console.log(`✅ Movimento valido! Scambio ${cell.id} con ${blankTile.id}`);
+        swapTiles(cell, blankTile);
+        checkWin();
+    } else {
+        console.log("❌ Movimento non valido! Le tessere non sono adiacenti.");
     }
 }
 
-function clickTile(row, column) {
-    let cell = document.getElementById("cell" + row + column);
-    let tile = cell.className;
-    if (tile !== "tile9") {
-        //Checking if white tile on the right
-        if (column < 3) {
-            if (document.getElementById("cell" + row + (column + 1)).className === "tile9") {
-                swapTiles("cell" + row + column, "cell" + row + (column + 1));
-                return null;
-            }
-        }
-        //Checking if white tile on the left
-        if (column > 1) {
-            if (document.getElementById("cell" + row + (column - 1)).className === "tile9") {
-                swapTiles("cell" + row + column, "cell" + row + (column - 1));
-                return null;
-            }
-        }
-        //Checking if white tile is above
-        if (row > 1) {
-            if (document.getElementById("cell" + (row - 1) + column).className === "tile9") {
-                swapTiles("cell" + row + column, "cell" + (row - 1) + column);
-                return null;
-            }
-        }
-        //Checking if white tile is below
-        if (row < 3) {
-            if (document.getElementById("cell" + (row + 1) + column).className === "tile9") {
-                swapTiles("cell" + row + column, "cell" + (row + 1) + column);
-                return null;
-            }
-        }
+// Funzione per scambiare le tessere
+function swapTiles(tile1, tile2) {
+    if (!tile1 || !tile2) {
+        console.error("❌ Errore: Uno dei tiles non è valido!", tile1, tile2);
+        return;
     }
 
+    console.log(`🔄 Scambio: ${tile1.id} ↔ ${tile2.id}`);
+
+    // **Scambia classi**
+    let tempClass = tile1.className;
+    tile1.className = tile2.className;
+    tile2.className = tempClass;
+
+    // **Scambia le immagini**
+    let tempBackground = tile1.style.backgroundImage;
+    let tempPosition = tile1.style.backgroundPosition;
+    tile1.style.backgroundImage = tile2.style.backgroundImage;
+    tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+    tile2.style.backgroundImage = tempBackground;
+    tile2.style.backgroundPosition = tempPosition;
+
+    // **Scambia `dataset` per tenere traccia della posizione originale**
+    let tempTile = tile1.dataset.tile;
+    tile1.dataset.tile = tile2.dataset.tile;
+    tile2.dataset.tile = tempTile;
+
+    console.log("✅ Dopo lo scambio:");
+    console.log("📌 Tile 1 - Background:", tile1.style.backgroundImage, "Posizione:", tile1.style.backgroundPosition);
+    console.log("📌 Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
+
+    saveGameState();
 }
 
-function clickTile2(row, column) {
-    let cell = document.getElementById("cell" + row + column);
-    let tile = cell.className;
-    if (tile !== "tile18") {
-        //Checking if white tile on the right
-        if (column < 6) {
-            if (document.getElementById("cell" + row + (column + 1)).className === "tile18") {
-                swapTiles("cell" + row + column, "cell" + row + (column + 1));
-                return null;
-            }
-        }
-        //Checking if white tile on the left
-        if (column > 4) {
-            if (document.getElementById("cell" + row + (column - 1)).className === "tile18") {
-                swapTiles("cell" + row + column, "cell" + row + (column - 1));
-                return null;
-            }
-        }
-        //Checking if white tile is above
-        if (row > 4) {
-            if (document.getElementById("cell" + (row - 1) + column).className === "tile18") {
-                swapTiles("cell" + row + column, "cell" + (row - 1) + column);
-                return null;
-            }
-        }
-        //Checking if white tile is below
-        if (row < 6) {
-            if (document.getElementById("cell" + (row + 1) + column).className === "tile18") {
-                swapTiles("cell" + row + column, "cell" + (row + 1) + column);
-                return null;
-            }
-        }
+
+// Funzione per salvare lo stato del gioco
+function saveGameState() {
+    let gameState = [];
+
+    document.querySelectorAll("td").forEach(tile => {
+        gameState.push({
+            id: tile.id,
+            className: tile.className
+        });
+    });
+
+    localStorage.setItem("gameState", JSON.stringify(gameState));
+    console.log("💾 Stato della partita salvato!");
+}
+
+// Funzione per caricare lo stato del gioco
+function loadGameState() {
+    let savedState = localStorage.getItem("gameState");
+    if (!savedState) {
+        console.warn("⚠️ Nessuno stato salvato trovato.");
+        return;
     }
 
-}
+    let gameState = JSON.parse(savedState);
+    console.log("🔄 Ripristino stato della partita...", gameState);
 
-function images() {
-    fetch("data.json") // Legge il file JSON
-        .then(response => response.json())
-        .then(data => {
-            let img = data.image; // Prende l'URL dell'immagine dal JSON
+    let playerName = localStorage.getItem("username");
+    let player1 = localStorage.getItem("player1");
+    let player2 = localStorage.getItem("player2");
 
-            if (!img) {
-                console.error("Nessuna immagine trovata nel database!");
+    let isPlayer1 = (playerName === player1);
+    let isPlayer2 = (playerName === player2);
+
+    gameState.forEach(tileData => {
+        let tile = document.getElementById(tileData.id);
+        if (tile) {
+            tile.className = tileData.className;
+
+            let tileNumber = parseInt(tileData.className.replace("tile", ""), 10);
+            let belongsToPlayer1 = tileNumber >= 1 && tileNumber <= 9;
+            let belongsToPlayer2 = tileNumber >= 10 && tileNumber <= 18;
+
+            let row = Math.floor((tileNumber - (belongsToPlayer2 ? 10 : 1)) / 3);
+            let col = (tileNumber - (belongsToPlayer2 ? 10 : 1)) % 3;
+            const tileSize = 180;
+
+            let imgToUse = belongsToPlayer1 ? localStorage.getItem("image1") : localStorage.getItem("image2");
+            if (!imgToUse) {
+                console.error("❌ Errore: Immagine non trovata per il tile", tileData.id);
                 return;
             }
 
-            let tileSize = 100; // Dimensione di ogni pezzo
+            tile.style.backgroundImage = `url('${imgToUse}')`;
+            tile.style.backgroundSize = "540px 540px";
+            tile.style.backgroundPosition = `-${col * tileSize}px -${row * tileSize}px`;
+        }
+    });
 
-            // Imposta l'immagine nei pezzi per il Player 1
-            for (let row = 1; row <= 3; row++) {
-                for (let col = 1; col <= 3; col++) {
-                    let tile = document.getElementById("cell" + row + col);
-                    if (tile) {
-                        tile.style.backgroundImage = `url(${img})`;
-                        tile.style.backgroundSize = "180px 180px";
-                        tile.style.backgroundPosition = `-${(col - 1) * tileSize}px -${(row - 1) * tileSize}px`;
-                    }
-                }
-            }
-
-            // Imposta l'immagine nei pezzi per il Player 2
-            for (let row = 4; row <= 6; row++) {
-                for (let col = 4; col <= 6; col++) {
-                    let tile = document.getElementById("cell" + row + col);
-                    if (tile) {
-                        tile.style.backgroundImage = `url(${img})`;
-                        tile.style.backgroundSize = "180px 180px";
-                        tile.style.backgroundPosition = `-${(col - 4) * tileSize}px -${(row - 4) * tileSize}px`;
-                    }
-                }
-            }
-        })
-        .catch(error => console.error("Errore nel caricamento delle immagini:", error));
+    console.log("✅ Stato della partita ripristinato!");
 }
 
+function startGameTimer() {
+    if (!localStorage.getItem("startTime")) {
+        localStorage.setItem("startTime", Date.now()); // Salva il tempo di inizio solo la prima volta
+    }
+
+    startTime = parseInt(localStorage.getItem("startTime"), 10);
+    timerInterval = setInterval(updateGameTimer, 1000);
+}
+
+function updateGameTimer() {
+    let currentTime = Date.now();
+    let elapsedTime = Math.floor((currentTime - startTime) / 1000);
+
+    let minutes = Math.floor(elapsedTime / 60);
+    let seconds = elapsedTime % 60;
+
+    document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function stopGameTimer() {
+    clearInterval(timerInterval);
+    let endTime = Date.now();
+    let totalTime = Math.floor((endTime - startTime) / 1000);
+
+    let minutes = Math.floor(totalTime / 60);
+    let seconds = totalTime % 60;
+    let finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    console.log(`⏹️ Partita conclusa! Tempo totale: ${finalTime}`);
+    localStorage.setItem("finalTime", finalTime);
+
+    document.getElementById("game-timer").textContent = `Tempo Finale: ${finalTime}`;
+
+    // 🔥 Rimuoviamo il tempo salvato per evitare problemi al prossimo gioco
+    localStorage.removeItem("startTime");
+}
+
+function checkWin() {
+    let tiles = document.querySelectorAll(".table-player-board td");
+    let correctOrder = true;
+
+    tiles.forEach((tile, index) => {
+        let expectedTile = `tile${index + 1}`;
+        if (!tile.classList.contains(expectedTile)) {
+            correctOrder = false;
+        }
+    });
+
+    if (correctOrder) {
+        console.log("🎉 Partita completata! Un giocatore ha vinto!");
+        stopGameTimer(); // 🔥 Ferma il timer
+        showGameOverPopup();
+    }
+}
+
+function showGameOverPopup() {
+    stopGameTimer();
+
+    let currentPlayer = localStorage.getItem("username");
+    let winner = currentPlayer === localStorage.getItem("player1") ? "Player 1" : "Player 2";
+
+    let isWinner = (winner === currentPlayer);
+    let winMessage = isWinner ? "🎉 Hai vinto!" : "❌ Hai perso!";
+
+    let puzzleImage = isWinner ? localStorage.getItem("image1") : localStorage.getItem("image2");
+    let puzzleName = isWinner ? localStorage.getItem("img1Name") : localStorage.getItem("img2Name");
+    let puzzleDesc = isWinner ? localStorage.getItem("img1Desc") : localStorage.getItem("img2Desc");
+    let finalTime = localStorage.getItem("finalTime") || "00:00"; // 🔥 Recupera il tempo di gioco
+
+    document.getElementById("win-lose-message").textContent = winMessage;
+    document.getElementById("puzzle-image").src = puzzleImage;
+    document.getElementById("puzzle-name").textContent = puzzleName;
+    document.getElementById("puzzle-description").textContent = puzzleDesc;
+
+    document.getElementById("game-time-result").textContent = `Durata partita: ${finalTime}`;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("game-over").style.display = "block";
+}
+
+function restartGame() {
+    localStorage.removeItem("startTime");
+    localStorage.removeItem("finalTime");
+    localStorage.removeItem("gameState");
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("game-over").style.display = "none";
+    window.location.href = "index.html"; // 🔥 Torna alla homepage
+}
+
+// Connessione WebSocket
 const socket = new WebSocket('ws://localhost:8080');
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
-    if (data.type === "matchFound") {
-        localStorage.setItem("player1", data.player1);
-        localStorage.setItem("player2", data.player2);
-
-        window.location.href = `game.html`;
+    if (data.type === "move") {
+        console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
+        swapTiles(data.from, data.to);
     }
 };
 
-// Invia il nome utente al server quando si cerca un avversario
-function findOpponent() {
-    const username = document.getElementById('username').value;
-    if (!username) return alert("Inserisci un nome utente!");
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("🔵 Funzione collegata correttamente!");
 
+    // Controlla se il bottone esiste prima di collegare l'evento
+    const newGameButton = document.querySelector(".new_game");
+    if (newGameButton) {
+        newGameButton.addEventListener("click", findOpponent);
+        console.log("🎮 Bottone 'Cerca avversario' collegato!");
+    } else {
+        console.warn("⚠️ Attenzione: Nessun bottone '.new_game' trovato in questa pagina.");
+    }
+});
+
+// 🔹 Funzione per cercare un avversario e avviare la partita
+function findOpponent() {
+    console.log("🟢 findOpponent() è stata chiamata!");
+
+    const username = document.getElementById('username')?.value;
+    if (!username) {
+        alert("Inserisci un nome utente!");
+        return;
+    }
+
+    console.log(`📩 Invio richiesta al server con username: ${username}`);
+
+    // Mostra il messaggio "Ricerca in corso..."
+    const searchMessage = document.getElementById('search-message');
+    if (!searchMessage) {
+        console.error("❌ Errore: 'search-message' non trovato nel DOM");
+        return;
+    }
+    searchMessage.textContent = "Ricerca in corso...";
+    searchMessage.style.display = "block";
+
+    // Verifica che il WebSocket sia connesso prima di inviare
+    if (socket.readyState !== WebSocket.OPEN) {
+        console.error("❌ Errore: WebSocket non connesso!");
+        return;
+    }
+
+    // Invia richiesta al server per trovare un avversario
     socket.send(JSON.stringify({ type: 'findOpponent', username }));
 
+    // Riceve la risposta dal server
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        console.log("📩 Risposta ricevuta dal server:", data);
+
         if (data.type === 'matchFound') {
-            alert(`Partita trovata! Giocherai contro ${data.opponent}`);
-            window.location.href = `game.html?username=${username}`;
+            console.log("👥 Giocatori assegnati:", data.currentPlayer, data.opponent);
+
+            alert(`✅ Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
+            // Salva i dati localmente
+            localStorage.setItem("player1", data.currentPlayer);
+            localStorage.setItem("player2", data.opponent);
+            localStorage.setItem("image1", data.currentImage);
+            localStorage.setItem("image2", data.opponentImage);
+            localStorage.setItem("img1Name", data.imgCName);
+            localStorage.setItem("img1Desc", data.imgCDesc);
+            localStorage.setItem("img2Name", data.imgOName);
+            localStorage.setItem("img2Desc", data.imgODesc);
+
+            // Salva il giocatore corrente
+            if (username === data.currentPlayer || username === data.opponent) {
+                localStorage.setItem("username", username);
+                console.log(`✅ Giocatore corrente salvato: ${username}`);
+            } else {
+                console.error("❌ Errore: Il giocatore corrente non è tra i partecipanti!");
+            }
+
+            // Nasconde il messaggio di ricerca
+            searchMessage.textContent = "";
+
+            // Reindirizza alla pagina di gioco
+            window.location.href = "game.html";
         }
     };
+}
+
+function solvePuzzle() {
+    console.log("🟢 Risoluzione automatica del puzzle...");
+
+    let tiles = document.querySelectorAll(".table-player-board td");
+
+    tiles.forEach((tile, index) => {
+        tile.className = `tile${index + 1}`;
+    });
+
+    console.log("✅ Puzzle risolto!");
+    checkWin();  // 🔥 Dopo la risoluzione automatica, controlliamo se il puzzle è stato completato
 }

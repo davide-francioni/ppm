@@ -1,65 +1,43 @@
 <html lang="it">
-
 <head>
-
     <title>Puzzle gamification</title>
     <meta charset="utf-8" />
     <meta name="description" content="A game where 2 players challenges trying to recreate a decomposed artwork" />
     <meta name="keywords" content="game 2 player puzzle artwork art" />
-    <link rel="stylesheet" href="style.css"  />
-    <script src="function.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("username").addEventListener("change", function () {
-                let username = this.value.trim();
-                if (username) {
-                    localStorage.setItem("playerName", username);
-                }
-            });
-        });
-
-        document.getElementById("player-image").addEventListener("change", function (event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    localStorage.setItem("playerImage", e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <header class="tit">
-        <h1>Puzzle Gamification</h1>
-    </header>
-    <div class="ind">
-        <div class="index">
+<header class="tit">
+    <h1>Puzzle Gamification</h1>
+</header>
+<div class="ind">
+    <div class="index">
+        <p>Inserisci un nome utente e clicca su "Nuova Partita" per iniziare a giocare.</p>
 
-            <p>Inserisci un nome utente e clicca su "Nuova Partita" per iniziare a giocare.</p>
+        <form>
+            <label for="username">Nome Giocatore:</label>
+            <input type="text" id="username" placeholder="Nome utente">
+        </form>
 
-            <form action="">
-                <label for="username">Nome Giocatore:</label>
-                <input type="text" id="username" placeholder="Nome utente">
-            </form>
+        <button class="new_game" id="find-opponent">Cerca avversario</button><br /><br />
 
-            <button class="new_game" onclick="findOpponent()">Cerca avversario</button><br /><br />
+        <p id="search-message" style="display: none; color: blue;">Ricerca in corso...</p>
 
-            <div>
-                <h2>Regole:</h2>
-                <p class="rules">
-                    Dopo aver selezionato Nuova partita, al giocatore verrà assegnato un avversario con cui competere nella risoluzione di un puzzle. L'obiettivo è completare il puzzle prima dell'altro giocatore.<br /><br />
-                    Il puzzle consiste nella ricostruzione di un'opera d'arte famosa, suddivisa in nove tasselli, uno dei quali sarà sostituito da uno spazio vuoto. I tasselli, disposti in modo casuale all'interno della cornice, devono essere riorganizzati per ricostruire l'immagine originale.<br /><br />
-                    Per muovere i tasselli, è possibile cliccare su uno adiacente allo spazio vuoto, che occuperà così la posizione libera. La partita si conclude non appena uno dei due giocatori riesce a ripristinare l’immagine correttamente.<br /><br />
-                    Al termine, entrambi i giocatori potranno visualizzare l'opera d'arte completa e leggere una breve descrizione della stessa.
-                </p>
-
-            </div>
+        <div>
+            <h2>Regole:</h2>
+            <p class="rules">
+                Dopo aver selezionato Nuova partita, al giocatore verrà assegnato un avversario con cui competere nella risoluzione di un puzzle.
+                L'obiettivo è completare il puzzle prima dell'altro giocatore.<br /><br />
+                Il puzzle consiste nella ricostruzione di un'opera d'arte famosa, suddivisa in nove tasselli, uno dei quali sarà sostituito da uno spazio vuoto.
+                I tasselli, disposti in modo casuale all'interno della cornice, devono essere riorganizzati per ricostruire l'immagine originale.<br /><br />
+                Per muovere i tasselli, è possibile cliccare su uno adiacente allo spazio vuoto, che occuperà così la posizione libera.
+                La partita si conclude non appena uno dei due giocatori riesce a ripristinare l’immagine correttamente.<br /><br />
+                Al termine, entrambi i giocatori potranno visualizzare l'opera d'arte completa e leggere una breve descrizione della stessa.
+            </p>
         </div>
     </div>
+</div>
 </body>
-
+<script src="function.js" defer></script>
 </html>

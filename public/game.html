@@ -1,116 +1,89 @@
 <html lang="it">
-
 <head>
-
     <title>Puzzle gamification</title>
     <meta charset="utf-8" />
     <meta name="description" content="A game where 2 players challenges trying to recreate a decomposed artwork" />
     <meta name="keywords" content="game 2 player puzzle artwork art" />
     <link rel="stylesheet" href="style.css" />
-    <script src="function.js"></script>
-    <script>
-        window.onload = function () {
-            images(); // Carica le immagini
-            setTimeout(shuffle, 500); // Mescola i pezzi dopo 500ms
-
-            let player1 = localStorage.getItem("player1") || "Player 1";
-            let player2 = localStorage.getItem("player2") || "Player 2";
-
-            document.getElementById("player1-name").textContent = player1;
-            document.getElementById("player2-name").textContent = player2;
-        };
-    </script>
-
+    <script src="function.js" defer></script>
 </head>
 
 <body>
-    <header class="tit">
-        <h1>Puzzle Gamification</h1>
-    </header>
+<header class="tit">
+    <h1>Puzzle Gamification</h1>
+    <button id="solve-button" onclick="solvePuzzle()">Risolvi Puzzle</button>
+</header>
 
-    <div class="page">
-        <div class="game">
-            <div class="p1-section">
-                <!--Player 1-->
+<div class="page">
+    <div class="game">
+        <div class="player-section">
+            <!-- Player 1 -->
+            <h1 class="player" id="player-name">Player 1</h1>
+            <p class="player-info" id="player-puzzle-name"></p>
+            <p class="player-info" id="player-puzzle-desc"></p>
 
-                <h1 class="player" id="player1-name">Player 1</h1>
-
-                <table class="table">
-                    <tr class="row">
-                        <td id="cell11" class="tile1" onClick="clickTile(1,1);"></td>
-                        <td id="cell12" class="tile2" onClick="clickTile(1,2);"></td>
-                        <td id="cell13" class="tile3" onClick="clickTile(1,3);"></td>
-                    </tr>
-                    <tr class="row">
-                        <td id="cell21" class="tile4" onClick="clickTile(2,1);"></td>
-                        <td id="cell22" class="tile5" onClick="clickTile(2,2);"></td>
-                        <td id="cell23" class="tile6" onClick="clickTile(2,3);"></td>
-                    </tr>
-                    <tr class="row">
-                        <td id="cell31" class="tile7" onClick="clickTile(3,1);"></td>
-                        <td id="cell32" class="tile8" onClick="clickTile(3,2);"></td>
-                        <td id="cell33" class="tile9" onClick="clickTile(3,3);"></td>
-                    </tr>
-                </table>
-
-            </div>
-
-
-
-            <div class="split">
-                <!--division-->
-
-            </div>
-
-            <div class="p2-section">
-                <!--Player 2-->
-
-                <h1 class="player" id="player2-name">Player 2</h1>
-
-                <table class="table">
-                    <tr class="row">
-                        <td id="cell44" class="tile10" onClick="clickTile2(4,4);"></td>
-                        <td id="cell45" class="tile11" onClick="clickTile2(4,5);"></td>
-                        <td id="cell46" class="tile12" onClick="clickTile2(4,6);"></td>
-                    </tr>
-                    <tr class="row">
-                        <td id="cell54" class="tile13" onClick="clickTile2(5,4);"></td>
-                        <td id="cell55" class="tile14" onClick="clickTile2(5,5);"></td>
-                        <td id="cell56" class="tile15" onClick="clickTile2(5,6);"></td>
-                    </tr>
-                    <tr class="row">
-                        <td id="cell64" class="tile16" onClick="clickTile2(6,4);"></td>
-                        <td id="cell65" class="tile17" onClick="clickTile2(6,5);"></td>
-                        <td id="cell66" class="tile18" onClick="clickTile2(6,6);"></td>
-                    </tr>
-                </table>
-
-            </div>
-
+            <table class="table-player-board">
+                <tr class="row">
+                    <td id="cell11" class="tile1"></td>
+                    <td id="cell12" class="tile2"></td>
+                    <td id="cell13" class="tile3"></td>
+                </tr>
+                <tr class="row">
+                    <td id="cell21" class="tile4"></td>
+                    <td id="cell22" class="tile5"></td>
+                    <td id="cell23" class="tile6"></td>
+                </tr>
+                <tr class="row">
+                    <td id="cell31" class="tile7"></td>
+                    <td id="cell32" class="tile8"></td>
+                    <td id="cell33" class="tile9"></td>
+                </tr>
+            </table>
         </div>
 
-
-
-        <div class="game_over">
-            <div class="go_container">
-                <div class="w_l">
-
-                    <p>win</p>
-
-                </div>
-
-
-
-                <div class="description">
-                    <p></p>
-                </div>
-
-            </div>
-
+        <div class="timer-container">
+            <div id="game-timer">Tempo: 00:00</div>
         </div>
+        <div class="split"></div>
 
+        <div class="opponent-section">
+            <!-- Player 2 -->
+            <h1 class="player" id="opponent-name">Player 2</h1>
+            <p class="player-info" id="opponent-puzzle-name"></p>
+            <p class="player-info" id="opponent-puzzle-desc"></p>
+
+            <table class="table-opponent-board">
+                <tr class="row">
+                    <td id="cell44" class="tile10"></td>
+                    <td id="cell45" class="tile11"></td>
+                    <td id="cell46" class="tile12"></td>
+                </tr>
+                <tr class="row">
+                    <td id="cell54" class="tile13"></td>
+                    <td id="cell55" class="tile14"></td>
+                    <td id="cell56" class="tile15"></td>
+                </tr>
+                <tr class="row">
+                    <td id="cell64" class="tile16"></td>
+                    <td id="cell65" class="tile17"></td>
+                    <td id="cell66" class="tile18"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 
-</body>
+    <div id="overlay"></div>
+    <div class="game-over-popup" id="game-over">
+        <div class="popup-content">
+            <h2 id="win-lose-message"></h2>
+            <p id="game-time-result"></p>
+            <img id="puzzle-image" src="" alt="Opera d'arte">
+            <h3 id="puzzle-name"></h3>
+            <p id="puzzle-description"></p>
+            <button onclick="restartGame()">Torna alla Homepage</button>
+        </div>
+    </div>
 
+</div>
+</body>
 </html>

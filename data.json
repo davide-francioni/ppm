@@ -1,29 +1,34 @@
 {
   "puzzleImages": [
     {
-      "name": "Mona Lisa",
-      "path": "image/puzzle1.png",
-      "description": "Un celebre dipinto di Leonardo da Vinci, noto per il suo enigmatico sorriso."
+      "id": 1,
+      "name": "Uomo vitruviano",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle1.png",
+      "description": "L'Uomo vitruviano è un disegno a penna e inchiostro su carta di Leonardo da Vinci, conservato, ma non esposto, nel Gabinetto dei Disegni e delle Stampe delle Gallerie dell'Accademia di Venezia. Celeberrima rappresentazione delle proporzioni ideali del corpo umano, cerca di dimostrare come possa essere armoniosamente inscritto nelle due figure perfette del cerchio, che simboleggia il Cielo, la perfezione divina, e del quadrato, che simboleggia la Terra. La scelta di questa geometria non è frutto del caso, bensì di studi precisi. Il cerchio infatti rappresenta il cosmo, il divino: gli antichi ritenevano che fosse simbolo di perfezione. In contrapposizione si trova il quadrato, simbolo del mondo terreno. L’uomo quindi rappresenterebbe l'unione tra microcosmo e macrocosmo, quindi l’idea stessa di mondo. Riconducendo tale visione alla filosofia platonica, aristotelica e neoplatonica, l’uomo viene considerato “specchio dell’universo”. Egli è il riflesso di un ordine superiore, il quale contiene gli elementi che compongono il mondo intero. L’uomo vitruviano è simbolo dell’arte rinascimentale, con esso si analizzano le proporzioni del corpo umano secondo gli scritti dell'architetto romano Vitruvio. Il genio artistico voleva rappresentare, in accordo con il periodo da lui vissuto, l’uomo come “misura di tutte le cose”."
     },
     {
-      "name": "Notte Stellata",
-      "path": "image/puzzle2.png",
-      "description": "Un'opera iconica di Vincent van Gogh, caratterizzata da pennellate turbolente e colori vivaci."
+      "id": 2,
+      "name": "Il bacio",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle2.png",
+      "description": "Il bacio (Der Kuss) è un dipinto a olio su tela di Gustav Klimt, realizzato nel 1907-1908 e conservato nell'Österreichische Galerie Belvedere di Vienna al primo piano. Al centro di un luogo etereo ed astratto due amanti si stringono e si abbandonano ad un bacio intenso; la fanciulla è pienamente abbandonata nell'amplesso, con gli occhi chiusi in una posizione estatica, mentre l'uomo stringe la testa dell'amata con delicatezza, protendendosi verso di lei in segno protettivo e di affetto. I due giovani innamorati, avvolti entrambi in lunghe tuniche mosaicate che ne celano i corpi, sono inginocchiati su un piccolo rettangolo erboso che richiama l'iconografia dei medievali hortus conclusus: neanche la vivace policromia del prato fiorito, tuttavia, riesce a spezzare il loro idillio amoroso. Il tema dell'amore e delle umane passioni era già stato trattato numerose volte nella produzione klimtiana, dove ricorre frequentemente, ciò malgrado, è solo in quest'opera che Klimt riesce a trasportare in pittura quel momento effimero in cui l'universo maschile e quello femminile riescono finalmente a compenetrarsi, in un attimo fuggente di sympatheia dell'amore. L'obiettivo al quale tende Klimt è, dunque, quello di glorificare con il Bacio il trionfo della potenza vivificatrice dell'eros, in grado di trascendere le antitesi tra sesso maschile e sesso femminile."
     },
     {
-      "name": "La Nascita di Venere",
-      "path": "image/puzzle3.png",
-      "description": "Un capolavoro di Sandro Botticelli che raffigura la dea Venere emergere dal mare."
+      "id": 3,
+      "name": "Colazione sull'erba",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle3.png",
+      "description": "Colazione sull'erba (Le Déjeuner sur l'herbe) è un dipinto del pittore francese Édouard Manet, realizzato nel 1863 e conservato al Museo d'Orsay di Parigi. Il dipinto due uomini e una donna che stanno consumando la merenda all'aperto, in una radura costeggiata dalla Senna, a poca distanza da Parigi. Bisogna notare che i due signori sono vestiti con abiti moderni di città e stanno amabilmente conversando tra di loro mentre alla destra della prima figura maschile troviamo una donna nuda che conversa. Con il mento posato sulla mano, la fanciulla volge lo sguardo verso lo spettatore (è l'unico personaggio della composizione a farlo), quasi a voler dialogare e intessere una relazione con chi sta osservando la scena, lasciandosi scappare contestualmente un enigmatico sorriso. Nell'angolo in basso a sinistra giacciono le sue vesti, nella fattispecie un cappellino di paglia di Firenze, adornato da un flessuoso nastro azzurro, e un abito dello stesso colore. A fianco dei vestiti scomposti si trovano anche i resti della colazione: la frutta che rotola disordinatamente dal cestino, il pane e la fiaschetta d'argento costituiscono a tutti gli effetti una natura morta all'interno del dipinto stesso, e raccontano agevolmente la storia del picnic."
     },
     {
-      "name": "Guernica",
-      "path": "image/puzzle4.png",
-      "description": "Un'opera di Pablo Picasso che rappresenta gli orrori della guerra civile spagnola."
+      "id": 4,
+      "name": "La persistenza della memoria",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle4.png",
+      "description": "La persistenza della memoria (La persistència de la memòria) è un dipinto a olio su tela del pittore surrealista Salvador Dalí, realizzato nel 1931 e conservato al Museum of Modern Art di New York. Opera surrealista per antonomasia, La persistenza della memoria raffigura una landa deserta dominata dalla presenza di alcuni orologi molli, dalla consistenza quasi fluida, simboli dell'elasticità del tempo. Il dipinto raffigura un paesaggio costiero della Costa Brava, in Catalogna, nei pressi di Port Lligat, dominato da un cielo con delle sfumature gialle e celesti. La scena, disabitata e scevra di ogni vegetazione, è popolata da diversi oggetti: un parallelepipedo color terra, un ulivo senza foglie (forse senza vita) che sorge su quest'ultimo, un occhio dalle lunghe ciglia addormentato e un plinto blu sullo sfondo, che fa pendant con il mare retrostante. L'attenzione dell'osservatore, tuttavia, è catturata dai tre orologi, che di fatto sono i protagonisti della scena. Squagliandosi, questi assumono la foggia dei loro sostegni: il primo ha una mosca su di esso e scivola oltre il bordo del volume squadrato collocato in primo piano, il secondo è sospeso sull'unico ramo dell'albero secco appoggiato sul parallelepipedo, e il terzo è avvolto a spirale sulla timida figura embrionale colante sul suolo. Un quarto orologio, l'unico ad essere rimasto allo stato solido, è collocato sempre sul parallelepipedo ed è ricoperto di formiche nere brulicanti."
     },
     {
-      "name": "Il Bacio",
-      "path": "image/puzzle5.png",
-      "description": "Un'opera di Gustav Klimt che esprime amore e intimità attraverso il suo stile dorato."
+      "id": 5,
+      "name": "La Libertà che guida il popolo",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle5.png",
+      "description": "La Libertà che guida il popolo (La Liberté guidant le peuple) è un dipinto a olio su tela del pittore francese Eugène Delacroix, realizzato nel 1830 e conservato nel museo del Louvre a Parigi. La Libertà che guida il popolo raffigura tutte le classi sociali unite in lotta contro l'oppressore, guidate dalla personificazione speciale della Francia, Marianne, che in quest'opera assurge anche a simbolo della Libertà. Marianne è colta nell'attimo in cui avanza sicura sulla barricata, sventolando con la mano destra il Tricolore francese e impugnando con la sinistra un fucile con baionetta. Indossa abiti contemporanei e anche un berretto frigio, ha il seno scoperto e i piedi nudi ed è realistica sino alla peluria sotto le ascelle, particolare che non fu apprezzato dai contemporanei. La Libertà è circondata da una folla tumultuosa: a destra della donna troviamo un ragazzino armato di pistole, alla sinistra, invece, è visibile un intellettuale borghese con un elegante cilindro in testa e una doppietta da caccia in mano. Ai piedi della Libertà infine troviamo una giovane manovale con un grembiule di cuoio, che guarda la fanciulla piena di speranza. Dietro questi personaggi si dispiega una massa indistinta di uomini, fucili, e spade. Alla base del quadro poi giacciono tre cadaveri: a sinistra vi è un insorto dal corpo seminudo, mentre a destra troviamo un corazziere e una guardia svizzera, appartenenti alla guardia reale che combatté la rivoluzione di quei giorni."
     }
   ]
 }

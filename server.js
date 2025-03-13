@@ -13,7 +13,6 @@ let activeGames = new Map();
 
 app.use(express.static(path.join(__dirname, 'public')));  // Serve files come CSS, JS, immagini, ecc.
 app.use(express.json());
-
 // Route principale per servire index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -147,4 +146,4 @@ wss.on("connection", (ws) => {
     });
 });
 
-server.listen(8080, () => console.log('Server avviato su http://localhost:8080'));
+server.listen(8081, () => console.log('Server avviato su http://localhost:8081'));

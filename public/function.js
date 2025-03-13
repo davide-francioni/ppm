@@ -7,8 +7,8 @@ function ensureUsername() {
     let player2 = localStorage.getItem("player2");
 
     if (!savedUsername) {
-        console.error("❌ Nessun username trovato! Reindirizzamento alla homepage.");
-        window.location.href = "index.html"; // 🔄 Torna alla home se non c'è un username
+        console.error("❌ Nessun username trovato!");
+        //window.location.href = "index.html"; // 🔄 Torna alla home se non c'è un username
     } else {
         console.log("🔒 Username già salvato:", savedUsername);
 
@@ -394,7 +394,7 @@ function showGameOverPopup() {
 
     document.getElementById("game-time-result").textContent = `Durata partita: ${finalTime}`;
     document.getElementById("overlay").style.display = "block";
-    document.getElementById("game-over").style.display = "block";
+    document.getElementById("game-over").style.display = "flex";
 }
 
 function restartGame() {
@@ -407,7 +407,7 @@ function restartGame() {
 }
 
 // Connessione WebSocket
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://localhost:8081');
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);

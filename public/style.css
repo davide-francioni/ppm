@@ -107,11 +107,6 @@ h2{
     margin: auto;
 }
 
-.w_l{
-    font-size: 32px;
-    text-align:center;
-}
-
 .image{
     width:180px;
     height:180px;
@@ -225,25 +220,40 @@ h2{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: auto;
-    height: 90%;
+    width: 90%;  /* 🔥 Ora si adatta meglio agli schermi piccoli */
+    max-width: 600px; /* 🔥 Limita la larghezza su schermi grandi */
+    height: auto;
+    max-height: 85%;
     background: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     z-index: 10;
+    overflow: hidden; /* 🔥 Impedisce che il contenuto esca fuori */
+    flex-direction: column;
+}
+
+.popup-content {
+    flex-grow: 1;  /* 🔥 Occupa lo spazio disponibile */
+    overflow-y: auto; /* 🔥 Aggiunge lo scroll verticale se necessario */
+    max-height: 60%; /* 🔥 Limita l'altezza della descrizione */
+    padding-bottom: 10px; /* 🔥 Distanza dal bottone */
 }
 
 .popup-content img {
-    width: 480px;
+    width: 100%;
+    max-width: 480px;
     height: auto;
 }
 
 .popup-content button {
-    margin-top: 15px;
+    position: sticky;
+    bottom: -11px;
+    width: 100%;
+    margin: 15px 15px 0px 15px;
     padding: 10px 20px;
-    font-size: 24px;
+    font-size: 18px;
     background-color: #b02d0c;
     color: white;
     border: none;
@@ -253,4 +263,5 @@ h2{
 
 #puzzle-description{
     font-size: 16px;
+    margin: 15px;
 }

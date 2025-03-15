@@ -221,7 +221,7 @@ h2{
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;  /* 🔥 Ora si adatta meglio agli schermi piccoli */
-    max-width: 600px; /* 🔥 Limita la larghezza su schermi grandi */
+    max-width: 800px; /* 🔥 Limita la larghezza su schermi grandi */
     height: auto;
     max-height: 85%;
     background: white;
@@ -248,10 +248,8 @@ h2{
 }
 
 .popup-content button {
-    position: sticky;
-    bottom: -11px;
+    position: relative;
     width: 100%;
-    margin: 15px 15px 0px 15px;
     padding: 10px 20px;
     font-size: 18px;
     background-color: #b02d0c;
@@ -259,6 +257,14 @@ h2{
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.button-container {
+    background: white;
+    padding: 10px;
+    margin-top: auto;
+    position: sticky;
+    bottom: -12px;
 }
 
 #puzzle-description{

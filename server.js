@@ -78,6 +78,7 @@ wss.on("connection", (ws) => {
 
                     const gameId = Date.now();
                     console.log(gameId);
+                    console.log("test"); //test commit
                     activeGames.set(gameId, {
                         img1,
                         img2,

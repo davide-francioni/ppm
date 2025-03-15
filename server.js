@@ -77,8 +77,6 @@ wss.on("connection", (ws) => {
                     let img2Desc = images[img2Index].description;
 
                     const gameId = Date.now();
-                    console.log(gameId);
-                    console.log("test"); //test commit
                     activeGames.set(gameId, {
                         img1,
                         img2,
@@ -157,4 +155,4 @@ wss.on("connection", (ws) => {
     });
 });
 
-server.listen(8081, () => console.log('Server avviato su http://localhost:8081'));
+server.listen(8081, '0.0.0.0', () => console.log('Server avviato su tutte le interfacce: http://0.0.0.0:8081'));

@@ -77,6 +77,7 @@ wss.on("connection", (ws) => {
                     let img2Desc = images[img2Index].description;
 
                     const gameId = Date.now();
+                    console.log(gameId);
                     activeGames.set(gameId, {
                         img1,
                         img2,
@@ -120,9 +121,7 @@ wss.on("connection", (ws) => {
                 console.log(`👤 ${ws.username} è in attesa di un avversario...`);
                 waitingPlayer = ws;
             }
-        }
-
-        if (data.type === "move") {
+        }else if (data.type === "move") {
             console.log(`🔄 Ricevuta mossa: ${data.from} ↔ ${data.to}`);
 
             // **Trasmetti la mossa all'altro giocatore**
@@ -132,6 +131,17 @@ wss.on("connection", (ws) => {
                         type: "move",
                         from: data.from,
                         to: data.to
+                    }));
+                }
+            });
+        } else if (data.type === 'gameWon') {
+            console.log(`🎮 Game won by: ${data.winner}`);
+            // Broadcast the win to all connected clients
+            wss.clients.forEach((client) => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: 'gameWon',
+                        winner: data.winner
                     }));
                 }
             });

@@ -383,6 +383,11 @@ function checkWin() {
     if (correctOrder) {
         console.log("🎉 Partita completata! Un giocatore ha vinto!");
         stopGameTimer(); // 🔥 Ferma il timer
+        let winner = localStorage.getItem("username");
+        socket.send(JSON.stringify({
+            type: "gameWon",
+            winner: winner
+        }));
         showGameOverPopup();
     }
 }

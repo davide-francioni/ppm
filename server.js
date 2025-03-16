@@ -155,4 +155,5 @@ wss.on("connection", (ws) => {
     });
 });
 
-server.listen(8081, '0.0.0.0', () => console.log('Server avviato su tutte le interfacce: http://0.0.0.0:8081'));
+const PORT = process.env.PORT || 8080; // 🔥 Usa la porta di Render o 8080 in locale
+server.listen(PORT, '0.0.0.0', () => console.log(`Server avviato su porta ${PORT}`));

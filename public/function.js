@@ -407,7 +407,7 @@ function restartGame() {
 }
 
 // Connessione WebSocket
-const socket = new WebSocket('ws://localhost:8081');
+const socket = new WebSocket(`wss://${window.location.hostname}`);
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);

@@ -174,16 +174,28 @@ function shuffle() {
         "cell64", "cell65"
     ]; // Evitiamo di mischiare "cell66" (tile bianco)
 
+    function safeSwap(tileId1, tileId2) {
+        let tile1 = document.getElementById(tileId1);
+        let tile2 = document.getElementById(tileId2);
+
+        if (!tile1 || !tile2) {
+            console.warn(`⚠️ Tentativo di scambio fallito: ${tileId1} o ${tileId2} non esistono.`);
+            return;
+        }
+
+        swapTiles(tile1, tile2);
+    }
+
     // **Mescola solo i tile del giocatore 1 tra di loro**
     for (let i = player1Tiles.length - 1; i > 0; i--) {
         let randIndex = Math.floor(Math.random() * (i + 1));
-        swapTiles(player1Tiles[i], player1Tiles[randIndex]);
+        safeSwap(player1Tiles[i], player1Tiles[randIndex]);
     }
 
     // **Mescola solo i tile del giocatore 2 tra di loro**
     for (let i = player2Tiles.length - 1; i > 0; i--) {
         let randIndex = Math.floor(Math.random() * (i + 1));
-        swapTiles(player2Tiles[i], player2Tiles[randIndex]);
+        safeSwap(player2Tiles[i], player2Tiles[randIndex]);
     }
 
     console.log("✅ Shuffle completato!");
@@ -231,6 +243,11 @@ function swapTiles(tile1, tile2) {
 
     console.log(`🔄 Scambio: ${tile1.id} ↔ ${tile2.id}`);
 
+    if (!tile1.style || !tile2.style) {
+        console.error("❌ Errore: `backgroundImage` non definito per uno dei tiles!", tile1, tile2);
+        return;
+    }
+
     // **Scambia classi**
     let tempClass = tile1.className;
     tile1.className = tile2.className;
@@ -239,21 +256,16 @@ function swapTiles(tile1, tile2) {
     // **Scambia le immagini**
     let tempBackground = tile1.style.backgroundImage;
     let tempPosition = tile1.style.backgroundPosition;
+
     tile1.style.backgroundImage = tile2.style.backgroundImage;
     tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+
     tile2.style.backgroundImage = tempBackground;
     tile2.style.backgroundPosition = tempPosition;
-
-    // **Scambia `dataset` per tenere traccia della posizione originale**
-    let tempTile = tile1.dataset.tile;
-    tile1.dataset.tile = tile2.dataset.tile;
-    tile2.dataset.tile = tempTile;
 
     console.log("✅ Dopo lo scambio:");
     console.log("📌 Tile 1 - Background:", tile1.style.backgroundImage, "Posizione:", tile1.style.backgroundPosition);
     console.log("📌 Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
-
-    saveGameState();
 }
 
 

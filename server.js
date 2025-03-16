@@ -134,12 +134,12 @@ wss.on("connection", (ws) => {
                 }
             });
         } else if (data.type === 'gameWon') {
-            console.log(`🎮 Game won by: ${data.winner}`);
+            console.log(`🏆 Partita vinta da: ${data.winner}`);
             // Broadcast the win to all connected clients
-            wss.clients.forEach((client) => {
-                if (client !== ws && client.readyState === WebSocket.OPEN) {
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
-                        type: 'gameWon',
+                        type: "gameWon",
                         winner: data.winner
                     }));
                 }

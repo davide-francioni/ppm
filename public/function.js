@@ -266,6 +266,8 @@ function swapTiles(tile1, tile2) {
     console.log("✅ Dopo lo scambio:");
     console.log("📌 Tile 1 - Background:", tile1.style.backgroundImage, "Posizione:", tile1.style.backgroundPosition);
     console.log("📌 Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
+
+    saveGameState();  // 🔥 Ora chiamiamo `saveGameState()` dopo ogni scambio!
 }
 
 
@@ -385,18 +387,17 @@ function checkWin() {
     }
 }
 
-function showGameOverPopup() {
+function showGameOverPopup(winner) {
     stopGameTimer();
 
     let currentPlayer = localStorage.getItem("username");
-    let winner = currentPlayer === localStorage.getItem("player1") ? "Player 1" : "Player 2";
 
     let isWinner = (winner === currentPlayer);
     let winMessage = isWinner ? "🎉 Hai vinto!" : "❌ Hai perso!";
 
-    let puzzleImage = isWinner ? localStorage.getItem("image1") : localStorage.getItem("image2");
-    let puzzleName = isWinner ? localStorage.getItem("img1Name") : localStorage.getItem("img2Name");
-    let puzzleDesc = isWinner ? localStorage.getItem("img1Desc") : localStorage.getItem("img2Desc");
+    let puzzleImage =localStorage.getItem("image1");
+    let puzzleName = localStorage.getItem("img1Name");
+    let puzzleDesc = localStorage.getItem("img1Desc");
     let finalTime = localStorage.getItem("finalTime") || "00:00"; // 🔥 Recupera il tempo di gioco
 
     document.getElementById("win-lose-message").textContent = winMessage;
@@ -505,6 +506,13 @@ function findOpponent() {
 
             // Reindirizza alla pagina di gioco
             window.location.href = "game.html";
+        } else if (data.type === "move") {
+            console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
+            swapTiles(data.from, data.to);
+        } else if (data.type === "gameWon") {
+            console.log(`🎮 Game Over! Winner: ${data.winner}`);
+            stopGameTimer();
+            showGameOverPopup(data.winner);
         }
     };
 }

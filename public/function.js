@@ -117,7 +117,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundImage = `url(${opponentImg})`;
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
-        tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
+        tile.dataset.tile = index + 10; // Imposta un ID univoco per ogni tile
         console.log(tile.dataset.tile);
         if (index === opponentTiles.length - 1) {
             tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto

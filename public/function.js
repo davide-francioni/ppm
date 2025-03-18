@@ -104,7 +104,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
         tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
-
+        console.log(tile.dataset.tile);
         if (index === playerTiles.length - 1) {
             tile.classList.add("tile9");  // Imposta l'ultimo tile come vuoto
         }
@@ -118,7 +118,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
         tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
-
+        console.log(tile.dataset.tile);
         if (index === opponentTiles.length - 1) {
             tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto
         }
@@ -263,12 +263,16 @@ function swapTiles(tile1, tile2) {
     if(tile1Id<10 && tile2Id<10) {
         tile1Id += 9;
         tile2Id += 9;
-        console.log(`📩 Inviando mossa al server: ${tile1Id} ↔ ${tile2Id}`);
-        socket.send(JSON.stringify({
-            type: "move",
-            from: `tile${tile1Id}`,
-            to: `tile${tile2Id}`
-        }));
+        if (socket.readyState === WebSocket.OPEN) {  // 🔥 Aspetta che WebSocket sia aperto prima di inviare
+            console.log(`📩 Inviando mossa al server: ${tile1Id} ↔ ${tile2Id}`);
+            socket.send(JSON.stringify({
+                type: "move",
+                from: `tile${tile1Id}`,
+                to: `tile${tile2Id}`
+            }));
+        } else {
+            console.warn("⚠️ WebSocket non ancora connesso! La mossa non è stata inviata.");
+        }
     }
 }
 

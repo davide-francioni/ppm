@@ -192,12 +192,6 @@ function shuffle() {
         safeSwap(player1Tiles[i], player1Tiles[randIndex]);
     }
 
-    // **Mescola solo i tile del giocatore 2 tra di loro**
-    for (let i = player2Tiles.length - 1; i > 0; i--) {
-        let randIndex = Math.floor(Math.random() * (i + 1));
-        safeSwap(player2Tiles[i], player2Tiles[randIndex]);
-    }
-
     console.log("✅ Shuffle completato!");
 }
 
@@ -268,6 +262,7 @@ function swapTiles(tile1, tile2) {
     console.log("📌 Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
 
     saveGameState();  // 🔥 Ora chiamiamo `saveGameState()` dopo ogni scambio!
+
 }
 
 
@@ -433,6 +428,10 @@ socket.onmessage = (event) => {
     if (data.type === "move") {
         console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
         swapTiles(data.from, data.to);
+    } else if (data.type === "gameWon") {
+        console.log(`🎮 Game Over! Winner: ${data.winner}`);
+        stopGameTimer();
+        showGameOverPopup(data.winner);
     }
 };
 
@@ -511,13 +510,6 @@ function findOpponent() {
 
             // Reindirizza alla pagina di gioco
             window.location.href = "game.html";
-        } else if (data.type === "move") {
-            console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
-            swapTiles(data.from, data.to);
-        } else if (data.type === "gameWon") {
-            console.log(`🎮 Game Over! Winner: ${data.winner}`);
-            stopGameTimer();
-            showGameOverPopup(data.winner);
         }
     };
 }

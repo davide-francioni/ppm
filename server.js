@@ -40,6 +40,7 @@ wss.on("connection", (ws) => {
     ws.on("message", (message) => {
         const data = JSON.parse(message);
         console.log("📩 Messaggio ricevuto:", data);
+        console.log(`📡 Client WebSocket connessi: ${wss.clients.size}`); // 🔥 Stampa quanti client sono connessi
 
         if (data.type === "findOpponent") {
             console.log(`🔍 ${data.username} sta cercando un avversario...`);

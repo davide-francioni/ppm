@@ -168,12 +168,6 @@ function shuffle() {
         "cell31", "cell32"
     ]; // Evitiamo di mischiare "cell33" (tile bianco)
 
-    let player2Tiles = [
-        "cell44", "cell45", "cell46",
-        "cell54", "cell55", "cell56",
-        "cell64", "cell65"
-    ]; // Evitiamo di mischiare "cell66" (tile bianco)
-
     function safeSwap(tileId1, tileId2) {
         let tile1 = document.getElementById(tileId1);
         let tile2 = document.getElementById(tileId2);
@@ -263,6 +257,19 @@ function swapTiles(tile1, tile2) {
 
     saveGameState();  // 🔥 Ora chiamiamo `saveGameState()` dopo ogni scambio!
 
+    let tile1Id = parseInt(tile1.className.replace("tile", ""), 10);
+    let tile2Id = parseInt(tile2.className.replace("tile", ""), 10);
+
+    if(tile1Id<10 && tile2Id<10) {
+        tile1Id += 9;
+        tile2Id += 9;
+        console.log(`📩 Inviando mossa al server: ${tile1Id} ↔ ${tile2Id}`);
+        socket.send(JSON.stringify({
+            type: "move",
+            from: `tile${tile1Id}`,
+            to: `tile${tile2Id}`
+        }));
+    }
 }
 
 

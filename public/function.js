@@ -104,6 +104,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
         tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
+        tile.id = `tile${index + 1}`;
         console.log(tile.dataset.tile);
         if (index === playerTiles.length - 1) {
             tile.classList.add("tile9");  // Imposta l'ultimo tile come vuoto
@@ -118,6 +119,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
         tile.dataset.tile = index + 10; // Imposta un ID univoco per ogni tile
+        tile.id = `tile${index + 10}`;
         console.log(tile.dataset.tile);
         if (index === opponentTiles.length - 1) {
             tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto
@@ -166,7 +168,7 @@ function shuffle() {
         "cell11", "cell12", "cell13",
         "cell21", "cell22", "cell23",
         "cell31", "cell32"
-    ]; // Evitiamo di mischiare "cell33" (tile bianco)
+    ];
 
     function safeSwap(tileId1, tileId2) {
         let tile1 = document.getElementById(tileId1);
@@ -438,6 +440,11 @@ socket.onmessage = (event) => {
 
     if (data.type === "move") {
         console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
+        let player2Tiles = [
+            "cell41", "cell42", "cell43",
+            "cell51", "cell52", "cell53",
+            "cell61", "cell62"
+        ];
         swapTiles(data.from, data.to);
     } else if (data.type === "gameWon") {
         console.log(`🎮 Game Over! Winner: ${data.winner}`);

@@ -438,7 +438,9 @@ socket.onmessage = (event) => {
 
     if (data.type === "move") {
         console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
-        swapTiles(data.from, data.to);
+        let cellOppF = document.getElementById(data.from);
+        let cellOppT = document.getElementById(data.to);
+        swapTiles(cellOppF, cellOppT);
     } else if (data.type === "gameWon") {
         console.log(`🎮 Game Over! Winner: ${data.winner}`);
         stopGameTimer();

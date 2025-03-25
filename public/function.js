@@ -263,6 +263,8 @@ function swapTiles(tile1, tile2) {
     if(tile1Id<34 && tile2Id<34) {
         tile1Id += 33;
         tile2Id += 33;
+        while(socket.readyState !== WebSocket.OPEN){
+        }
         if (socket.readyState === WebSocket.OPEN) {  // 🔥 Aspetta che WebSocket sia aperto prima di inviare
             console.log(`📩 Inviando mossa al server: cell${tile1Id} ↔ cell${tile2Id}`);
             socket.send(JSON.stringify({

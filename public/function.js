@@ -103,7 +103,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundImage = `url(${playerImg})`;
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
-        tile.dataset.tile = index + 1; // Imposta un ID univoco per ogni tile
+
         console.log(tile.dataset.tile);
         if (index === playerTiles.length - 1) {
             tile.classList.add("tile9");  // Imposta l'ultimo tile come vuoto
@@ -117,7 +117,7 @@ function setPuzzleImages(playerImg, opponentImg) {
         tile.style.backgroundImage = `url(${opponentImg})`;
         tile.style.backgroundSize = "540px 540px";
         tile.style.backgroundPosition = `-${col * 180}px -${row * 180}px`;
-        tile.dataset.tile = index + 10; // Imposta un ID univoco per ogni tile
+
         console.log(tile.dataset.tile);
         if (index === opponentTiles.length - 1) {
             tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto
@@ -257,20 +257,20 @@ function swapTiles(tile1, tile2) {
 
     saveGameState();  // 🔥 Ora chiamiamo `saveGameState()` dopo ogni scambio!
 
-    let tile1Id = parseInt(tile1.className.replace("tile", ""), 10);
-    let tile2Id = parseInt(tile2.className.replace("tile", ""), 10);
+    let tile1Id = parseInt(tile1.id.replace("cell", ""));
+    let tile2Id = parseInt(tile2.id.replace("cell", ""));
 
-    if(tile1Id<10 && tile2Id<10) {
-        tile1Id += 9;
-        tile2Id += 9;
+    if(tile1Id<34 && tile2Id<34) {
+        tile1Id += 33;
+        tile2Id += 33;
         if (socket.readyState === WebSocket.OPEN) {  // 🔥 Aspetta che WebSocket sia aperto prima di inviare
-            console.log(`📩 Inviando mossa al server: ${tile1Id} ↔ ${tile2Id}`);
+            console.log(`📩 Inviando mossa al server: cell${tile1Id} ↔ cell${tile2Id}`);
             socket.send(JSON.stringify({
                 type: "move",
-                from: `tile${tile1Id}`,
-                to: `tile${tile2Id}`
+                from: `cell${tile1Id}`,
+                to: `cell${tile2Id}`
             }));
-        } else {
+        }else {
             console.warn("⚠️ WebSocket non ancora connesso! La mossa non è stata inviata.");
         }
     }
@@ -438,11 +438,6 @@ socket.onmessage = (event) => {
 
     if (data.type === "move") {
         console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
-        let player2Tiles = [
-            "cell41", "cell42", "cell43",
-            "cell51", "cell52", "cell53",
-            "cell61", "cell62"
-        ];
         swapTiles(data.from, data.to);
     } else if (data.type === "gameWon") {
         console.log(`🎮 Game Over! Winner: ${data.winner}`);

@@ -430,6 +430,19 @@ function restartGame() {
     window.location.href = "index.html"; // 🔥 Torna alla homepage
 }
 
+function showMatchToast(message) {
+    const searchMessage = document.getElementById('search-message');
+    searchMessage.style.display = "none";
+    const toast = document.getElementById("match-toast");
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    toast.classList.add("visible");
+
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        toast.classList.add("hidden");
+    }, 3000); // 🔥 Il toast resta visibile per 3 secondi
+}
 // Connessione WebSocket
 const socket = new WebSocket(`wss://${window.location.hostname}`);
 
@@ -499,7 +512,7 @@ function findOpponent() {
         if (data.type === 'matchFound') {
             console.log("👥 Giocatori assegnati:", data.currentPlayer, data.opponent);
 
-            alert(`✅ Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
+            showMatchToast(`✅ Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente
             localStorage.setItem("player1", data.currentPlayer);
             localStorage.setItem("player2", data.opponent);

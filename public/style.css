@@ -238,7 +238,7 @@ h2{
     flex-grow: 1;  /* 🔥 Occupa lo spazio disponibile */
     overflow-y: auto; /* 🔥 Aggiunge lo scroll verticale se necessario */
     max-height: 60%; /* 🔥 Limita l'altezza della descrizione */
-    padding-bottom: 10px; /* 🔥 Distanza dal bottone */
+    padding-bottom: 10px;
 }
 
 .popup-content img {

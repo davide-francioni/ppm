@@ -317,6 +317,10 @@ h2{
         padding: 30px 50px;
     }
 
+    .index {
+        margin: 25px 35px;
+    }
+
     .game {
         flex-direction: column;
     }
@@ -357,6 +361,7 @@ h2{
 
 @media screen and (max-width: 768px) {
     .index {
+        margin: 20px;
         padding: 20px;
     }
 
@@ -437,6 +442,10 @@ h2{
     .ind {
         padding: 30px 50px;
     }
+
+    .index {
+        margin: 25px 35px;
+    }
 }
 
 @media screen and (max-height: 700px) {
@@ -467,6 +476,10 @@ h2{
     .ind {
         padding: 15px 20px;
     }
+
+    .index {
+        margin: 20px;
+    }
 }
 
 /* Combined width and height queries for extreme cases */
@@ -474,6 +487,10 @@ h2{
     .game {
         transform: scale(0.55);
         transform-origin: top center;
+    }
+
+    .index {
+        margin: 10px;
     }
 
     .player-section, .opponent-section {

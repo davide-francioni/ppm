@@ -313,6 +313,10 @@ h2{
 }
 
 @media screen and (max-width: 1200px) {
+    .ind {
+        padding: 30px 50px;
+    }
+
     .game {
         flex-direction: column;
     }
@@ -352,7 +356,6 @@ h2{
 }
 
 @media screen and (max-width: 768px) {
-
     .index {
         padding: 20px;
     }
@@ -383,6 +386,11 @@ h2{
 }
 
 @media screen and (max-width: 480px) {
+
+    .ind {
+        padding: 15px 20px;
+    }
+
     body {
         font-size: 16px;
     }

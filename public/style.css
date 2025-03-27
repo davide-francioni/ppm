@@ -340,6 +340,15 @@ h2{
         height: 154px;
         background-size: 462px 462px;
     }
+
+    .split {
+        width: 90%;
+        height: 3px;
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translateY(-50%);
+    }
 }
 
 @media screen and (max-width: 768px) {

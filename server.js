@@ -32,8 +32,6 @@ app.get('/puzzle-data', (req, res) => {
     });
 });
 
-
-
 wss.on("connection", (ws) => {
     console.log("🟢 Nuovo giocatore connesso");
 

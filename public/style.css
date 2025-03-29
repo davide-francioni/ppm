@@ -313,6 +313,14 @@ h2{
 }
 
 @media screen and (max-width: 1200px) {
+    .ind {
+        padding: 30px 50px;
+    }
+
+    .index {
+        margin: 25px 35px;
+    }
+
     .game {
         flex-direction: column;
     }
@@ -340,11 +348,20 @@ h2{
         height: 154px;
         background-size: 462px 462px;
     }
+
+    .split {
+        width: 90%;
+        height: 3px;
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translateY(-50%);
+    }
 }
 
 @media screen and (max-width: 768px) {
-
     .index {
+        margin: 20px;
         padding: 20px;
     }
 
@@ -374,6 +391,11 @@ h2{
 }
 
 @media screen and (max-width: 480px) {
+
+    .ind {
+        padding: 15px 20px;
+    }
+
     body {
         font-size: 16px;
     }
@@ -420,6 +442,10 @@ h2{
     .ind {
         padding: 30px 50px;
     }
+
+    .index {
+        margin: 25px 35px;
+    }
 }
 
 @media screen and (max-height: 700px) {
@@ -450,6 +476,10 @@ h2{
     .ind {
         padding: 15px 20px;
     }
+
+    .index {
+        margin: 20px;
+    }
 }
 
 /* Combined width and height queries for extreme cases */
@@ -457,6 +487,10 @@ h2{
     .game {
         transform: scale(0.55);
         transform-origin: top center;
+    }
+
+    .index {
+        margin: 10px;
     }
 
     .player-section, .opponent-section {

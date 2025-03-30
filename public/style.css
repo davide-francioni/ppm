@@ -471,7 +471,11 @@ h2{
     }
 }
 
-@media screen and (max-height: 720px) {
+@media screen and (max-height: 700px) {
+    body {
+        font-size: 16px;
+    }
+
     .game {
         transform: scale(0.65);
         transform-origin: top center;

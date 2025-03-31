@@ -323,6 +323,7 @@ h2{
 
     .game {
         flex-direction: column;
+        padding-top: 50px;
     }
 
     .player-section, .opponent-section {
@@ -438,6 +439,13 @@ h2{
 
     .popup-content img {
         max-width: 280px;
+    }
+}
+
+@media screen and (max-height: 1000px) {
+    .game {
+        transform: scale(0.90);
+        transform-origin: top center;
     }
 }
 

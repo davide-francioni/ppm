@@ -353,9 +353,17 @@ h2{
         width: 90%;
         height: 3px;
         position: absolute;
-        top: 50%;
+        top: 60%;
         left: 10%;
         transform: translateY(-50%);
+    }
+
+    #player-name {
+        text-align: center;
+    }
+
+    #opponent-name {
+        text-align: center;
     }
 }
 

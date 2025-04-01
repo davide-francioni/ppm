@@ -413,7 +413,6 @@ h2{
 
     .game {
         flex-direction: column;
-        padding-top: 50px;
     }
 
     .player-section, .opponent-section {

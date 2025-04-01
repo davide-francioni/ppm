@@ -312,6 +312,13 @@ h2{
     }
 }
 
+@media screen and (max-width: 1550px) {
+    .game {
+        transform: scale(0.75);
+        transform-origin: top center;
+    }
+}
+
 @media screen and (max-width: 1200px) {
     .ind {
         padding: 30px 50px;
@@ -464,7 +471,7 @@ h2{
     }
 }
 
-@media screen and (max-height: 800px) {
+@media screen and (max-height: 820px) {
     body {
         font-size: 18px;
     }
@@ -487,7 +494,7 @@ h2{
     }
 }
 
-@media screen and (max-height: 700px) {
+@media screen and (max-height: 720px) {
     body {
         font-size: 16px;
     }
@@ -506,7 +513,7 @@ h2{
     }
 }
 
-@media screen and (max-height: 600px) {
+@media screen and (max-height: 620px) {
     .game {
         transform: scale(0.5);
         transform-origin: top center;
@@ -520,7 +527,7 @@ h2{
 
 
 /* Combined width and height queries for extreme cases */
-@media screen and (max-width: 480px) and (max-height: 700px) {
+@media screen and (max-width: 480px) and (max-height: 720px) {
     .game {
         transform: scale(0.55);
         transform-origin: top center;

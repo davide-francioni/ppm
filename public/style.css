@@ -168,11 +168,6 @@ h2{
     background-size: 540px 540px;
 }
 
-#player1-puzzle-name, #player1-puzzle-desc,
-#player2-puzzle-name, #player2-puzzle-desc {
-    display: none;
-}
-
 .timer-container {
     position: absolute;
     top: 2%;  /* 🔥 Posiziona il timer in alto */
@@ -422,7 +417,10 @@ h2{
 
     .player-section, .opponent-section {
         width: 100%;
+        margin:7%;
         padding: 0 20px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .table-player-board, .table-opponent-board {
@@ -448,8 +446,8 @@ h2{
         width: 90%;
         height: 3px;
         position: absolute;
-        top: 60%;
-        left: 10%;
+        top: 53%;
+        left: 5%;
         transform: translateY(-50%);
     }
 

@@ -297,7 +297,7 @@ h2{
 
 /* Media Queries for Responsive Design */
 
-/*@media screen and (max-width: 1650px) {
+@media screen and (max-width: 1600px) {
     .game {
         transform: scale(0.9);
         transform-origin: top center;
@@ -306,7 +306,7 @@ h2{
     .player-section, .opponent-section {
         padding: 0 30px;
     }
-}*/
+}
 
 @media screen and (max-height: 940px) {
     .game {
@@ -327,6 +327,13 @@ h2{
 
     .index {
         margin: 25px 35px;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .game {
+        transform: scale(0.75);
+        transform-origin: top center;
     }
 }
 

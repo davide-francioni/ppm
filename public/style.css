@@ -308,7 +308,14 @@ h2{
     }
 }*/
 
-@media screen and (max-height: 950px) {
+@media screen and (max-height: 940px) {
+    .game {
+        transform: scale(0.9);
+        transform-origin: top center;
+    }
+}
+
+@media screen and (max-height: 880px) {
     .game {
         transform: scale(0.85);
         transform-origin: top center;

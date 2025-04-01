@@ -312,10 +312,97 @@ h2{
     }
 }
 
+@media screen and (max-height: 1000px) {
+    .game {
+        transform: scale(0.90);
+        transform-origin: top center;
+    }
+}
+
+@media screen and (max-height: 900px) {
+    .game {
+        transform: scale(0.85);
+        transform-origin: top center;
+    }
+
+    .ind {
+        padding: 30px 50px;
+    }
+
+    .index {
+        margin: 25px 35px;
+    }
+}
+
 @media screen and (max-width: 1550px) {
     .game {
         transform: scale(0.75);
         transform-origin: top center;
+    }
+}
+
+@media screen and (max-height: 820px) {
+    body {
+        font-size: 18px;
+    }
+
+    .game {
+        transform: scale(0.75);
+        transform-origin: top center;
+    }
+
+    .ind {
+        padding: 20px 30px;
+    }
+
+    .index {
+        margin: auto;
+    }
+
+    #game-timer {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-height: 720px) {
+    body {
+        font-size: 16px;
+    }
+
+    .game {
+        transform: scale(0.65);
+        transform-origin: top center;
+    }
+
+    header {
+        padding: 3px 0;
+    }
+
+    .ind {
+        padding: 15px 20px;
+    }
+}
+
+/* Combined width and height queries for extreme cases */
+@media screen and (max-width: 480px) and (max-height: 720px) {
+    .game {
+        transform: scale(0.55);
+        transform-origin: top center;
+    }
+
+    .player-section, .opponent-section {
+        padding: 0 10px;
+    }
+}
+
+@media screen and (max-height: 620px) {
+    .game {
+        transform: scale(0.5);
+        transform-origin: top center;
+    }
+
+    .ind {
+        padding: 10px;
     }
 }
 
@@ -449,91 +536,3 @@ h2{
     }
 }
 
-@media screen and (max-height: 1000px) {
-    .game {
-        transform: scale(0.90);
-        transform-origin: top center;
-    }
-}
-
-@media screen and (max-height: 900px) {
-    .game {
-        transform: scale(0.85);
-        transform-origin: top center;
-    }
-
-    .ind {
-        padding: 30px 50px;
-    }
-
-    .index {
-        margin: 25px 35px;
-    }
-}
-
-@media screen and (max-height: 820px) {
-    body {
-        font-size: 18px;
-    }
-
-    .game {
-        transform: scale(0.75);
-        transform-origin: top center;
-    }
-
-    .ind {
-        padding: 20px 30px;
-    }
-
-    .index {
-        margin: auto;
-    }
-
-    #game-timer {
-        font-size: 20px;
-    }
-}
-
-@media screen and (max-height: 720px) {
-    body {
-        font-size: 16px;
-    }
-
-    .game {
-        transform: scale(0.65);
-        transform-origin: top center;
-    }
-
-    header {
-        padding: 3px 0;
-    }
-
-    .ind {
-        padding: 15px 20px;
-    }
-}
-
-@media screen and (max-height: 620px) {
-    .game {
-        transform: scale(0.5);
-        transform-origin: top center;
-    }
-
-    .ind {
-        padding: 10px;
-    }
-}
-
-
-
-/* Combined width and height queries for extreme cases */
-@media screen and (max-width: 480px) and (max-height: 720px) {
-    .game {
-        transform: scale(0.55);
-        transform-origin: top center;
-    }
-
-    .player-section, .opponent-section {
-        padding: 0 10px;
-    }
-}

@@ -7,41 +7,40 @@ function ensureUsername() {
     let player2 = localStorage.getItem("player2");
 
     if (!savedUsername) {
-        console.error("❌ Nessun username trovato!");
-        //window.location.href = "index.html"; // 🔄 Torna alla home se non c'è un username
-    } else {
-        console.log("🔒 Username già salvato:", savedUsername);
+        console.error("Nessun username trovato!");
 
-        // Verifica se l'username è player1 o player2
+    } else {
+        console.log("Username già salvato:", savedUsername);
+
         let isPlayer1 = savedUsername === player1;
         let isPlayer2 = savedUsername === player2;
 
-        localStorage.setItem("isPlayer1", isPlayer1); // ✅ Salva chi è il giocatore
+        localStorage.setItem("isPlayer1", isPlayer1);
         localStorage.setItem("isPlayer2", isPlayer2);
     }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("📢 Pagina caricata! Verifica elementi...");
+    console.log("Pagina caricata! Verifica elementi...");
 
-    ensureUsername(); // ✅ Verifica che l'username sia preservato
+    ensureUsername();
 
     if (document.getElementById("player-name")) {
-        console.log("🔄 Caricamento dati puzzle...");
+        console.log("Caricamento dati puzzle...");
         loadPuzzleData();
         setTimeout(attachTileListeners, 300);
     } else {
-        console.warn("⚠️ Elemento #player-name non trovato! Siamo nella pagina sbagliata?");
+        console.warn("Elemento #player-name non trovato! Siamo nella pagina sbagliata?");
     }
 });
 
 function loadPuzzleData() {
-    console.log("✅ Chiamata loadPuzzleData()...");
+    console.log("Chiamata loadPuzzleData()...");
 
-    let playerName = localStorage.getItem("username"); // 🔥 Recuperiamo il nome esatto
+    let playerName = localStorage.getItem("username");
 
     if (!playerName) {
-        console.error("❌ Errore: Username non trovato!");
+        console.error("Errore: Username non trovato!");
         return;
     }
 
@@ -54,11 +53,11 @@ function loadPuzzleData() {
     let img1 = localStorage.getItem("image1");
     let img2 = localStorage.getItem("image2");
 
-    console.log("👤 Player1:", player1, "| Player2:", player2);
-    console.log("🎨 Immagini ricevute:", img1, img2);
+    console.log("Player1:", player1, "| Player2:", player2);
+    console.log("Immagini ricevute:", img1, img2);
 
     if (!img1 || !img2) {
-        console.error("❌ Errore: Mancano le immagini nei dati salvati!");
+        console.error("Errore: Mancano le immagini nei dati salvati!");
         return;
     }
 
@@ -69,14 +68,14 @@ function loadPuzzleData() {
     let opponentImg = isPlayer1 ? localStorage.getItem("image2") : localStorage.getItem("image1");
 
     setPuzzleImages(playerImg, opponentImg);
-    console.log("✅ Immagini assegnate correttamente!");
-    startGameTimer(); // 🔥 Inizia il timer
+    console.log("Immagini assegnate correttamente!");
+    startGameTimer();
 
     if (localStorage.getItem("gameState")) {
-        console.log("🟢 Stato della partita trovato! Ripristino...");
+        console.log("Stato della partita trovato! Ripristino...");
         loadGameState();
     } else {
-        console.log("🟡 Nessuno stato salvato, eseguo shuffle iniziale...");
+        console.log("Nessuno stato salvato, eseguo shuffle iniziale...");
         setTimeout(shuffle, 1000);
     }
 
@@ -86,13 +85,13 @@ function loadPuzzleData() {
 }
 
 function setPuzzleImages(playerImg, opponentImg) {
-    console.log(`🖼️ Impostando immagini: player=${playerImg}, opponent=${opponentImg}`);
+    console.log(`Impostando immagini: player=${playerImg}, opponent=${opponentImg}`);
 
     let playerTiles = document.querySelectorAll(".table-player-board td");
     let opponentTiles = document.querySelectorAll(".table-opponent-board td");
 
     if (!playerImg || !opponentImg) {
-        console.error("❌ Errore: immagini non caricate correttamente!");
+        console.error("Errore: immagini non caricate correttamente!");
         return;
     }
 
@@ -106,7 +105,7 @@ function setPuzzleImages(playerImg, opponentImg) {
 
         console.log(tile.dataset.tile);
         if (index === playerTiles.length - 1) {
-            tile.classList.add("tile9");  // Imposta l'ultimo tile come vuoto
+            tile.classList.add("tile9");
         }
     });
 
@@ -120,32 +119,32 @@ function setPuzzleImages(playerImg, opponentImg) {
 
         console.log(tile.dataset.tile);
         if (index === opponentTiles.length - 1) {
-            tile.classList.add("tile18");  // Imposta l'ultimo tile come vuoto
+            tile.classList.add("tile18");
         }
     });
 
-    console.log("✅ Immagini e dataset assegnati correttamente!");
+    console.log("Immagini e dataset assegnati correttamente!");
 }
 
 function attachTileListeners() {
-    console.log("🔵 Collegando gli eventi di click ai tile...");
+    console.log("Collegando gli eventi di click ai tile...");
 
     let playerName = localStorage.getItem("username");
     let player1 = localStorage.getItem("player1");
     let player2 = localStorage.getItem("player2");
 
     if (!playerName || !player1 || !player2) {
-        console.error("❌ Errore: Dati dei giocatori mancanti!");
+        console.error("Errore: Dati dei giocatori mancanti!");
         return;
     }
 
     let isPlayer1 = (playerName === player1);
     let isPlayer2 = (playerName === player2);
 
-    console.log(`👤 Giocatore attuale: ${playerName} (Player1=${isPlayer1}, Player2=${isPlayer2})`);
+    console.log(`Giocatore attuale: ${playerName} (Player1=${isPlayer1}, Player2=${isPlayer2})`);
 
     let playerTiles = document.querySelectorAll(isPlayer1 ? ".table-player-board td" : ".table-opponent-board td");
-    console.log("📌 Numero di tiles trovati:", playerTiles.length);
+    console.log("Numero di tiles trovati:", playerTiles.length);
 
     document.querySelectorAll("td").forEach(tile => {
         tile.addEventListener("click", function () {
@@ -153,12 +152,12 @@ function attachTileListeners() {
             let row = parseInt(id.charAt(0));
             let col = parseInt(id.charAt(1));
 
-            console.log(`🟢 Click su tile (${row}, ${col})`);
+            console.log(`Click su tile (${row}, ${col})`);
             moveTile(row, col);
         });
     });
 
-    console.log("✅ Eventi di click collegati!");
+    console.log("Eventi di click collegati!");
 }
 
 function shuffle() {
@@ -173,34 +172,32 @@ function shuffle() {
         let tile2 = document.getElementById(tileId2);
 
         if (!tile1 || !tile2) {
-            console.warn(`⚠️ Tentativo di scambio fallito: ${tileId1} o ${tileId2} non esistono.`);
+            console.warn(`Tentativo di scambio fallito: ${tileId1} o ${tileId2} non esistono.`);
             return;
         }
 
         swapTiles(tile1, tile2);
     }
 
-    // **Mescola solo i tile del giocatore 1 tra di loro**
     for (let i = player1Tiles.length - 1; i > 0; i--) {
         let randIndex = Math.floor(Math.random() * (i + 1));
         safeSwap(player1Tiles[i], player1Tiles[randIndex]);
     }
 
-    console.log("✅ Shuffle completato!");
+    console.log("Shuffle completato!");
 }
 
-// Funzione per muovere le tessere
 function moveTile(row, column) {
     let cell = document.getElementById(`cell${row}${column}`);
     let blankTile = Array.from(document.querySelectorAll("td")).find(tile =>
         tile.classList.contains("tile9") || tile.classList.contains("tile18")
     );
 
-    console.log(`🔍 Tentativo di muovere il tile: ${cell ? cell.id : "❌ Nessuna cella trovata!"}`);
-    console.log(`🔍 Tessera vuota attuale: ${blankTile ? blankTile.id : "❌ Nessuna tessera bianca trovata!"}`);
+    console.log(`Tentativo di muovere il tile: ${cell ? cell.id : "Nessuna cella trovata!"}`);
+    console.log(`Tessera vuota attuale: ${blankTile ? blankTile.id : "Nessuna tessera bianca trovata!"}`);
 
     if (!cell || !blankTile) {
-        console.error("❌ Errore: Una delle tessere è null. Impossibile spostare!");
+        console.error("Errore: Una delle tessere è null. Impossibile spostare!");
         return;
     }
 
@@ -214,34 +211,31 @@ function moveTile(row, column) {
         (cellCol === blankCol && Math.abs(cellRow - blankRow) === 1);
 
     if (isAdjacent) {
-        console.log(`✅ Movimento valido! Scambio ${cell.id} con ${blankTile.id}`);
+        console.log(`Movimento valido! Scambio ${cell.id} con ${blankTile.id}`);
         swapTiles(cell, blankTile);
         checkWin();
     } else {
-        console.log("❌ Movimento non valido! Le tessere non sono adiacenti.");
+        console.log("Movimento non valido! Le tessere non sono adiacenti.");
     }
 }
 
-// Funzione per scambiare le tessere
 function swapTiles(tile1, tile2) {
 
     if (!tile1 || !tile2) {
-        console.error("❌ Errore: Uno dei tiles non è valido!", tile1, tile2);
+        console.error("Errore: Uno dei tiles non è valido!", tile1, tile2);
         return;
     }
-    console.log(`🔄 Scambio: ${tile1.id} ↔ ${tile2.id}`);
+    console.log(`Scambio: ${tile1.id} ↔ ${tile2.id}`);
 
     if (!tile1.style || !tile2.style) {
-        console.error("❌ Errore: `backgroundImage` non definito per uno dei tiles!", tile1, tile2);
+        console.error("Errore: `backgroundImage` non definito per uno dei tiles!", tile1, tile2);
         return;
     }
 
-    // **Scambia classi**
     let tempClass = tile1.className;
     tile1.className = tile2.className;
     tile2.className = tempClass;
 
-    // **Scambia le immagini**
     let tempBackground = tile1.style.backgroundImage;
     let tempPosition = tile1.style.backgroundPosition;
 
@@ -251,11 +245,11 @@ function swapTiles(tile1, tile2) {
     tile2.style.backgroundImage = tempBackground;
     tile2.style.backgroundPosition = tempPosition;
 
-    console.log("✅ Dopo lo scambio:");
-    console.log("📌 Tile 1 - Background:", tile1.style.backgroundImage, "Posizione:", tile1.style.backgroundPosition);
-    console.log("📌 Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
+    console.log("Dopo lo scambio:");
+    console.log("Tile 1 - Background:", tile1.style.backgroundImage, "Posizione:", tile1.style.backgroundPosition);
+    console.log("Tile 2 - Background:", tile2.style.backgroundImage, "Posizione:", tile2.style.backgroundPosition);
 
-    saveGameState();  // 🔥 Ora chiamiamo `saveGameState()` dopo ogni scambio!
+    saveGameState();
 
     let tile1Id = parseInt(tile1.id.replace("cell", ""));
     let tile2Id = parseInt(tile2.id.replace("cell", ""));
@@ -263,19 +257,18 @@ function swapTiles(tile1, tile2) {
     if(tile1Id<34 && tile2Id<34) {
         tile1Id += 33;
         tile2Id += 33;
-        if (socket.readyState === WebSocket.OPEN) {  // 🔥 Aspetta che WebSocket sia aperto prima di inviare
-            console.log(`📩 Inviando mossa al server: cell${tile1Id} ↔ cell${tile2Id}`);
+        if (socket.readyState === WebSocket.OPEN) {
+            console.log(`Inviando mossa al server: cell${tile1Id} ↔ cell${tile2Id}`);
             socket.send(JSON.stringify({
                 type: "move",
                 from: `cell${tile1Id}`,
                 to: `cell${tile2Id}`
             }));
         }else {
-            console.warn("⚠️ WebSocket non ancora connesso! La mossa non è stata inviata.");
+            console.warn("WebSocket non ancora connesso! La mossa non è stata inviata.");
         }
     }
 }
-
 
 // Funzione per salvare lo stato del gioco
 function saveGameState() {
@@ -289,26 +282,23 @@ function saveGameState() {
     });
 
     localStorage.setItem("gameState", JSON.stringify(gameState));
-    console.log("💾 Stato della partita salvato!");
+    console.log("Stato della partita salvato!");
 }
 
 // Funzione per caricare lo stato del gioco
 function loadGameState() {
     let savedState = localStorage.getItem("gameState");
     if (!savedState) {
-        console.warn("⚠️ Nessuno stato salvato trovato.");
+        console.warn("Nessuno stato salvato trovato.");
         return;
     }
 
     let gameState = JSON.parse(savedState);
-    console.log("🔄 Ripristino stato della partita...", gameState);
+    console.log("Ripristino stato della partita...", gameState);
 
     let playerName = localStorage.getItem("username");
     let player1 = localStorage.getItem("player1");
     let player2 = localStorage.getItem("player2");
-
-    let isPlayer1 = (playerName === player1);
-    let isPlayer2 = (playerName === player2);
 
     gameState.forEach(tileData => {
         let tile = document.getElementById(tileData.id);
@@ -325,7 +315,7 @@ function loadGameState() {
 
             let imgToUse = belongsToPlayer1 ? localStorage.getItem("image1") : localStorage.getItem("image2");
             if (!imgToUse) {
-                console.error("❌ Errore: Immagine non trovata per il tile", tileData.id);
+                console.error("Errore: Immagine non trovata per il tile", tileData.id);
                 return;
             }
 
@@ -335,7 +325,7 @@ function loadGameState() {
         }
     });
 
-    console.log("✅ Stato della partita ripristinato!");
+    console.log("Stato della partita ripristinato!");
 }
 
 function startGameTimer() {
@@ -366,12 +356,11 @@ function stopGameTimer() {
     let seconds = totalTime % 60;
     let finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-    console.log(`⏹️ Partita conclusa! Tempo totale: ${finalTime}`);
+    console.log(`Partita conclusa! Tempo totale: ${finalTime}`);
     localStorage.setItem("finalTime", finalTime);
 
     document.getElementById("game-timer").textContent = `Tempo Finale: ${finalTime}`;
 
-    // 🔥 Rimuoviamo il tempo salvato per evitare problemi al prossimo gioco
     localStorage.removeItem("startTime");
 }
 
@@ -387,8 +376,8 @@ function checkWin() {
     });
 
     if (correctOrder) {
-        console.log("🎉 Partita completata! Un giocatore ha vinto!");
-        stopGameTimer(); // 🔥 Ferma il timer
+        console.log("Partita completata! Un giocatore ha vinto!");
+        stopGameTimer();
         let winner = localStorage.getItem("username");
         socket.send(JSON.stringify({
             type: "gameWon",
@@ -404,12 +393,12 @@ function showGameOverPopup(winner) {
     let currentPlayer = localStorage.getItem("username");
 
     let isWinner = (winner === currentPlayer);
-    let winMessage = isWinner ? "🎉 Hai vinto!" : "❌ Hai perso!";
+    let winMessage = isWinner ? "Hai vinto!" : "Hai perso!";
 
     let puzzleImage =localStorage.getItem("image1");
     let puzzleName = localStorage.getItem("img1Name");
     let puzzleDesc = localStorage.getItem("img1Desc");
-    let finalTime = localStorage.getItem("finalTime") || "00:00"; // 🔥 Recupera il tempo di gioco
+    let finalTime = localStorage.getItem("finalTime") || "00:00";
 
     document.getElementById("win-lose-message").textContent = winMessage;
     document.getElementById("puzzle-image").src = puzzleImage;
@@ -427,7 +416,7 @@ function restartGame() {
     localStorage.removeItem("gameState");
     document.getElementById("overlay").style.display = "none";
     document.getElementById("game-over").style.display = "none";
-    window.location.href = "index.html"; // 🔥 Torna alla homepage
+    window.location.href = "index.html";
 }
 
 function showMatchToast(message) {
@@ -441,8 +430,9 @@ function showMatchToast(message) {
     setTimeout(() => {
         toast.classList.remove("visible");
         toast.classList.add("hidden");
-    }, 3000); // 🔥 Il toast resta visibile per 3 secondi
+    }, 3000);
 }
+
 // Connessione WebSocket
 const socket = new WebSocket(`wss://${window.location.hostname}`);
 
@@ -450,33 +440,33 @@ socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === "move") {
-        console.log(`🔄 Mossa ricevuta: ${data.from} ↔ ${data.to}`);
+        console.log(`Mossa ricevuta: ${data.from} ↔ ${data.to}`);
         let cellOppF = document.getElementById(data.from);
         let cellOppT = document.getElementById(data.to);
         swapTiles(cellOppF, cellOppT);
     } else if (data.type === "gameWon") {
-        console.log(`🎮 Game Over! Winner: ${data.winner}`);
+        console.log(`Game Over! Winner: ${data.winner}`);
         stopGameTimer();
         showGameOverPopup(data.winner);
     }
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("🔵 Funzione collegata correttamente!");
+    console.log("Funzione collegata correttamente!");
 
     // Controlla se il bottone esiste prima di collegare l'evento
     const newGameButton = document.querySelector(".new_game");
     if (newGameButton) {
         newGameButton.addEventListener("click", findOpponent);
-        console.log("🎮 Bottone 'Cerca avversario' collegato!");
+        console.log("Bottone 'Cerca avversario' collegato!");
     } else {
-        console.warn("⚠️ Attenzione: Nessun bottone '.new_game' trovato in questa pagina.");
+        console.warn("Attenzione: Nessun bottone '.new_game' trovato in questa pagina.");
     }
 });
 
 // 🔹 Funzione per cercare un avversario e avviare la partita
 function findOpponent() {
-    console.log("🟢 findOpponent() è stata chiamata!");
+    console.log("findOpponent() è stata chiamata!");
 
     const username = document.getElementById('username')?.value;
     if (!username) {
@@ -484,12 +474,12 @@ function findOpponent() {
         return;
     }
 
-    console.log(`📩 Invio richiesta al server con username: ${username}`);
+    console.log(`Invio richiesta al server con username: ${username}`);
 
     // Mostra il messaggio "Ricerca in corso..."
     const searchMessage = document.getElementById('search-message');
     if (!searchMessage) {
-        console.error("❌ Errore: 'search-message' non trovato nel DOM");
+        console.error("Errore: 'search-message' non trovato nel DOM");
         return;
     }
     searchMessage.textContent = "Ricerca in corso...";
@@ -497,7 +487,7 @@ function findOpponent() {
 
     // Verifica che il WebSocket sia connesso prima di inviare
     if (socket.readyState !== WebSocket.OPEN) {
-        console.error("❌ Errore: WebSocket non connesso!");
+        console.error("Errore: WebSocket non connesso!");
         return;
     }
 
@@ -507,12 +497,12 @@ function findOpponent() {
     // Riceve la risposta dal server
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log("📩 Risposta ricevuta dal server:", data);
+        console.log("Risposta ricevuta dal server:", data);
 
         if (data.type === 'matchFound') {
-            console.log("👥 Giocatori assegnati:", data.currentPlayer, data.opponent);
+            console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
 
-            showMatchToast(`✅ Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
+            showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente
             localStorage.setItem("player1", data.currentPlayer);
             localStorage.setItem("player2", data.opponent);
@@ -526,9 +516,9 @@ function findOpponent() {
             // Salva il giocatore corrente
             if (username === data.currentPlayer || username === data.opponent) {
                 localStorage.setItem("username", username);
-                console.log(`✅ Giocatore corrente salvato: ${username}`);
+                console.log(`Giocatore corrente salvato: ${username}`);
             } else {
-                console.error("❌ Errore: Il giocatore corrente non è tra i partecipanti!");
+                console.error("Errore: Il giocatore corrente non è tra i partecipanti!");
             }
 
             // Nasconde il messaggio di ricerca
@@ -541,7 +531,7 @@ function findOpponent() {
 }
 
 function solvePuzzle() {
-    console.log("🟢 Risoluzione automatica del puzzle...");
+    console.log("Risoluzione automatica del puzzle...");
 
     let tiles = document.querySelectorAll(".table-player-board td");
 
@@ -549,6 +539,6 @@ function solvePuzzle() {
         tile.className = `tile${index + 1}`;
     });
 
-    console.log("✅ Puzzle risolto!");
-    checkWin();  // 🔥 Dopo la risoluzione automatica, controlliamo se il puzzle è stato completato
+    console.log("Puzzle risolto!");
+    checkWin();
 }

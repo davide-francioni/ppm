@@ -13,6 +13,7 @@ let activeGames = new Map();
 
 app.use(express.static(path.join(__dirname, 'public')));  // Serve files come CSS, JS, immagini, ecc.
 app.use(express.json());
+
 // Route principale per servire index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -33,32 +34,32 @@ app.get('/puzzle-data', (req, res) => {
 });
 
 wss.on("connection", (ws) => {
-    console.log("🟢 Nuovo giocatore connesso");
+    console.log("Nuovo giocatore connesso");
 
     ws.on("message", (message) => {
         const data = JSON.parse(message);
-        console.log("📩 Messaggio ricevuto:", data);
-        console.log(`📡 Client WebSocket connessi: ${wss.clients.size}`); // 🔥 Stampa quanti client sono connessi
+        console.log("Messaggio ricevuto:", data);
+        console.log(`Client WebSocket connessi: ${wss.clients.size}`);
 
         if (data.type === "findOpponent") {
-            console.log(`🔍 ${data.username} sta cercando un avversario...`);
+            console.log(`${data.username} sta cercando un avversario...`);
             ws.username = data.username;
 
             if (waitingPlayer) {
                 const player1 = waitingPlayer;
                 const player2 = ws;
 
-                console.log(`🔗 Match trovato: ${player1.username} vs ${player2.username}`);
+                console.log(`Match trovato: ${player1.username} vs ${player2.username}`);
 
                 fs.readFile("data.json", "utf8", (err, jsonData) => {
                     if (err) {
-                        console.error("❌ Errore nel caricamento delle immagini:", err);
+                        console.error("Errore nel caricamento delle immagini:", err);
                         return;
                     }
                     const images = JSON.parse(jsonData).puzzleImages;
 
                     if (images.length < 2) {
-                        console.error("❌ Non ci sono abbastanza immagini!");
+                        console.error("Non ci sono abbastanza immagini!");
                         return;
                     }
 
@@ -88,7 +89,7 @@ wss.on("connection", (ws) => {
                         type: "matchFound",
                         gameId,
                         currentPlayer: player1.username,
-                        opponent: player2.username,  // 🔥 Ora `player1` riceverà il nome di `player2`
+                        opponent: player2.username,
                         currentImage:img1,
                         opponentImage:img2,
                         imgCName: img1Name,
@@ -101,28 +102,27 @@ wss.on("connection", (ws) => {
                         type: "matchFound",
                         gameId,
                         currentPlayer: player2.username,
-                        opponent: player1.username,  // 🔥 Ora `player2` riceverà il nome di `player1`
+                        opponent: player1.username,
                         currentImage:img2,
                         opponentImage:img1,
-                        imgCName: img2Name, // 🔥 Ora player2 riceve i dati corretti
+                        imgCName: img2Name,
                         imgCDesc: img2Desc,
                         imgOName: img1Name,
                         imgODesc: img1Desc
                     }));
 
-                    console.log(`📩 Inviato a Player1: ${player1.username}, currentPlayer=${player1.username}`);
-                    console.log(`📩 Inviato a Player2: ${player2.username}, currentPlayer=${player2.username}`);
+                    console.log(`Inviato a Player1: ${player1.username}, currentPlayer=${player1.username}`);
+                    console.log(`Inviato a Player2: ${player2.username}, currentPlayer=${player2.username}`);
 
                     waitingPlayer = null;
                 });
             } else {
-                console.log(`👤 ${ws.username} è in attesa di un avversario...`);
+                console.log(`${ws.username} è in attesa di un avversario...`);
                 waitingPlayer = ws;
             }
         }else if (data.type === "move") {
-            console.log(`🔄 Ricevuta mossa: ${data.from} ↔ ${data.to}`);
+            console.log(`Ricevuta mossa: ${data.from} ↔ ${data.to}`);
 
-            // **Trasmetti la mossa all'altro giocatore**
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
@@ -133,8 +133,8 @@ wss.on("connection", (ws) => {
                 }
             });
         } else if (data.type === 'gameWon') {
-            console.log(`🏆 Partita vinta da: ${data.winner}`);
-            // Broadcast the win to all connected clients
+            console.log(`Partita vinta da: ${data.winner}`);
+
             wss.clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
@@ -148,11 +148,11 @@ wss.on("connection", (ws) => {
 
     ws.on("close", () => {
         if (waitingPlayer === ws) {
-            console.log(`❌ ${ws.username} ha abbandonato la ricerca.`);
+            console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;
         }
     });
 });
 
-const PORT = process.env.PORT || 8080; // 🔥 Usa la porta di Render o 8080 in locale
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, '0.0.0.0', () => console.log(`Server avviato su porta ${PORT}`));

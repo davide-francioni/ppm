@@ -159,7 +159,6 @@ h2{
     pointer-events: none;
 }
 
-/* Assicura che i tasselli abbiano dimensioni fisse */
 .tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
 .tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
     width: 180px;
@@ -171,54 +170,53 @@ h2{
 
 .timer-container {
     position: absolute;
-    top: 2%;  /* 🔥 Posiziona il timer in alto */
+    top: 2%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    width: 200px; /* 🔥 Per evitare sovrapposizioni */
+    width: 200px;
 }
 
-/* Stile del Timer */
 #game-timer {
     font-size: 24px;
     font-weight: bold;
     color: #b02d0c;
-    background: white; /* 🔥 Sfondo bianco per staccarlo visivamente */
+    background: white;
     padding: 5px 10px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Barra centrale */
+
 .split {
     background-color: #b2b2b2;
     width: 3px;
-    height: 90%; /* 🔥 Ora occupa quasi tutta la finestra */
+    height: 90%;
     position: absolute;
-    top: 10%; /* 🔥 Inizia sotto il timer */
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
 }
 
 #overlay {
-    display: none; /* 🔥 Di default è nascosto */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* 🔥 Sfondo nero trasparente */
-    z-index: 5; /* 🔥 Inferiore al pop-up, ma sopra il resto */
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 5;
 }
 
 .game-over-popup {
-    display: none;  /* 🔥 Nasconde il pop-up all'inizio */
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;  /* 🔥 Ora si adatta meglio agli schermi piccoli */
-    max-width: 800px; /* 🔥 Limita la larghezza su schermi grandi */
+    width: 90%;
+    max-width: 800px;
     height: auto;
     max-height: 85%;
     background: white;
@@ -227,14 +225,14 @@ h2{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     z-index: 10;
-    overflow: hidden; /* 🔥 Impedisce che il contenuto esca fuori */
+    overflow: hidden;
     flex-direction: column;
 }
 
 .popup-content {
-    flex-grow: 1;  /* 🔥 Occupa lo spazio disponibile */
-    overflow-y: auto; /* 🔥 Aggiunge lo scroll verticale se necessario */
-    max-height: 60%; /* 🔥 Limita l'altezza della descrizione */
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 60%;
     padding-bottom: 10px;
 }
 

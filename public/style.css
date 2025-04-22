@@ -262,6 +262,12 @@ h2{
     bottom: -12px;
 }
 
+#solve-button {
+    position: fixed;
+    left: 80%;
+    top: 20px;
+}
+
 #puzzle-description{
     font-size: 16px;
     margin: 15px;
@@ -455,6 +461,20 @@ h2{
 
     #opponent-name {
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 1200px) and (max-height: 1080px) {
+    .game {
+        transform: scale(0.5);
+        transform-origin: top center;
+    }
+}
+
+@media screen and (max-width: 620px) and (max-height: 1080px) {
+    .game {
+        transform: scale(0.75);
+        transform-origin: top center;
     }
 }
 

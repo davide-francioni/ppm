@@ -359,8 +359,6 @@ function stopGameTimer() {
     console.log(`Partita conclusa! Tempo totale: ${finalTime}`);
     localStorage.setItem("finalTime", finalTime);
 
-    document.getElementById("game-timer").textContent = `Tempo Finale: ${finalTime}`;
-
     localStorage.removeItem("startTime");
 }
 
@@ -523,9 +521,11 @@ function findOpponent() {
 
             // Nasconde il messaggio di ricerca
             searchMessage.textContent = "";
-
+            setTimeout(() => {
+                window.location.href = "game.html";
+            }, 3000);
             // Reindirizza alla pagina di gioco
-            window.location.href = "game.html";
+
         }
     };
 }

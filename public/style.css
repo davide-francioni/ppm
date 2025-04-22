@@ -303,19 +303,43 @@ h2{
     position: absolute;
     right: 20px;
     top: 15px;
-    background-color: white;
-    color: #b02d0c;
+    background-color: #74230a;
+    color: white;
     padding: 8px 14px;
     border-radius: 8px;
     font-weight: bold;
     text-decoration: none;
-    border: 2px solid #b02d0c;
+    border: 2px solid white;
     transition: 0.3s;
 }
 
 .admin-button:hover {
-    background-color: #b02d0c;
-    color: white;
+    background-color: white;
+    color: #74230a;
+}
+
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.confirm-box {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.confirm-box button {
+    margin: 10px;
 }
 
 /* Media Queries for Responsive Design */

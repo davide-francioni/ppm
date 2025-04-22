@@ -55,6 +55,33 @@ app.delete('/admin/opera/:id', (req, res) => {
     });
 });
 
+app.post('/admin/opera', (req, res) => {
+    const filePath = path.join(__dirname, 'data.json');
+    fs.readFile(filePath, 'utf8', (err, json) => {
+        if (err) return res.sendStatus(500);
+        const data = JSON.parse(json);
+        const newId = Math.max(...data.puzzleImages.map(o => o.id)) + 1;
+        data.puzzleImages.push({ id: newId, ...req.body });
+        fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(201));
+    });
+});
+
+app.put('/admin/opera/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const filePath = path.join(__dirname, 'data.json');
+    fs.readFile(filePath, 'utf8', (err, json) => {
+        if (err) return res.sendStatus(500);
+        let data = JSON.parse(json);
+        const index = data.puzzleImages.findIndex(o => o.id === id);
+        if (index !== -1) {
+            data.puzzleImages[index] = { id, ...req.body };
+            fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(200));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+});
+
 wss.on("connection", (ws) => {
     console.log("Nuovo giocatore connesso");
 

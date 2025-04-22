@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuova Opera</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="index">
+  <h2>Aggiungi Nuova Opera</h2>
+  <form id="new-form">
+    <input type="text" id="name" placeholder="Nome Opera" required><br><br>
+    <input type="text" id="description" placeholder="Descrizione" required><br><br>
+    <input type="text" id="path" placeholder="URL Immagine" required><br><br>
+    <button type="submit">Salva</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById("new-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const description = document.getElementById("description").value;
+    const path = document.getElementById("path").value;
+
+    await fetch("/admin/opera", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, description, path })
+    });
+
+    window.location.href = "/admin/dashboard.html";
+  });
+</script>
+</body>
+</html>

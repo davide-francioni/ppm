@@ -22,7 +22,7 @@
                         <img src="${opera.path}" style="width:100px"><br>
                         <strong>${opera.name}</strong><br>
                         <button onclick="editOpera(${opera.id})">Modifica</button>
-                        <button onclick="deleteOpera(${opera.id})">Elimina</button>
+                        <button onclick="confirmDelete(${opera.id})">Elimina</button>
                         <hr>
                     `;
               container.appendChild(box);
@@ -31,6 +31,19 @@
 
   function editOpera(id) {
     window.location.href = `/admin/edit.html?id=${id}`;
+  }
+
+  function confirmDelete(id) {
+    const confirmBox = document.createElement("div");
+    confirmBox.className = "confirm-overlay";
+    confirmBox.innerHTML = `
+            <div class="confirm-box">
+                <p>Sei sicuro di voler eliminare questa opera?</p>
+                <button onclick="deleteOpera(${id})">✅ Sì, elimina</button>
+                <button onclick="this.parentElement.parentElement.remove()">❌ Annulla</button>
+            </div>
+        `;
+    document.body.appendChild(confirmBox);
   }
 
   function deleteOpera(id) {

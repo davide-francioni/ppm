@@ -447,6 +447,39 @@ h2{
     }
 
     .split {
+        width: 3px;
+        height: 90%;
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #player-name {
+        text-align: left;
+    }
+
+    #opponent-name {
+        text-align: right;
+    }
+}
+
+@media screen and (max-width: 1200px) and (max-height: 1080px) {
+    .game {
+        transform: scale(0.5);
+        transform-origin: top center;
+        flex-direction: row;
+    }
+
+    .player-section, .opponent-section {
+        width: 100%;
+        margin-top:7%;
+        padding: 0 20px;
+        left:0;
+        transform: translateX(-50%);
+    }
+
+    .split {
         width: 90%;
         height: 3px;
         position: absolute;
@@ -461,13 +494,6 @@ h2{
 
     #opponent-name {
         text-align: center;
-    }
-}
-
-@media screen and (max-width: 1200px) and (max-height: 1080px) {
-    .game {
-        transform: scale(0.5);
-        transform-origin: top center;
     }
 }
 

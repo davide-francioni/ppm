@@ -424,6 +424,13 @@ h2{
     }
 }
 
+@media screen and (max-width: 780px) {
+    .game {
+        transform: scale(0.6);
+        transform-origin: top center;
+    }
+}
+
 @media screen and (max-width: 1200px) and (max-height: 1080px) {
     .game {
         flex-direction: row;

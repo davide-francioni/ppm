@@ -21,8 +21,8 @@
               box.innerHTML = `
                     <img src="${opera.path}" style="width:100px"><br>
                     <strong>${opera.name}</strong><br>
-                    <button onclick="editOpera(${opera.id})">✏️ Modifica</button>
-                    <button onclick="confirmDelete(${opera.id})">🗑️ Elimina</button>
+                    <button onclick="editOpera(${opera.id})">Modifica</button>
+                    <button onclick="confirmDelete(${opera.id})">Elimina</button>
                     ${index < data.puzzleImages.length - 1 ? '<hr>' : ''}
                 `;
               container.appendChild(box);
@@ -39,8 +39,8 @@
     confirmBox.innerHTML = `
             <div class="confirm-box">
                 <p>Sei sicuro di voler eliminare questa opera?</p>
-                <button onclick="deleteOpera(${id})">✅ Sì, elimina</button>
-                <button onclick="this.parentElement.parentElement.remove()">❌ Annulla</button>
+                <button onclick="deleteOpera(${id})">Sì, elimina</button>
+                <button onclick="this.parentElement.parentElement.remove()">Annulla</button>
             </div>
         `;
     document.body.appendChild(confirmBox);

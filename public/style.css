@@ -424,7 +424,7 @@ h2{
     }
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 1000px) {
     .game {
         transform: scale(0.6);
         transform-origin: top center;

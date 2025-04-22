@@ -299,6 +299,25 @@ h2{
     display: none;
 }
 
+.admin-button {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background-color: white;
+    color: #b02d0c;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #b02d0c;
+    transition: 0.3s;
+}
+
+.admin-button:hover {
+    background-color: #b02d0c;
+    color: white;
+}
+
 /* Media Queries for Responsive Design */
 
 @media screen and (max-width: 1600px) {

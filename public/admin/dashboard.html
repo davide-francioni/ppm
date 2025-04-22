@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestione Opere</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="index">
+  <h2>Elenco delle Opere</h2>
+  <button onclick="window.location.href='/admin/new.html'">Aggiungi Nuova Opera</button>
+  <div id="opera-list"></div>
+</div>
+<script>
+  fetch("/puzzle-data")
+          .then(res => res.json())
+          .then(data => {
+            const container = document.getElementById("opera-list");
+            data.puzzleImages.forEach(opera => {
+              const box = document.createElement("div");
+              box.innerHTML = `
+                        <img src="${opera.path}" style="width:100px"><br>
+                        <strong>${opera.name}</strong><br>
+                        <button onclick="editOpera(${opera.id})">Modifica</button>
+                        <button onclick="deleteOpera(${opera.id})">Elimina</button>
+                        <hr>
+                    `;
+              container.appendChild(box);
+            });
+          });
+
+  function editOpera(id) {
+    window.location.href = `/admin/edit.html?id=${id}`;
+  }
+
+  function deleteOpera(id) {
+    fetch(`/admin/opera/${id}`, { method: "DELETE" })
+            .then(() => location.reload());
+  }
+</script>
+</body>
+</html>

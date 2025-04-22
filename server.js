@@ -33,6 +33,28 @@ app.get('/puzzle-data', (req, res) => {
     });
 });
 
+const adminUser = { username: "admin", password: "1234" };
+
+app.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username === adminUser.username && password === adminUser.password) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+app.delete('/admin/opera/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const filePath = path.join(__dirname, 'data.json');
+    fs.readFile(filePath, 'utf8', (err, json) => {
+        if (err) return res.sendStatus(500);
+        let data = JSON.parse(json);
+        data.puzzleImages = data.puzzleImages.filter(op => op.id !== id);
+        fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(200));
+    });
+});
+
 wss.on("connection", (ws) => {
     console.log("Nuovo giocatore connesso");
 

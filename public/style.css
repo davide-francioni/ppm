@@ -417,6 +417,8 @@ h2{
 
     .game {
         flex-direction: column;
+        transform: scale(1);
+        transform-origin: top center;
     }
 
     .player-section, .opponent-section {
@@ -474,6 +476,7 @@ h2{
         margin-top:0;
         padding: 0 20px;
         left:0;
+        transform: translateX(0%);
     }
 
     .split {

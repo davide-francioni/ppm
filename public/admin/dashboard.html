@@ -16,15 +16,15 @@
           .then(res => res.json())
           .then(data => {
             const container = document.getElementById("opera-list");
-            data.puzzleImages.forEach(opera => {
+            data.puzzleImages.forEach((opera, index) => {
               const box = document.createElement("div");
               box.innerHTML = `
-                        <img src="${opera.path}" style="width:100px"><br>
-                        <strong>${opera.name}</strong><br>
-                        <button onclick="editOpera(${opera.id})">Modifica</button>
-                        <button onclick="confirmDelete(${opera.id})">Elimina</button>
-                        <hr>
-                    `;
+                    <img src="${opera.path}" style="width:100px"><br>
+                    <strong>${opera.name}</strong><br>
+                    <button onclick="editOpera(${opera.id})">✏️ Modifica</button>
+                    <button onclick="confirmDelete(${opera.id})">🗑️ Elimina</button>
+                    ${index < data.puzzleImages.length - 1 ? '<hr>' : ''}
+                `;
               container.appendChild(box);
             });
           });

@@ -262,18 +262,13 @@ h2{
     bottom: -12px;
 }
 
-#solve-button {
-    position: fixed;
-    left: 80%;
-    top: 20px;
-}
-
 #puzzle-description{
     font-size: 16px;
     margin: 15px;
 }
 
 #search-message{
+    margin: 0;
     position: fixed;
     top: 30px;
     left: 50%;
@@ -285,7 +280,6 @@ h2{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     font-size: 18px;
     z-index: 9999;
-    opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease-in-out;
 }
@@ -319,7 +313,7 @@ h2{
 #solve-button {
     position: absolute;
     right: 30px;
-    top: 32px;
+    top: 39px;
     background-color: #74230a;
     color: white;
     padding: 8px 14px;
@@ -338,7 +332,7 @@ h2{
 .admin-button {
     position: absolute;
     right: 30px;
-    top: 32px;
+    top: 21px;
     background-color: #74230a;
     color: white;
     padding: 8px 14px;

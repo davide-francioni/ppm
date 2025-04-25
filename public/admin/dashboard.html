@@ -7,8 +7,9 @@
 </head>
 <body>
 <div class="index">
+  <h1>Gestione Database</h1>
+  <button onclick="window.location.href='/admin/new.html'"><h1>+</h1><br>Aggiungi Nuova Opera</button>
   <h2>Elenco delle Opere</h2>
-  <button onclick="window.location.href='/admin/new.html'">Aggiungi Nuova Opera</button>
   <div id="opera-list"></div>
 </div>
 <script>
@@ -18,12 +19,12 @@
             const container = document.getElementById("opera-list");
             data.puzzleImages.forEach((opera, index) => {
               const box = document.createElement("div");
-              box.innerHTML = `
-                    <img src="${opera.path}" style="width:100px"><br>
-                    <strong>${opera.name}</strong><br>
+              box.innerHTML = `<br>
+                    <img src="${opera.path}" style="width:200px"><br><br>
+                    <h3>${opera.name}</h3><br><br>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>
-                    ${index < data.puzzleImages.length - 1 ? '<hr>' : ''}
+                    ${index < data.puzzleImages.length - 1 ? '<br><hr>' : ''}
                 `;
               container.appendChild(box);
             });

@@ -273,6 +273,23 @@ h2{
     margin: 15px;
 }
 
+#search-message{
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: dodgerblue;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
 .toast {
     position: fixed;
     top: 30px;
@@ -297,6 +314,25 @@ h2{
 
 .toast.hidden {
     display: none;
+}
+
+#solve-button {
+    position: absolute;
+    right: 30px;
+    top: 32px;
+    background-color: #74230a;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid white;
+    transition: 0.3s;
+}
+
+#solve-button:hover {
+    background-color: white;
+    color: #74230a;
 }
 
 .admin-button {

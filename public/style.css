@@ -348,6 +348,21 @@ h2{
     color: #74230a;
 }
 
+.adm-button{
+    background-color: darkgray;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid dimgray;
+    transition: 0.3s;
+}
+
+.adm-button:hover {
+    background-color: gray;
+    color: white;
+}
+
 .confirm-overlay {
     position: fixed;
     top: 0;

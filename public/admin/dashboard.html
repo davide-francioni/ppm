@@ -9,7 +9,7 @@
 <div class="index">
   <h1>Gestione Database</h1>
   <div>
-    <button class="adm-button" <!--style="position: relative;width: fit-content;left: 50%;transform: translateX(-50%);"--> onclick="window.location.href='/admin/new.html'"><h1>+</h1>Aggiungi Nuova Opera</button><br>
+    <button class="adm-button" onclick="window.location.href='/admin/new.html'"><h1>+</h1>Aggiungi Nuova Opera</button><br> <!--style="position: relative;width: fit-content;left: 50%;transform: translateX(-50%);"-->
   </div>
   <h2>Elenco delle Opere</h2>
   <div id="opera-list"></div>
@@ -22,7 +22,7 @@
             data.puzzleImages.forEach((opera, index) => {
               const box = document.createElement("div");
               box.innerHTML = `<br>
-                    <img src="${opera.path}" style="width:300px"><br>
+                    <img src="${opera.path}" style="width:300px; max-height: 300px;"><br>
                     <h3>${opera.name}</h3><br>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>

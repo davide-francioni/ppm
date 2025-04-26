@@ -9,12 +9,16 @@
 <div class="index">
   <h2>Modifica Opera</h2>
   <form id="edit-form">
-    <strong>Nome: </strong>
+    <strong>Nome:</strong><br>
     <input type="text" id="name" required><br><br>
-    <strong>Descrizione: </strong>
-    <input type="text" id="description" required><br><br>
-    <input type="text" id="path" required><br><br>
+
+    <strong>Descrizione:</strong><br>
+    <textarea id="description" maxlength="1500" required style="width:80%; height:100px;"></textarea><br><br>
+
+    <img id="preview" src="" style="max-width: 300px; margin-bottom: 10px;"><br>
+
     <button class="adm-button" type="submit">Aggiorna</button>
+    <p id="error-msg" style="color:red; display:none;"></p>
   </form>
 </div>
 
@@ -29,7 +33,7 @@
             if (opera) {
               document.getElementById("name").value = opera.name;
               document.getElementById("description").value = opera.description;
-              document.getElementById("path").value = opera.path;
+              document.getElementById("preview").src = opera.path;
             }
           });
 
@@ -37,12 +41,18 @@
     e.preventDefault();
     const name = document.getElementById("name").value;
     const description = document.getElementById("description").value;
-    const path = document.getElementById("path").value;
+    const errorMsg = document.getElementById("error-msg");
+
+    if (description.length > 1500) {
+      errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
+      errorMsg.style.display = "block";
+      return;
+    }
 
     await fetch(`/admin/opera/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, path })
+      body: JSON.stringify({ name, description })
     });
 
     window.location.href = "/admin/dashboard.html";

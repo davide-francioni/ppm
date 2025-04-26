@@ -18,6 +18,10 @@ h2{
     padding:0 10px;
 }
 
+form{
+    text-align: left;
+}
+
 .ind {
     margin: auto;
     text-align: center;

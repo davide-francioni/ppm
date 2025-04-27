@@ -75,6 +75,7 @@
       });
 
       if (response.ok) {
+        console.log("✅ Salvataggio riuscito! Redirect in corso...");
         window.location.href = "/admin/dashboard.html";
       } else {
         throw new Error("Errore di upload!");

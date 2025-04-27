@@ -89,6 +89,11 @@ app.post('/admin/upload', upload.single('image'), async (req, res) => {
                 Authorization: `Bearer ${GITHUB_TOKEN}`,
                 Accept: "application/vnd.github.v3+json"
             }
+        }).then(() => {
+            console.log("✅ Immagine caricata correttamente su GitHub!");
+        }).catch((error) => {
+            console.error("❌ Errore upload immagine su GitHub:", error.response?.data || error.message);
+            throw new Error("Errore upload immagine su GitHub");
         });
 
         const publicImageUrl = `https://raw.githubusercontent.com/${REPO}/main/${githubImagePath}`;

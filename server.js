@@ -55,80 +55,85 @@ app.delete('/admin/opera/:id', (req, res) => {
     });
 });
 
-app.post('/admin/opera', (req, res) => {
-    const filePath = path.join(__dirname, 'data.json');
-    fs.readFile(filePath, 'utf8', (err, json) => {
-        if (err) return res.sendStatus(500);
-        const data = JSON.parse(json);
-        const newId = Math.max(...data.puzzleImages.map(o => o.id)) + 1;
-        data.puzzleImages.push({ id: newId, ...req.body });
-        fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(201));
-    });
-});
-
-app.put('/admin/opera/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const filePath = path.join(__dirname, 'data.json');
-    fs.readFile(filePath, 'utf8', (err, json) => {
-        if (err) return res.sendStatus(500);
-        let data = JSON.parse(json);
-        const index = data.puzzleImages.findIndex(o => o.id === id);
-        if (index !== -1) {
-            data.puzzleImages[index] = { id, ...req.body };
-            fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(200));
-        } else {
-            res.sendStatus(404);
-        }
-    });
-});
-
 const multer = require('multer');
 const upload = multer();
 const axios = require('axios');
 
-// Configurazione Github
 const GITHUB_TOKEN = "ghp_YNsZoxQcryAAndKZUIIK2tPaPDFbWr2aQsNN";
 const REPO = "davide-francioni/ppm";
-const PATH_FOLDER = "public/image/";
+const GITHUB_API = "https://api.github.com/repos/davide-francioni/ppm/contents/";
+const IMAGE_FOLDER = "public/image/";
+const DATA_JSON = "data.json";
 
+// 👉 Route per upload immagine + aggiornamento data.json
 app.post('/admin/upload', upload.single('image'), async (req, res) => {
     try {
         const { name, description } = req.body;
         const file = req.file;
 
-        const base64Content = file.buffer.toString('base64');
-        const fileName = Date.now() + "-" + file.originalname.replace(/\s/g, "_");
+        if (!file) {
+            return res.status(400).send("Nessun file caricato");
+        }
 
-        // Upload su GitHub
-        const githubResponse = await axios.put(
-            `https://api.github.com/repos/${REPO}/contents/${PATH_FOLDER}${fileName}`,
-            {
-                message: `Upload immagine: ${fileName}`,
-                content: base64Content
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${GITHUB_TOKEN}`,
-                    Accept: 'application/vnd.github.v3+json'
-                }
+        const base64Image = file.buffer.toString('base64');
+        const timestamp = Date.now();
+        const safeFileName = `${timestamp}-${file.originalname.replace(/\s+/g, '_')}`;
+        const githubImagePath = `${IMAGE_FOLDER}${safeFileName}`;
+
+        // 🔥 1. Carica immagine su GitHub
+        await axios.put(`${GITHUB_API}${githubImagePath}`, {
+            message: `Aggiunta immagine ${safeFileName}`,
+            content: base64Image
+        }, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json"
             }
-        );
-
-        const publicUrl = `https://raw.githubusercontent.com/${REPO}/main/${PATH_FOLDER}${fileName}`;
-
-        // Ora aggiorniamo il database
-        const filePath = path.join(__dirname, 'data.json');
-        fs.readFile(filePath, 'utf8', (err, json) => {
-            if (err) return res.sendStatus(500);
-            const data = JSON.parse(json);
-            const newId = Math.max(0, ...data.puzzleImages.map(o => o.id)) + 1;
-            data.puzzleImages.push({ id: newId, name, description, path: publicUrl });
-            fs.writeFile(filePath, JSON.stringify(data, null, 2), () => res.sendStatus(201));
         });
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Errore durante l'upload su GitHub");
+        const publicImageUrl = `https://raw.githubusercontent.com/${REPO}/main/${githubImagePath}`;
+
+        // 🔥 2. Scarica il data.json attuale da GitHub
+        const getDataJson = await axios.get(`${GITHUB_API}${DATA_JSON}`, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json"
+            }
+        });
+
+        const dataContent = Buffer.from(getDataJson.data.content, 'base64').toString('utf-8');
+        let data = JSON.parse(dataContent);
+        const shaOld = getDataJson.data.sha;
+
+        // 🔥 3. Aggiorna i dati in RAM
+        const newId = Math.max(0, ...data.puzzleImages.map(o => o.id)) + 1;
+        data.puzzleImages.push({
+            id: newId,
+            name,
+            description,
+            path: publicImageUrl
+        });
+
+        const updatedDataJson = Buffer.from(JSON.stringify(data, null, 2)).toString('base64');
+
+        // 🔥 4. Carica nuovo data.json su GitHub
+        await axios.put(`${GITHUB_API}${DATA_JSON}`, {
+            message: "Aggiornamento data.json con nuova opera",
+            content: updatedDataJson,
+            sha: shaOld
+        }, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json"
+            }
+        });
+
+        console.log("✅ Immagine e data.json caricati con successo!");
+        res.sendStatus(201);
+
+    } catch (error) {
+        console.error("❌ Errore durante upload su GitHub:", error.response?.data || error.message);
+        res.status(500).send("Errore durante upload su GitHub");
     }
 });
 

@@ -30,6 +30,10 @@ textarea{
     border-radius: 5px;
 }
 
+#new-form{
+    text-align: left;
+}
+
 #edit-form{
     text-align: left;
 }

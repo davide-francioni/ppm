@@ -42,49 +42,59 @@
     }
   });
 
-  document.getElementById("new-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("✅ SCRIPT FUNZIONANTE!");
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("✅ DOM completamente caricato!");
 
-    const name = document.getElementById("name").value;
-    const description = document.getElementById("description").value;
-    const imageFile = document.getElementById("image").files[0];
-    const errorMsg = document.getElementById("error-msg");
-
-    if (description.length > 1500) {
-      errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
-      errorMsg.style.display = "block";
+    const form = document.getElementById("new-form");
+    if (!form) {
+      console.error("❌ Form #new-form non trovato!");
       return;
     }
 
-    if (!imageFile || !["image/png", "image/jpeg", "image/jpg"].includes(imageFile.type)) {
-      errorMsg.textContent = "Devi caricare un file PNG, JPG o JPEG.";
-      errorMsg.style.display = "block";
-      return;
-    }
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      console.log("🟢 FORM SUBMIT INTERCETTATO!");
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("image", imageFile);
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const imageFile = document.getElementById("image").files[0];
+      const errorMsg = document.getElementById("error-msg");
 
-    try {
-      const response = await fetch("/admin/upload", {
-        method: "POST",
-        body: formData
-      });
-
-      if (response.ok) {
-        console.log("✅ Salvataggio riuscito! Redirect in corso...");
-        window.location.href = "/admin/dashboard.html";
-      } else {
-        throw new Error("Errore di upload!");
+      if (description.length > 1500) {
+        errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
+        errorMsg.style.display = "block";
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "Errore durante il salvataggio.";
-      errorMsg.style.display = "block";
-    }
+
+      if (!imageFile || !["image/png", "image/jpeg", "image/jpg"].includes(imageFile.type)) {
+        errorMsg.textContent = "Devi caricare un file PNG, JPG o JPEG.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("image", imageFile);
+
+      try {
+        const response = await fetch("/admin/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          console.log("✅ Salvataggio riuscito! Redirect in corso...");
+          window.location.href = "/admin/dashboard.html";
+        } else {
+          throw new Error("Errore nell'upload");
+        }
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "Errore durante il salvataggio.";
+        errorMsg.style.display = "block";
+      }
+    });
   });
 </script>
 </body>

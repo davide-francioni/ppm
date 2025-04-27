@@ -26,7 +26,6 @@
 </div>
 
 <script>
-  console.log("✅ SCRIPT FUNZIONANTE!");
   document.getElementById("image").addEventListener("change", function() {
     const file = this.files[0];
     const preview = document.getElementById("preview");
@@ -45,6 +44,7 @@
 
   document.getElementById("new-form").addEventListener("submit", async (e) => {
     e.preventDefault();
+    console.log("✅ SCRIPT FUNZIONANTE!");
 
     const name = document.getElementById("name").value;
     const description = document.getElementById("description").value;

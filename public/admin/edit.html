@@ -26,7 +26,6 @@
 </div>
 
 <script>
-  console.log("✅ SCRIPT FUNZIONANTE!");
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -43,6 +42,7 @@
 
   document.getElementById("edit-form").addEventListener("submit", async (e) => {
     e.preventDefault();
+    console.log("✅ SCRIPT FUNZIONANTE!");
     const name = document.getElementById("name").value;
     const description = document.getElementById("description").value;
     const errorMsg = document.getElementById("error-msg");

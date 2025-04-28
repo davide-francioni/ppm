@@ -59,7 +59,7 @@ const multer = require('multer');
 const upload = multer();
 const axios = require('axios');
 
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 const REPO = "davide-francioni/ppm";
 const GITHUB_API = "https://api.github.com/repos/davide-francioni/ppm/contents/";
 const IMAGE_FOLDER = "public/image/";

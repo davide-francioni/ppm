@@ -64,7 +64,7 @@ const REPO = "davide-francioni/ppm";
 const GITHUB_API = "https://api.github.com/repos/davide-francioni/ppm/contents/";
 const IMAGE_FOLDER = "public/image/";
 const DATA_JSON = "data.json";
-//sossio
+
 // 👉 Route per upload immagine + aggiornamento data.json
 app.post('/admin/upload', upload.single('image'), async (req, res) => {
     try {

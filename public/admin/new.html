@@ -26,34 +26,27 @@
 </div>
 
 <script>
-  document.getElementById("image").addEventListener("change", function() {
-    const file = this.files[0];
-    const preview = document.getElementById("preview");
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = "unset";
-      };
-      reader.readAsDataURL(file);
-    } else {
-      preview.style.display = "none";
-    }
-  });
-
   document.addEventListener("DOMContentLoaded", function() {
-    console.log("✅ DOM completamente caricato!");
-
     const form = document.getElementById("new-form");
-    if (!form) {
-      console.error("❌ Form #new-form non trovato!");
-      return;
-    }
+
+    document.getElementById("image").addEventListener("change", function() {
+      const file = this.files[0];
+      const preview = document.getElementById("preview");
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = "unset";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = "none";
+      }
+    });
 
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
-      console.log("🟢 FORM SUBMIT INTERCETTATO!");
 
       const name = document.getElementById("name").value.trim();
       const description = document.getElementById("description").value.trim();
@@ -84,10 +77,9 @@
         });
 
         if (response.ok) {
-          console.log("✅ Salvataggio riuscito! Redirect in corso...");
           window.location.href = "/admin/dashboard.html";
         } else {
-          throw new Error("Errore nell'upload");
+          throw new Error("Errore di upload!");
         }
       } catch (err) {
         console.error(err);

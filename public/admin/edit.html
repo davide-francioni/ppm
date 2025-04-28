@@ -25,51 +25,54 @@
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-  fetch("/puzzle-data")
-          .then(res => res.json())
-          .then(data => {
-            const opera = data.puzzleImages.find(op => op.id == id);
-            if (opera) {
-              document.getElementById("name").value = opera.name;
-              document.getElementById("description").value = opera.description;
-              document.getElementById("preview").src = opera.path;
-            }
-          });
+    fetch("/puzzle-data")
+            .then(res => res.json())
+            .then(data => {
+              const opera = data.puzzleImages.find(op => op.id == id);
+              if (opera) {
+                document.getElementById("name").value = opera.name;
+                document.getElementById("description").value = opera.description;
+                document.getElementById("preview").src = opera.path;
+              }
+            });
 
-  document.getElementById("edit-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("✅ SCRIPT FUNZIONANTE!");
-    const name = document.getElementById("name").value;
-    const description = document.getElementById("description").value;
-    const errorMsg = document.getElementById("error-msg");
+    const form = document.getElementById("edit-form");
 
-    if (description.length > 1500) {
-      errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
-      errorMsg.style.display = "block";
-      return;
-    }
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-    try {
-      const response = await fetch(`/admin/opera/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description })
-      });
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const errorMsg = document.getElementById("error-msg");
 
-      if (response.ok) {
-        console.log("✅ Salvataggio riuscito! Redirect in corso...");
-        window.location.href = "/admin/dashboard.html";
-      } else {
-        throw new Error("Errore aggiornamento!");
+      if (description.length > 1500) {
+        errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
+        errorMsg.style.display = "block";
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "Errore durante l'aggiornamento.";
-      errorMsg.style.display = "block";
-    }
+
+      try {
+        const response = await fetch(`/admin/opera/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, description })
+        });
+
+        if (response.ok) {
+          window.location.href = "/admin/dashboard.html";
+        } else {
+          throw new Error("Errore aggiornamento!");
+        }
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "Errore durante l'aggiornamento.";
+        errorMsg.style.display = "block";
+      }
+    });
   });
 </script>
 </body>

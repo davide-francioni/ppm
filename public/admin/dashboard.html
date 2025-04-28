@@ -13,6 +13,13 @@
   </div>
   <h2>Elenco delle Opere</h2>
   <div id="opera-list"></div>
+
+  <div id="overlay" class="overlay" style="display: none;"></div>
+  <div id="description-popup" class="popup" style="display: none;">
+    <button id="close-popup" class="close-btn">&times;</button>
+    <h2 id="popup-title"></h2>
+    <p id="popup-description"></p>
+  </div>
 </div>
 <script>
   fetch("/puzzle-data")
@@ -22,8 +29,9 @@
             data.puzzleImages.forEach((opera, index) => {
               const box = document.createElement("div");
               box.innerHTML = `<br>
-                    <img src="${opera.path}" style="width:300px; max-height: 300px;"><br>
+                    <img src="${opera.path}" class="preview-image"><br>
                     <h3>${opera.name}</h3><br>
+                    <button onclick="openDescription('${opera.name}', '${opera.description}')">👁️ Visualizza Descrizione</button>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>
                     ${index < data.puzzleImages.length - 1 ? '<br><br><hr>' : ''}
@@ -53,6 +61,18 @@
     fetch(`/admin/opera/${id}`, { method: "DELETE" })
             .then(() => location.reload());
   }
+
+  function openDescription(name, description) {
+    document.getElementById("popup-title").textContent = name;
+    document.getElementById("popup-description").textContent = description;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("description-popup").style.display = "block";
+  }
+
+  document.getElementById("close-popup").addEventListener("click", function() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("description-popup").style.display = "none";
+  });
 </script>
 </body>
 </html>

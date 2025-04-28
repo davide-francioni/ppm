@@ -416,6 +416,23 @@ textarea{
     color: white;
 }
 
+.home-button {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid dimgray;
+    transition: 0.3s;
+}
+
+.home-button:hover {
+    background-color: gray;
+    color: white;
+}
+
 .confirm-overlay {
     position: fixed;
     top: 0;
@@ -447,6 +464,9 @@ img.preview-image {
     height: auto;
     display: block;
     margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 12px solid black;
 }
 
 /* Media Queries for Responsive Design */

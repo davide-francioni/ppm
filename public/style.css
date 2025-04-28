@@ -418,8 +418,9 @@ textarea{
 
 .home-button {
     position: absolute;
-    right: 20px;
-    top: 15px;
+    right: 40px;
+    top: 57px;
+    color: buttontext;
     padding: 8px 14px;
     border-radius: 8px;
     font-weight: bold;
@@ -466,7 +467,7 @@ img.preview-image {
     margin: auto;
     padding: 10px;
     border-radius: 10px;
-    border: 12px solid black;
+    border: 5px solid black;
 }
 
 /* Media Queries for Responsive Design */

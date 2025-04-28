@@ -32,7 +32,7 @@
               box.innerHTML = `<br>
                     <img src="${opera.path}" class="preview-image"><br>
                     <h3>${opera.name}</h3><br>
-                    <button class="adm-button" onclick='openDescription("${opera.name}", "${opera.description}")'>Visualizza Descrizione</button>
+                    <button class="adm-button" onclick="openDescription(this)" data-name="${opera.name}" data-description="${opera.description}">Visualizza Descrizione</button>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>
                     ${index < data.puzzleImages.length - 1 ? '<br><br><hr>' : ''}
@@ -63,7 +63,10 @@
             .then(() => location.reload());
   }
 
-  function openDescription(name, description) {
+  function openDescription(button) {
+    const name = button.getAttribute("data-name");
+    const description = button.getAttribute("data-description");
+
     document.getElementById("popup-title").textContent = name;
     document.getElementById("popup-description").textContent = description;
     document.getElementById("overlay").style.display = "block";

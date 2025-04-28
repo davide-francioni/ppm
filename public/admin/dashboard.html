@@ -8,8 +8,9 @@
 <body>
 <div class="index">
   <h1>Gestione Database</h1>
+  <a href="/index.html" class="home-button">Home</a>
   <div>
-    <button class="adm-button" onclick="window.location.href='/admin/new.html'"><h1>+</h1>Aggiungi Nuova Opera</button><br> <!--style="position: relative;width: fit-content;left: 50%;transform: translateX(-50%);"-->
+    <button class="adm-button" onclick="window.location.href='/admin/new.html'"><h1>+</h1>Aggiungi Nuova Opera</button><br>
   </div>
   <h2>Elenco delle Opere</h2>
   <div id="opera-list"></div>
@@ -17,7 +18,7 @@
   <div id="overlay" class="overlay" style="display: none;"></div>
   <div id="description-popup" class="popup" style="display: none;">
     <button id="close-popup" class="close-btn">&times;</button>
-    <h2 id="popup-title"></h2>
+    <h2 id="popup-name"></h2>
     <p id="popup-description"></p>
   </div>
 </div>
@@ -31,7 +32,7 @@
               box.innerHTML = `<br>
                     <img src="${opera.path}" class="preview-image"><br>
                     <h3>${opera.name}</h3><br>
-                    <button onclick="openDescription('${opera.name}', '${opera.description}')">👁️ Visualizza Descrizione</button>
+                    <button class="adm-button" onclick='openDescription("${opera.name}", "${opera.description}")'>Visualizza Descrizione</button>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>
                     ${index < data.puzzleImages.length - 1 ? '<br><br><hr>' : ''}

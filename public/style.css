@@ -425,6 +425,7 @@ textarea{
     right: 40px;
     top: 57px;
     background-color: lightgray;
+    color: black;
     padding: 8px 14px;
     border-radius: 8px;
     font-weight: bold;
@@ -616,6 +617,10 @@ img.preview-image {
 
     #description{
         height: 170px;
+    }
+
+    .adm-button{
+        font-size: 24px;
     }
 }
 

@@ -484,6 +484,9 @@ img.preview-image {
     height:120px;
 }
 
+.comf-delete{
+    font-size: 40px;
+}
 /* Media Queries for Responsive Design */
 
 @media screen and (max-width: 1600px) {

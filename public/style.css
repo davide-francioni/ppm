@@ -22,12 +22,15 @@ input{
     padding: 5px;
     border: 2px solid;
     border-radius: 5px;
+    font-size: 20px;
 }
 
 textarea{
     padding: 5px;
     border: 2px solid;
     border-radius: 5px;
+    font-family: unify sans,Helvetica,Arial,sans-serif;
+    font-size: 20px;
 }
 
 #new-form{
@@ -627,7 +630,16 @@ img.preview-image {
         top:27px;
     }
 
+    #solve-button {
+        font-size: 24px;
+        top: 41px;
+    }
+
     .adm-button{
+        font-size: 24px;
+    }
+
+    input, textarea {
         font-size: 24px;
     }
 }

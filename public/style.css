@@ -545,6 +545,10 @@ img.preview-image {
 }
 
 @media screen and (max-width: 1200px) {
+    body{
+        font-size: 24px;
+    }
+
     .ind {
         padding: 30px 50px;
     }
@@ -619,12 +623,16 @@ img.preview-image {
         height: 170px;
     }
 
+    .admin-button{
+        top:27px;
+    }
+
     .adm-button{
         font-size: 24px;
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) and (max-height: 1080px) {
     .game {
         transform: scale(0.6);
         transform-origin: top center;

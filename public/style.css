@@ -265,7 +265,7 @@ textarea{
     right: 15px;
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 40px;
     cursor: pointer;
 }
 
@@ -651,6 +651,10 @@ img.preview-image {
 
     textarea {
         font-size: 14px;
+    }
+
+    .close-btn {
+        font-size: 60px;
     }
 }
 

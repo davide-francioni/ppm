@@ -478,6 +478,11 @@ img.preview-image {
     border: 5px solid black;
 }
 
+#description{
+    width:100%;
+    height:120px;
+}
+
 /* Media Queries for Responsive Design */
 
 @media screen and (max-width: 1600px) {
@@ -623,7 +628,7 @@ img.preview-image {
     }
 
     #description{
-        height: 170px;
+        height: 600px;
     }
 
     .admin-button{
@@ -639,8 +644,12 @@ img.preview-image {
         font-size: 24px;
     }
 
-    input, textarea {
+    input{
         font-size: 24px;
+    }
+
+    textarea {
+        font-size: 18px;
     }
 }
 
@@ -648,6 +657,10 @@ img.preview-image {
     .game {
         transform: scale(0.6);
         transform-origin: top center;
+    }
+
+    #description{
+        height: 250px;
     }
 }
 

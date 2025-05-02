@@ -416,6 +416,7 @@ textarea{
     text-decoration: none;
     border: 2px solid dimgray;
     transition: 0.3s;
+    font-size: 20px;
 }
 
 .adm-button:hover {
@@ -426,7 +427,7 @@ textarea{
 .home-button {
     position: absolute;
     right: 40px;
-    top: 57px;
+    top: 46px;
     background-color: lightgray;
     color: black;
     padding: 8px 14px;

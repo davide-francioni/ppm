@@ -789,6 +789,7 @@ img.preview-image {
     }
 }
 
+
 @media screen and (max-width: 480px) and (max-height: 720px) {
     .game {
         transform: scale(0.55);

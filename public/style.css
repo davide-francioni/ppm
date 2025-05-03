@@ -687,39 +687,6 @@ img.preview-image {
     }
 }
 
-@media screen and (max-width: 1200px) and (max-height: 1080px) {
-    .game {
-        transform: scale(0.4);
-        transform-origin: top center;
-        /*flex-direction: row;*/
-    }
-/*
-.player-section, .opponent-section {
-    width: 100%;
-    margin-top:0;
-    padding: 0 20px;
-    left:0;
-    transform: translateX(0%);
-}
-
-.split {
-    width: 3px;
-    height: 90%;
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-#player-name {
-    text-align: left;
-}
-
-#opponent-name {
-    text-align: right;
-}*/
-}
-
 @media screen and (max-height: 720px) {
 body {
     font-size: 16px;
@@ -892,6 +859,39 @@ body {
 .popup-content img {
     max-width: 280px;
 }
+}
+
+@media screen and (max-width: 1200px) and (max-height: 1080px) {
+    .game {
+        transform: scale(0.4);
+        transform-origin: top center;
+        /*flex-direction: row;*/
+    }
+    /*
+    .player-section, .opponent-section {
+        width: 100%;
+        margin-top:0;
+        padding: 0 20px;
+        left:0;
+        transform: translateX(0%);
+    }
+
+    .split {
+        width: 3px;
+        height: 90%;
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #player-name {
+        text-align: left;
+    }
+
+    #opponent-name {
+        text-align: right;
+    }*/
 }
 
 

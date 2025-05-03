@@ -748,6 +748,10 @@ img.preview-image {
     .admin-button{
         top: 15px
     }
+
+    #solve-button {
+        top: 20px
+    }
 }
 
 @media screen and (max-width: 1000px) and (max-height: 1080px){

@@ -756,6 +756,13 @@ img.preview-image {
     }
 }
 
+@media screen and (max-width: 1000px){
+    .preview-image{
+        max-width: 300px;
+        max-height: 300px;
+    }
+}
+
 @media screen and (max-width: 480px) and (max-height: 720px) {
     .game {
         transform: scale(0.55);
@@ -806,11 +813,6 @@ img.preview-image {
     .game-over-popup {
         width: 95%;
         max-width: 450px;
-    }
-
-    .preview-image{
-        max-width: 300px;
-        max-height: 300px;
     }
 }
 

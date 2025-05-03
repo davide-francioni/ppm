@@ -772,15 +772,20 @@ img.preview-image {
 
     .home-button{
         font-size: 15px;
-        right: 50%;
-        transform: translateX(50%);
-        top: auto;
+        right: 20px;
+        top: 10px;
     }
 }
 
 @media screen and (max-width: 1000px) and (max-height: 720px){
     header{
         height: 150px;
+    }
+
+    .home-button{
+        font-size: 12px;
+        right: 10px;
+        top: 5px;
     }
 }
 

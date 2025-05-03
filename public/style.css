@@ -689,216 +689,216 @@ img.preview-image {
 
 @media screen and (max-width: 1200px) and (max-height: 1080px) {
     .game {
-        flex-direction: row;
-        transform: scale(0.75);
+        transform: scale(0.5);
         transform-origin: top center;
+        /*flex-direction: row;*/
     }
+/*
+.player-section, .opponent-section {
+    width: 100%;
+    margin-top:0;
+    padding: 0 20px;
+    left:0;
+    transform: translateX(0%);
+}
 
-    .player-section, .opponent-section {
-        width: 100%;
-        margin-top:0;
-        padding: 0 20px;
-        left:0;
-        transform: translateX(0%);
-    }
+.split {
+    width: 3px;
+    height: 90%;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-    .split {
-        width: 3px;
-        height: 90%;
-        position: absolute;
-        top: 10%;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+#player-name {
+    text-align: left;
+}
 
-    #player-name {
-        text-align: left;
-    }
-
-    #opponent-name {
-        text-align: right;
-    }
+#opponent-name {
+    text-align: right;
+}*/
 }
 
 @media screen and (max-width: 620px) and (max-height: 1080px) {
-    .game {
-        transform: scale(0.75);
-        transform-origin: top center;
-    }
+.game {
+    transform: scale(0.75);
+    transform-origin: top center;
+}
 }
 
 @media screen and (max-height: 720px) {
-    body {
-        font-size: 16px;
-    }
+body {
+    font-size: 16px;
+}
 
-    .game {
-        transform: scale(0.65);
-        transform-origin: top center;
-    }
+.game {
+    transform: scale(0.65);
+    transform-origin: top center;
+}
 
-    header {
-        padding: 3px 0;
-    }
+header {
+    padding: 3px 0;
+}
 
-    .ind {
-        padding: 15px 20px;
-    }
+.ind {
+    padding: 15px 20px;
+}
 
-    .admin-button{
-        top: 15px
-    }
+.admin-button{
+    top: 15px
+}
 
-    #solve-button {
-        top: 20px
-    }
+#solve-button {
+    top: 20px
+}
 }
 
 @media screen and (max-width: 1000px) and (max-height: 1080px){
-    header{
-        height: 185px;
-    }
+header{
+    height: 185px;
+}
 
-    .admin-button{
-        font-size: 15px;
-        right: 50%;
-        transform: translateX(50%);
-        top: auto;
-    }
+.admin-button{
+    font-size: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    top: auto;
+}
 
-    #solve-button{
-        font-size: 15px;
-        right: 50%;
-        transform: translateX(50%);
-        top: auto;
-    }
+#solve-button{
+    font-size: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    top: auto;
+}
 
-    .home-button{
-        font-size: 15px;
-        right: 20px;
-        top: 10px;
-    }
+.home-button{
+    font-size: 15px;
+    right: 20px;
+    top: 10px;
+}
 
-    .dash-title{
-        margin-top: 70px;
-    }
+.dash-title{
+    margin-top: 70px;
+}
 }
 
 @media screen and (max-width: 1000px) and (max-height: 720px){
-    header{
-        height: 150px;
-    }
+header{
+    height: 150px;
+}
 
-    .home-button{
-        font-size: 12px;
-        right: 10px;
-    }
+.home-button{
+    font-size: 12px;
+    right: 10px;
+}
 }
 
 
 @media screen and (max-width: 480px) and (max-height: 720px) {
-    .game {
-        transform: scale(0.55);
-        transform-origin: top center;
-    }
+.game {
+    transform: scale(0.55);
+    transform-origin: top center;
+}
 
-    .player-section, .opponent-section {
-        padding: 0 10px;
-    }
+.player-section, .opponent-section {
+    padding: 0 10px;
+}
 }
 
 @media screen and (max-height: 620px) {
-    .game {
-        transform: scale(0.5);
-        transform-origin: top center;
-    }
+.game {
+    transform: scale(0.5);
+    transform-origin: top center;
+}
 
-    .ind {
-        padding: 10px;
-    }
+.ind {
+    padding: 10px;
+}
 }
 
 @media screen and (max-width: 768px) {
-    .index {
-        margin: 20px;
-        padding: 20px;
-    }
+.index {
+    margin: 20px;
+    padding: 20px;
+}
 
-    .table-player-board, .table-opponent-board {
-        width: 450px;
-        height: 450px;
-        padding: 50px 49px;
-        background-size: 450px;
-    }
+.table-player-board, .table-opponent-board {
+    width: 450px;
+    height: 450px;
+    padding: 50px 49px;
+    background-size: 450px;
+}
 
-    .row {
-        width: 348px;
-        height: 116px;
-    }
+.row {
+    width: 348px;
+    height: 116px;
+}
 
-    .tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
-    .tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
-        width: 116px;
-        height: 116px;
-        background-size: 348px 348px;
-    }
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
+.tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
+    width: 116px;
+    height: 116px;
+    background-size: 348px 348px;
+}
 
-    .game-over-popup {
-        width: 95%;
-        max-width: 450px;
-    }
+.game-over-popup {
+    width: 95%;
+    max-width: 450px;
+}
 
-    img.preview-image{
-        max-width: 300px;
-        max-height: 300px;
-    }
+img.preview-image{
+    max-width: 300px;
+    max-height: 300px;
+}
 
-    #image{
-        font-size: 20px;
-    }
+#image{
+    font-size: 20px;
+}
 }
 
 @media screen and (max-width: 480px) {
 
-    .ind {
-        padding: 15px 20px;
-    }
+.ind {
+    padding: 15px 20px;
+}
 
-    body {
-        font-size: 16px;
-    }
+body {
+    font-size: 16px;
+}
 
-    .table-player-board, .table-opponent-board {
-        width: 300px;
-        height: 300px;
-        padding: 33px 32px;
-        background-size: 300px;
-    }
+.table-player-board, .table-opponent-board {
+    width: 300px;
+    height: 300px;
+    padding: 33px 32px;
+    background-size: 300px;
+}
 
-    .row {
-        width: 231px;
-        height: 77px;
-    }
+.row {
+    width: 231px;
+    height: 77px;
+}
 
-    .tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
-    .tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
-        width: 77px;
-        height: 77px;
-        background-size: 231px 231px;
-    }
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
+.tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
+    width: 77px;
+    height: 77px;
+    background-size: 231px 231px;
+}
 
-    .new_game {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
+.new_game {
+    font-size: 16px;
+    padding: 8px 12px;
+}
 
-    #game-timer {
-        font-size: 18px;
-    }
+#game-timer {
+    font-size: 18px;
+}
 
-    .popup-content img {
-        max-width: 280px;
-    }
+.popup-content img {
+    max-width: 280px;
+}
 }
 
 

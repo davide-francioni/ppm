@@ -733,7 +733,7 @@ img.preview-image {
     }
 }
 
-@media screen and (max-width: 900px) and (max-height: 1080px){
+@media screen and (max-width: 1000px) and (max-height: 1080px){
     .admin-button{
         font-size: 15px;
         right: 50%;
@@ -753,11 +753,6 @@ img.preview-image {
         right: 50%;
         transform: translateX(50%);
         top: auto;
-    }
-
-    .preview-image{
-        max-width: 300px;
-        max-height: 300px;
     }
 }
 
@@ -811,6 +806,11 @@ img.preview-image {
     .game-over-popup {
         width: 95%;
         max-width: 450px;
+    }
+
+    .preview-image{
+        max-width: 300px;
+        max-height: 300px;
     }
 }
 

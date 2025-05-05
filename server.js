@@ -90,8 +90,6 @@ app.use(
     })
 );
 
-app.use(express.static("public"));
-
 function checkAuth(req, res, next) {
     if (req.session && req.session.authenticated) {
         next();
@@ -100,11 +98,26 @@ function checkAuth(req, res, next) {
     }
 }
 
-app.use("/admin/dashboard.html", checkAuth);
-app.use("/admin/new.html", checkAuth);
-app.use("/admin/edit.html", checkAuth);
+app.get("/admin/dashboard.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "admin", "dashboard.html"));
+});
 
-app.use("/admin", express.static("admin"));
+app.get("/admin/new.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "admin", "new.html"));
+});
+
+app.get("/admin/edit.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "admin", "edit.html"));
+});
+
+// Login.html accessibile senza protezione
+app.get("/admin/login.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "admin", "login.html"));
+});
+
+// Servi altri file statici (CSS, JS, immagini) in admin
+app.use("/admin", express.static(path.join(__dirname, "admin")));
+
 
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
 

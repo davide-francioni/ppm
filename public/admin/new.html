@@ -13,10 +13,13 @@
                 // Se non è autenticato, reindirizza
                 window.location.href = "/admin/login.html";
               }
+              else{
+                document.getElementById("body").style.display = "block";
+              }
             })
   </script>
 </head>
-<body>
+<body id="body" style="display: none">
 <div class="index">
   <h1>Aggiungi Nuova Opera</h1>
   <form id="new-form" enctype="multipart/form-data">

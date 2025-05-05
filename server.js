@@ -87,8 +87,8 @@ app.use(
         saveUninitialized: false,
         cookie: {
             maxAge: 2 * 60 * 60 * 1000,
-            secure: true,            // se usi https
-            sameSite: "none",        // per cross-domain cookie
+            secure: false,
+            sameSite: "lax"
         },
     })
 );

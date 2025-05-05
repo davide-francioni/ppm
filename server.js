@@ -74,22 +74,16 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const fetch = require("node-fetch");
 const session = require("express-session");
+const FileStore = require("session-file-store")(session);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(
-    session({
-        secret: "ppm_super_secret_key",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 2 * 60 * 60 * 1000, // 2 ore
-        },
-    })
-);
+app.use(express.static("public"));
+app.use("/admin", express.static("admin"));
 
+// Middleware per protezione pagine admin
 function checkAuth(req, res, next) {
     if (req.session && req.session.authenticated) {
         next();
@@ -98,26 +92,9 @@ function checkAuth(req, res, next) {
     }
 }
 
-app.get("/admin/dashboard.html", checkAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "dashboard.html"));
-});
-
-app.get("/admin/new.html", checkAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "new.html"));
-});
-
-app.get("/admin/edit.html", checkAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "edit.html"));
-});
-
-// Login.html accessibile senza protezione
-app.get("/admin/login.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "login.html"));
-});
-
-// Servi altri file statici (CSS, JS, immagini) in admin
-app.use("/admin", express.static(path.join(__dirname, "admin")));
-
+app.use("/admin/dashboard.html", checkAuth);
+app.use("/admin/new.html", checkAuth);
+app.use("/admin/edit.html", checkAuth);
 
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
 

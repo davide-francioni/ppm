@@ -5,6 +5,20 @@
   <title>Gestione Opere</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
+  <script>
+    // Controlla se esiste una sessione salvata (es: tramite flag custom)
+    fetch('/admin/check-session')
+            .then(res => {
+              if (!res.ok) {
+                // Se non è autenticato, reindirizza
+                window.location.href = "/admin/login.html";
+              }
+            })
+            .catch(() => {
+              // Se errore nella fetch, reindirizza comunque
+              window.location.href = "/admin/login.html";
+            });
+  </script>
 </head>
 <body>
 <div class="index">

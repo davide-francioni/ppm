@@ -125,6 +125,14 @@ function checkAuth(req, res, next) {
     }
 }
 
+app.get("/admin/check-session", (req, res) => {
+    if (req.session && req.session.authenticated) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
 
 app.get("/opere", (req, res) => {
@@ -132,18 +140,6 @@ app.get("/opere", (req, res) => {
         if (err) return res.status(500).send("Errore nel leggere il database.");
         res.json(JSON.parse(data));
     });
-});
-
-app.post("/admin/login", (req, res) => {
-    const { username, password } = req.body;
-    if (username === "admin" && password === "admin") {
-        req.session.authenticated = true;
-        res.redirect("/admin/dashboard.html");
-    } else {
-        res.send(
-            '<script>alert("Credenziali non valide!"); window.location.href="/admin/login.html";</script>'
-        );
-    }
 });
 
 app.get("/admin/logout", (req, res) => {

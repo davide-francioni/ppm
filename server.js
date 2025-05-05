@@ -434,7 +434,6 @@ wss.on("connection", (ws) => {
 
     ws.on("close", () => {
         if (waitingPlayer === ws) {
-            clearTimeout(inactivityTimer);
             console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;
         }

@@ -306,7 +306,7 @@ app.delete('/admin/opera/:id', async (req, res) => {
 
         res.sendStatus(200);
     } catch (error) {
-        console.error("❌ Errore eliminazione opera:", error.response?.data || error.message);
+        console.error("Errore eliminazione opera:", error.response?.data || error.message);
         res.status(500).send("Errore durante l'eliminazione");
     }
 });
@@ -314,7 +314,15 @@ app.delete('/admin/opera/:id', async (req, res) => {
 wss.on("connection", (ws) => {
     console.log("Nuovo giocatore connesso");
 
+    const inactivityTimeout = setTimeout(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.close();
+            console.log("Connessione chiusa per inattività");
+        }
+    }, 60 * 60 * 1000);
+
     ws.on("message", (message) => {
+        clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);
         console.log("Messaggio ricevuto:", data);
         console.log(`Client WebSocket connessi: ${wss.clients.size}`);
@@ -426,6 +434,7 @@ wss.on("connection", (ws) => {
 
     ws.on("close", () => {
         if (waitingPlayer === ws) {
+            clearTimeout(inactivityTimer);
             console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;
         }

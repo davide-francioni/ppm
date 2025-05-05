@@ -39,6 +39,7 @@ const adminUser = { username: "admin", password: "1234" };
 app.post('/admin/login', (req, res) => {
     const { username, password } = req.body;
     if (username === adminUser.username && password === adminUser.password) {
+        req.session.authenticated = true;
         res.sendStatus(200);
     } else {
         res.sendStatus(401);
@@ -83,12 +84,18 @@ app.use(bodyParser.json());
 
 app.use(
     session({
-        store: new FileStore({ path: "./sessions", logFn: function () {} }),
+        store: new FileStore({
+            path: "./sessions",
+            logFn: function () {}, // silenzioso
+            retries: 1,
+        }),
         secret: "ppm_super_secret_key",
         resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 2 * 60 * 60 * 1000, // 2 ore
+            maxAge: 2 * 60 * 60 * 1000,
+            secure: true,            // se usi https
+            sameSite: "none",        // per cross-domain cookie
         },
     })
 );
@@ -145,6 +152,7 @@ app.get("/opere", (req, res) => {
 
 app.get("/admin/logout", (req, res) => {
     req.session.destroy(() => {
+        req.session.authenticated = false;
         res.redirect("/admin/login.html");
     });
 });

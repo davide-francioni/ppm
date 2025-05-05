@@ -73,9 +73,20 @@ app.use(express.static('public'));
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const fetch = require("node-fetch");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
+
+app.use(
+    session({
+        store: new FileStore({ path: "./sessions", logFn: function () {} }),
+        secret: "ppm_super_secret_key",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 2 * 60 * 60 * 1000, // 2 ore
+        },
+    })
+);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));

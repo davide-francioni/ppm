@@ -12,12 +12,10 @@
               if (!res.ok) {
                 // Se non è autenticato, reindirizza
                 window.location.href = "/admin/login.html";
+              }else{
+                document.getElementById("body").style.display = "block";
               }
             })
-            .catch(() => {
-              // Se errore nella fetch, reindirizza comunque
-              window.location.href = "/admin/login.html";
-            });
   </script>
 </head>
 <body id="body" style="display: none">

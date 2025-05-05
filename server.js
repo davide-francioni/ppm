@@ -45,7 +45,19 @@ app.post('/admin/login', (req, res) => {
 });
 
 const multer = require('multer');
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // max 5MB
+    fileFilter: function (req, file, cb) {
+        const ext = path.extname(file.originalname).toLowerCase();
+        if ([".png", ".jpg", ".jpeg"].includes(ext)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Solo PNG, JPG e JPEG sono supportati"));
+        }
+    },
+});
 const axios = require('axios');
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -57,6 +69,68 @@ const DATA_JSON = "data.json";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const fetch = require("node-fetch");
+const session = require("express-session");
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(
+    session({
+        secret: "ppm_super_secret_key",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 2 * 60 * 60 * 1000, // 2 ore
+        },
+    })
+);
+
+app.use(express.static("public"));
+app.use("/admin", express.static("admin"));
+
+function checkAuth(req, res, next) {
+    if (req.session && req.session.authenticated) {
+        next();
+    } else {
+        res.redirect("/admin/login.html");
+    }
+}
+
+app.use("/admin/dashboard.html", checkAuth);
+app.use("/admin/new.html", checkAuth);
+app.use("/admin/edit.html", checkAuth);
+
+const DATA_FILE_PATH = path.join(__dirname, "data.json");
+
+app.get("/opere", (req, res) => {
+    fs.readFile(DATA_FILE_PATH, "utf8", (err, data) => {
+        if (err) return res.status(500).send("Errore nel leggere il database.");
+        res.json(JSON.parse(data));
+    });
+});
+
+app.post("/admin/login", (req, res) => {
+    const { username, password } = req.body;
+    if (username === "admin" && password === "admin") {
+        req.session.authenticated = true;
+        res.redirect("/admin/dashboard.html");
+    } else {
+        res.send(
+            '<script>alert("Credenziali non valide!"); window.location.href="/admin/login.html";</script>'
+        );
+    }
+});
+
+app.get("/admin/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/admin/login.html");
+    });
+});
 
 const saveLocalJson = (data) => {
     const filePath = path.join(__dirname, 'data.json');

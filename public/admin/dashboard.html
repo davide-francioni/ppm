@@ -23,6 +23,18 @@
   </div>
 </div>
 <script>
+  fetch("/opere", { method: "GET" })
+          .then(res => {
+            if (res.status === 401 || res.redirected) {
+              console.warn("Sessione non valida. Reindirizzo...");
+              window.location.href = "/admin/login.html";
+            }
+          })
+          .catch(err => {
+            console.error("Errore nel controllo sessione:", err);
+            window.location.href = "/admin/login.html";
+          });
+
   fetch("/puzzle-data")
           .then(res => res.json())
           .then(data => {

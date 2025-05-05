@@ -91,7 +91,6 @@ app.use(
 );
 
 app.use(express.static("public"));
-app.use("/admin", express.static("admin"));
 
 function checkAuth(req, res, next) {
     if (req.session && req.session.authenticated) {
@@ -104,6 +103,8 @@ function checkAuth(req, res, next) {
 app.use("/admin/dashboard.html", checkAuth);
 app.use("/admin/new.html", checkAuth);
 app.use("/admin/edit.html", checkAuth);
+
+app.use("/admin", express.static("admin"));
 
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
 

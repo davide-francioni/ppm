@@ -110,10 +110,17 @@ app.get("/admin/edit.html", checkAuth, (req, res) => {
 
 app.use("/admin", express.static("admin")); // solo per file CSS, JS, immagini
 
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
+    next();
+});
+
 function checkAuth(req, res, next) {
+    console.log("🔐 checkAuth chiamato - Sessione:", req.session);
     if (req.session && req.session.authenticated) {
         next();
     } else {
+        console.log("🚫 Accesso negato: utente non autenticato");
         res.redirect("/admin/login.html");
     }
 }

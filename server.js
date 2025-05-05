@@ -3,6 +3,9 @@ const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
 const fs = require('fs');
+if (!fs.existsSync("./sessions")) {
+    fs.mkdirSync("./sessions");
+}
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -35,16 +38,6 @@ app.get('/puzzle-data', (req, res) => {
 });
 
 const adminUser = { username: "admin", password: "1234" };
-
-app.post('/admin/login', (req, res) => {
-    const { username, password } = req.body;
-    if (username === adminUser.username && password === adminUser.password) {
-        req.session.authenticated = true;
-        res.sendStatus(200);
-    } else {
-        res.sendStatus(401);
-    }
-});
 
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const multer = require('multer');
@@ -99,6 +92,16 @@ app.use(
         },
     })
 );
+
+app.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username === adminUser.username && password === adminUser.password) {
+        req.session.authenticated = true;
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(401);
+    }
+});
 
 app.use(express.static("public"));
 

@@ -108,7 +108,7 @@ app.get("/admin/edit.html", checkAuth, (req, res) => {
     res.sendFile(path.join(adminPath, "edit.html"));
 });
 
-app.use("/admin", express.static("admin")); // solo per file CSS, JS, immagini
+//app.use("/admin", express.static("admin")); // solo per file CSS, JS, immagini
 
 app.use((req, res, next) => {
     res.setHeader("Cache-Control", "no-store");
@@ -124,10 +124,6 @@ function checkAuth(req, res, next) {
         res.redirect("/admin/login.html");
     }
 }
-
-app.use("/admin/dashboard.html", checkAuth);
-app.use("/admin/new.html", checkAuth);
-app.use("/admin/edit.html", checkAuth);
 
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
 

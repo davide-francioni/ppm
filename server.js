@@ -45,6 +45,7 @@ app.post('/admin/login', (req, res) => {
     }
 });
 
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -76,6 +77,10 @@ const cors = require("cors");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 
+app.use(cors({ origin: true, credentials: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use(
     session({
         store: new FileStore({ path: "./sessions", logFn: function () {} }),
@@ -87,10 +92,6 @@ app.use(
         },
     })
 );
-
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(express.static("public"));
 

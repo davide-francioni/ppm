@@ -82,9 +82,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static("public"));
-app.use("/admin", express.static("admin"));
 
-// Middleware per protezione pagine admin
+const adminPath = path.join(__dirname, "admin");
+
+app.get("/admin/dashboard.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(adminPath, "dashboard.html"));
+});
+
+app.get("/admin/new.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(adminPath, "new.html"));
+});
+
+app.get("/admin/edit.html", checkAuth, (req, res) => {
+    res.sendFile(path.join(adminPath, "edit.html"));
+});
+
+app.use("/admin", express.static("admin")); // solo per file CSS, JS, immagini
+
 function checkAuth(req, res, next) {
     if (req.session && req.session.authenticated) {
         next();

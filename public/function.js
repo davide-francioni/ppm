@@ -1,4 +1,4 @@
-let startTime;
+let gameStartTimestamp = null;
 let timerInterval;
 
 function ensureUsername() {
@@ -331,13 +331,21 @@ function loadGameState() {
     console.log("Stato della partita ripristinato!");
 }
 
-function startGameTimer(gameId) {
-    const savedGameId = localStorage.getItem("currentGameId");
-    const key = `startTime_${gameId}`;
-    if (!localStorage.getItem(key)) {
-        localStorage.setItem(key, Date.now());
+function startGameTimer() {
+    if (!gameStartTimestamp) {
+        const stored = localStorage.getItem("startTimestamp");
+        if (stored) gameStartTimestamp = parseInt(stored, 10);
     }
-    timerInterval = setInterval(() => updateGameTimer(gameId), 1000);
+    if (!gameStartTimestamp) return;
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const now = Date.now();
+        const elapsed = Math.floor((now - gameStartTimestamp) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 }
 
 function updateGameTimer(gameId) {
@@ -351,21 +359,13 @@ function updateGameTimer(gameId) {
 
 function stopGameTimer() {
     clearInterval(timerInterval);
-    const gameId = localStorage.getItem("currentGameId");
-    const startKey = `startTime_${gameId}`;
-
-    const startTime = parseInt(localStorage.getItem(startKey), 10);
-    let endTime = Date.now();
-    let totalTime = Math.floor((endTime - startTime) / 1000);
-
-    let minutes = Math.floor(totalTime / 60);
-    let seconds = totalTime % 60;
-    let finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    console.log(`Partita conclusa! Tempo totale: ${finalTime}`);
+    const end = Date.now();
+    const elapsed = Math.floor((end - gameStartTimestamp) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    const finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     localStorage.setItem("finalTime", finalTime);
-
-    localStorage.removeItem("startTime");
+    localStorage.removeItem("startTimestamp");
 }
 
 function checkWin() {
@@ -505,7 +505,8 @@ function findOpponent() {
 
         if (data.type === 'matchFound') {
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
-
+            localStorage.setItem("startTimestamp", data.startTime);
+            gameStartTimestamp = parseInt(data.startTime, 10);
             showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente
             localStorage.setItem("player1", data.currentPlayer);

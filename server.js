@@ -314,7 +314,15 @@ app.delete('/admin/opera/:id', async (req, res) => {
 wss.on("connection", (ws) => {
     console.log("Nuovo giocatore connesso");
 
+    const inactivityTimeout = setTimeout(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.close();
+            console.log("Connessione chiusa per inattività");
+        }
+    }, 20 * 60 * 1000);
+
     ws.on("message", (message) => {
+        clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);
         console.log("Messaggio ricevuto:", data);
         console.log(`Client WebSocket connessi: ${wss.clients.size}`);
@@ -355,30 +363,25 @@ wss.on("connection", (ws) => {
                     let img2Desc = images[img2Index].description;
 
                     const gameId = Date.now();
-
-                    const timeout = setTimeout(() => {
-                        console.log(`⏰ Timeout partita ${gameId}`);
-                        [player1, player2].forEach(p => {
-                            if (p.readyState === WebSocket.OPEN) {
-                                p.send(JSON.stringify({ type: "timeout" }));
-                                p.close();
-                            }
-                        });
-                        activeGames.delete(gameId);
-                    }, 10 * 60 * 1000);
+                    const startTime = Date.now();
 
                     activeGames.set(gameId, {
                         img1,
                         img2,
                         player1: player1.username,
                         player2: player2.username,
-                        timeout
+                        startTime
                     });
+
+                    const gameInfo = {
+                        type: "matchFound",
+                        gameId,
+                        startTime,
+                    };
 
                     // Invia i dati ai due giocatori
                     player1.send(JSON.stringify({
-                        type: "matchFound",
-                        gameId,
+                        ...gameInfo,
                         currentPlayer: player1.username,
                         opponent: player2.username,
                         currentImage:img1,
@@ -390,8 +393,7 @@ wss.on("connection", (ws) => {
                     }));
 
                     player2.send(JSON.stringify({
-                        type: "matchFound",
-                        gameId,
+                        ...gameInfo,
                         currentPlayer: player2.username,
                         opponent: player1.username,
                         currentImage:img2,
@@ -412,61 +414,28 @@ wss.on("connection", (ws) => {
                 waitingPlayer = ws;
             }
         }else if (data.type === "move") {
-            console.log(`Ricevuta mossa: ${data.from} ↔ ${data.to}`);
-
-            for (const [gameId, game] of activeGames.entries()) {
-                if (game.player1 === ws || game.player2 === ws) {
-                    clearTimeout(game.timeout);
-                    game.timeout = setTimeout(() => {
-                        console.log(`⏰ Timeout partita ${gameId}`);
-                        [game.player1, game.player2].forEach(p => {
-                            if (p.readyState === WebSocket.OPEN) {
-                                p.send(JSON.stringify({ type: "timeout" }));
-                                p.close();
-                            }
-                        });
-                        activeGames.delete(gameId);
-                    }, 10 * 60 * 1000);
-
-                    const receiver = (game.player1 === ws) ? game.player2 : game.player1;
-                    if (receiver.readyState === WebSocket.OPEN) {
-                        receiver.send(JSON.stringify({ type: "move", from: data.from, to: data.to }));
-                    }
-                    break;
+            wss.clients.forEach(client => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: "move",
+                        from: data.from,
+                        to: data.to
+                    }));
                 }
-            }
+            });
         } else if (data.type === 'gameWon') {
-            console.log(`Partita vinta da: ${data.winner}`);
-
-            for (const [gameId, game] of activeGames.entries()) {
-                if (game.player1 === ws || game.player2 === ws) {
-                    clearTimeout(game.timeout);
-                    [game.player1, game.player2].forEach(p => {
-                        if (p.readyState === WebSocket.OPEN) {
-                            p.send(JSON.stringify({ type: "gameWon", winner: data.winner }));
-                        }
-                    });
-                    activeGames.delete(gameId);
-                    break;
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: "gameWon",
+                        winner: data.winner
+                    }));
                 }
-            }
+            });
         }
     });
 
     ws.on("close", () => {
-        for (const [gameId, game] of activeGames.entries()) {
-            if (game.player1 === ws || game.player2 === ws) {
-                clearTimeout(game.timeout);
-                const other = game.player1 === ws ? game.player2 : game.player1;
-                if (other.readyState === WebSocket.OPEN) {
-                    other.send(JSON.stringify({ type: "timeout" }));
-                    other.close();
-                }
-                activeGames.delete(gameId);
-                break;
-            }
-        }
-
         if (waitingPlayer === ws) {
             console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;

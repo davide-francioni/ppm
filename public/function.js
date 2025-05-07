@@ -37,6 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadPuzzleData() {
     console.log("Chiamata loadPuzzleData()...");
 
+    const gameId = Date.now();
+    localStorage.setItem("currentGameId", gameId);
+
     let playerName = localStorage.getItem("username");
 
     if (!playerName) {
@@ -69,7 +72,7 @@ function loadPuzzleData() {
 
     setPuzzleImages(playerImg, opponentImg);
     console.log("Immagini assegnate correttamente!");
-    startGameTimer();
+    startGameTimer(gameId);
 
     if (localStorage.getItem("gameState")) {
         console.log("Stato della partita trovato! Ripristino...");
@@ -328,27 +331,30 @@ function loadGameState() {
     console.log("Stato della partita ripristinato!");
 }
 
-function startGameTimer() {
-    if (!localStorage.getItem("startTime")) {
-        localStorage.setItem("startTime", Date.now()); // Salva il tempo di inizio solo la prima volta
+function startGameTimer(gameId) {
+    const savedGameId = localStorage.getItem("currentGameId");
+    const key = `startTime_${gameId}`;
+    if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, Date.now());
     }
-
-    startTime = parseInt(localStorage.getItem("startTime"), 10);
-    timerInterval = setInterval(updateGameTimer, 1000);
+    timerInterval = setInterval(() => updateGameTimer(gameId), 1000);
 }
 
-function updateGameTimer() {
-    let currentTime = Date.now();
-    let elapsedTime = Math.floor((currentTime - startTime) / 1000);
-
-    let minutes = Math.floor(elapsedTime / 60);
-    let seconds = elapsedTime % 60;
-
+function updateGameTimer(gameId) {
+    const startTime = parseInt(localStorage.getItem(`startTime_${gameId}`), 10);
+    const currentTime = Date.now();
+    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = elapsedTime % 60;
     document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function stopGameTimer() {
     clearInterval(timerInterval);
+    const gameId = localStorage.getItem("currentGameId");
+    const startKey = `startTime_${gameId}`;
+
+    const startTime = parseInt(localStorage.getItem(startKey), 10);
     let endTime = Date.now();
     let totalTime = Math.floor((endTime - startTime) / 1000);
 
@@ -409,11 +415,11 @@ function showGameOverPopup(winner) {
 }
 
 function restartGame() {
-    localStorage.removeItem("startTime");
-    localStorage.removeItem("finalTime");
+    const gameId = localStorage.getItem("currentGameId");
     localStorage.removeItem("gameState");
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("game-over").style.display = "none";
+    localStorage.removeItem(`startTime_${gameId}`);
+    localStorage.removeItem("finalTime");
+    localStorage.removeItem("currentGameId");
     window.location.href = "index.html";
 }
 

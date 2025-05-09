@@ -36,24 +36,6 @@ app.get('/puzzle-data', (req, res) => {
     });
 });
 
-app.post('/admin/login', (req, res) => {
-    const { username, password } = req.body;
-    fs.readFile('data.json', 'utf8', (err, rawData) => {
-        if (err) return res.status(500).send("Errore lettura database");
-
-        const data = JSON.parse(rawData);
-        const match = data.admins.find(user => user.username === username && user.password === password);
-
-        if (match) {
-            req.session.authenticated = true;
-            req.session.username = username;
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(401);
-        }
-    });
-});
-
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const multer = require('multer');
 const storage = multer.memoryStorage();
@@ -108,16 +90,6 @@ app.use(
     })
 );
 
-app.post('/admin/login', (req, res) => {
-    const { username, password } = req.body;
-    if (username === adminUser.username && password === adminUser.password) {
-        req.session.authenticated = true;
-        res.sendStatus(200);
-    } else {
-        res.sendStatus(401);
-    }
-});
-
 app.use(express.static("public"));
 
 const adminPath = path.join(__dirname, "admin");
@@ -160,6 +132,41 @@ app.get("/admin/check-session", (req, res) => {
 });
 
 const DATA_FILE_PATH = path.join(__dirname, "data.json");
+
+app.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+
+    fs.readFile(DATA_FILE_PATH, 'utf8', (err, rawData) => {
+        if (err) {
+            console.error("❌ Errore lettura data.json:", err);
+            return res.status(500).send("Errore interno nel server");
+        }
+
+        try {
+            const data = JSON.parse(rawData);
+            if (!data.admins || !Array.isArray(data.admins)) {
+                return res.status(500).send("Struttura dati non valida");
+            }
+
+            const match = data.admins.find(user =>
+                user.username === username && user.password === password
+            );
+
+            if (match) {
+                req.session.authenticated = true;
+                req.session.username = username;
+                return res.sendStatus(200);
+            } else {
+                return res.sendStatus(401); // credenziali errate
+            }
+
+        } catch (parseError) {
+            console.error("❌ Errore parsing JSON:", parseError);
+            return res.status(500).send("Errore parsing database");
+        }
+    });
+});
+
 
 app.get("/opere", (req, res) => {
     fs.readFile(DATA_FILE_PATH, "utf8", (err, data) => {

@@ -18,7 +18,6 @@ let activeGames = new Map();
 app.use(express.static(path.join(__dirname, 'public')));  // Serve files come CSS, JS, immagini, ecc.
 app.use(express.json());
 
-// Route principale per servire index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -37,7 +36,23 @@ app.get('/puzzle-data', (req, res) => {
     });
 });
 
-const adminUser = { username: "admin", password: "1234" };
+app.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    fs.readFile('data.json', 'utf8', (err, rawData) => {
+        if (err) return res.status(500).send("Errore lettura database");
+
+        const data = JSON.parse(rawData);
+        const match = data.admins.find(user => user.username === username && user.password === password);
+
+        if (match) {
+            req.session.authenticated = true;
+            req.session.username = username;
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(401);
+        }
+    });
+});
 
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const multer = require('multer');

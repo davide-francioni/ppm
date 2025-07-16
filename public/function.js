@@ -480,10 +480,16 @@ socket.onmessage = (event) => {
         stopGameTimer();
         showGameOverPopup(data.winner);
     }
-    else if (data.type === "scoreUpdate") {
-        const opponentScoreEl = document.getElementById("opponent-score");
-        if (opponentScoreEl) {
-            opponentScoreEl.textContent = `${data.score}/8`;
+    else if (data.type === "opponentScoreUpdate") {
+        const opponentUsername = localStorage.getItem("player1") === localStorage.getItem("username")
+            ? localStorage.getItem("player2")
+            : localStorage.getItem("player1");
+
+        if (data.username === opponentUsername) {
+            const opponentScoreEl = document.getElementById("opponent-score");
+            if (opponentScoreEl) {
+                opponentScoreEl.textContent = `${data.score}/8`;
+            }
         }
     }
 };

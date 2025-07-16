@@ -101,7 +101,7 @@ textarea{
     padding: 10px 0;
 }
 
-#opponent-name {
+#opponent-container {
     flex-direction: row-reverse;
 }
 

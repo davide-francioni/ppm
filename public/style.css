@@ -22,12 +22,15 @@ input{
     padding: 5px;
     border: 2px solid;
     border-radius: 5px;
+    font-size: 20px;
 }
 
 textarea{
     padding: 5px;
     border: 2px solid;
     border-radius: 5px;
+    font-family: unify sans,Helvetica,Arial,sans-serif;
+    font-size: 20px;
 }
 
 #new-form{
@@ -64,9 +67,15 @@ textarea{
     margin: auto;
     background-color: #b02d0c;
     color: white;
-    border: none;
+    border: 2px solid white;
     border-radius: 12px;
     padding: 10px 15px;
+}
+
+.new_game:hover {
+    background-color: white;
+    color: #b02d0c;
+    border: 2px solid #b02d0c;
 }
 
 .rules {
@@ -207,7 +216,6 @@ textarea{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-
 .split {
     background-color: #b2b2b2;
     width: 3px;
@@ -228,6 +236,44 @@ textarea{
     background: rgba(0, 0, 0, 0.3);
     z-index: 5;
 }
+
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+    height: auto;
+    max-height: 85%;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+}
+
 
 .game-over-popup {
     display: none;
@@ -269,9 +315,15 @@ textarea{
     font-size: 18px;
     background-color: #b02d0c;
     color: white;
-    border: none;
+    border: 2px solid white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.popup-content button:hover {
+    background-color: white;
+    color: #b02d0c;
+    border: 2px solid #b02d0c;
 }
 
 .button-container {
@@ -333,7 +385,7 @@ textarea{
 #solve-button {
     position: absolute;
     right: 30px;
-    top: 39px;
+    top: 33px;
     background-color: #74230a;
     color: white;
     padding: 8px 14px;
@@ -342,11 +394,13 @@ textarea{
     text-decoration: none;
     border: 2px solid white;
     transition: 0.3s;
+    font-size: 20px;
 }
 
 #solve-button:hover {
     background-color: white;
     color: #74230a;
+    border: 2px solid white;
 }
 
 .admin-button {
@@ -366,6 +420,7 @@ textarea{
 .admin-button:hover {
     background-color: white;
     color: #74230a;
+    border: 2px solid white;
 }
 
 .adm-button{
@@ -375,9 +430,30 @@ textarea{
     text-decoration: none;
     border: 2px solid dimgray;
     transition: 0.3s;
+    font-size: 20px;
+    margin: 5px;
 }
 
 .adm-button:hover {
+    background-color: gray;
+    color: white;
+}
+
+.home-button {
+    position: absolute;
+    right: 40px;
+    top: 46px;
+    background-color: lightgray;
+    color: black;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid dimgray;
+    transition: 0.3s;
+}
+
+.home-button:hover {
     background-color: gray;
     color: white;
 }
@@ -406,6 +482,30 @@ textarea{
     margin: 10px;
 }
 
+img.preview-image {
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 5px solid black;
+}
+
+#name{
+    width: 99%;
+}
+
+#description{
+    height:120px;
+    width: 99%;
+}
+
+.comf-delete{
+    font-size: 40px;
+}
 /* Media Queries for Responsive Design */
 
 @media screen and (max-width: 1600px) {
@@ -416,6 +516,10 @@ textarea{
 
     .player-section, .opponent-section {
         padding: 0 30px;
+    }
+
+    #description{
+        height: 170px;
     }
 }
 
@@ -463,7 +567,7 @@ textarea{
     }
 
     .index {
-        margin: auto;
+        margin: 15px 25px;
     }
 
     #game-timer {
@@ -472,6 +576,10 @@ textarea{
 }
 
 @media screen and (max-width: 1200px) {
+    body{
+        font-size: 24px;
+    }
+
     .ind {
         padding: 30px 50px;
     }
@@ -529,22 +637,237 @@ textarea{
     #opponent-name {
         text-align: center;
     }
+
+    img.preview-image {
+        max-width: 500px;
+        max-height: 500px;
+    }
+
+    #description{
+        height: 600px;
+    }
+
+    .admin-button{
+        top:27px;
+    }
+
+    #solve-button {
+        font-size: 24px;
+        top: 41px;
+    }
+
+    .adm-button{
+        font-size: 24px;
+    }
+
+    input{
+        font-size: 24px;
+    }
+
+    textarea {
+        font-size: 14px;
+    }
+
+    .close-btn {
+        font-size: 60px;
+    }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) and (max-height: 1080px) {
     .game {
         transform: scale(0.6);
         transform-origin: top center;
     }
 }
 
+@media screen and (max-width: 1200px) and (max-height: 1700px) {
+    #description{
+        height: 250px;
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-height: 720px) {
+body {
+    font-size: 16px;
+}
+
+.game {
+    transform: scale(0.65);
+    transform-origin: top center;
+}
+
+header {
+    padding: 3px 0;
+}
+
+.ind {
+    padding: 15px 20px;
+}
+
+.admin-button{
+    top: 15px
+}
+
+#solve-button {
+    top: 20px
+}
+}
+
+@media screen and (max-width: 1000px) and (max-height: 1080px){
+header{
+    height: 185px;
+}
+
+.admin-button{
+    font-size: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    top: auto;
+}
+
+#solve-button{
+    font-size: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    top: auto;
+}
+
+.home-button{
+    font-size: 15px;
+    right: 20px;
+    top: 10px;
+}
+
+.dash-title{
+    margin-top: 70px;
+}
+}
+
+@media screen and (max-width: 1000px) and (max-height: 720px){
+header{
+    height: 150px;
+}
+
+.home-button{
+    font-size: 12px;
+    right: 10px;
+}
+}
+
+
+@media screen and (max-width: 480px) and (max-height: 720px) {
+.game {
+    transform: scale(0.55);
+    transform-origin: top center;
+}
+
+.player-section, .opponent-section {
+    padding: 0 10px;
+}
+}
+
+@media screen and (max-height: 620px) {
+.game {
+    transform: scale(0.5);
+    transform-origin: top center;
+}
+
+.ind {
+    padding: 10px;
+}
+}
+
+@media screen and (max-width: 768px) {
+.index {
+    margin: 20px;
+    padding: 20px;
+}
+
+.table-player-board, .table-opponent-board {
+    width: 450px;
+    height: 450px;
+    padding: 50px 49px;
+    background-size: 450px;
+}
+
+.row {
+    width: 348px;
+    height: 116px;
+}
+
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
+.tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
+    width: 116px;
+    height: 116px;
+    background-size: 348px 348px;
+}
+
+.game-over-popup {
+    width: 95%;
+    max-width: 450px;
+}
+
+img.preview-image{
+    max-width: 300px;
+    max-height: 300px;
+}
+
+#image{
+    font-size: 20px;
+}
+}
+
+@media screen and (max-width: 480px) {
+
+.ind {
+    padding: 15px 20px;
+}
+
+body {
+    font-size: 16px;
+}
+
+.table-player-board, .table-opponent-board {
+    width: 300px;
+    height: 300px;
+    padding: 33px 32px;
+    background-size: 300px;
+}
+
+.row {
+    width: 231px;
+    height: 77px;
+}
+
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
+.tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
+    width: 77px;
+    height: 77px;
+    background-size: 231px 231px;
+}
+
+.new_game {
+    font-size: 16px;
+    padding: 8px 12px;
+}
+
+#game-timer {
+    font-size: 18px;
+}
+
+.popup-content img {
+    max-width: 280px;
+}
+}
+
 @media screen and (max-width: 1200px) and (max-height: 1080px) {
     .game {
-        flex-direction: row;
-        transform: scale(0.75);
+        transform: scale(0.4);
         transform-origin: top center;
+        /*flex-direction: row;*/
     }
-
+    /*
     .player-section, .opponent-section {
         width: 100%;
         margin-top:0;
@@ -568,130 +891,7 @@ textarea{
 
     #opponent-name {
         text-align: right;
-    }
-}
-
-@media screen and (max-width: 620px) and (max-height: 1080px) {
-    .game {
-        transform: scale(0.75);
-        transform-origin: top center;
-    }
-}
-
-@media screen and (max-height: 720px) {
-    body {
-        font-size: 16px;
-    }
-
-    .game {
-        transform: scale(0.65);
-        transform-origin: top center;
-    }
-
-    header {
-        padding: 3px 0;
-    }
-
-    .ind {
-        padding: 15px 20px;
-    }
-}
-
-/* Combined width and height queries for extreme cases */
-@media screen and (max-width: 480px) and (max-height: 720px) {
-    .game {
-        transform: scale(0.55);
-        transform-origin: top center;
-    }
-
-    .player-section, .opponent-section {
-        padding: 0 10px;
-    }
-}
-
-@media screen and (max-height: 620px) {
-    .game {
-        transform: scale(0.5);
-        transform-origin: top center;
-    }
-
-    .ind {
-        padding: 10px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .index {
-        margin: 20px;
-        padding: 20px;
-    }
-
-    .table-player-board, .table-opponent-board {
-        width: 450px;
-        height: 450px;
-        padding: 50px 49px;
-        background-size: 450px;
-    }
-
-    .row {
-        width: 348px;
-        height: 116px;
-    }
-
-    .tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
-    .tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
-        width: 116px;
-        height: 116px;
-        background-size: 348px 348px;
-    }
-
-    .game-over-popup {
-        width: 95%;
-        max-width: 450px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-
-    .ind {
-        padding: 15px 20px;
-    }
-
-    body {
-        font-size: 16px;
-    }
-
-    .table-player-board, .table-opponent-board {
-        width: 300px;
-        height: 300px;
-        padding: 33px 32px;
-        background-size: 300px;
-    }
-
-    .row {
-        width: 231px;
-        height: 77px;
-    }
-
-    .tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8,
-    .tile10, .tile11, .tile12, .tile13, .tile14, .tile15, .tile16, .tile17 {
-        width: 77px;
-        height: 77px;
-        background-size: 231px 231px;
-    }
-
-    .new_game {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
-
-    #game-timer {
-        font-size: 18px;
-    }
-
-    .popup-content img {
-        max-width: 280px;
-    }
+    }*/
 }
 
 

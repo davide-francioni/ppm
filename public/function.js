@@ -1,4 +1,4 @@
-let startTime;
+let gameStartTimestamp = null;
 let timerInterval;
 
 function ensureUsername() {
@@ -37,6 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadPuzzleData() {
     console.log("Chiamata loadPuzzleData()...");
 
+    const gameId = Date.now();
+    localStorage.setItem("currentGameId", gameId);
+
     let playerName = localStorage.getItem("username");
 
     if (!playerName) {
@@ -69,7 +72,7 @@ function loadPuzzleData() {
 
     setPuzzleImages(playerImg, opponentImg);
     console.log("Immagini assegnate correttamente!");
-    startGameTimer();
+    startGameTimer(gameId);
 
     if (localStorage.getItem("gameState")) {
         console.log("Stato della partita trovato! Ripristino...");
@@ -329,37 +332,40 @@ function loadGameState() {
 }
 
 function startGameTimer() {
-    if (!localStorage.getItem("startTime")) {
-        localStorage.setItem("startTime", Date.now()); // Salva il tempo di inizio solo la prima volta
+    if (!gameStartTimestamp) {
+        const stored = localStorage.getItem("startTimestamp");
+        if (stored) gameStartTimestamp = parseInt(stored, 10);
     }
+    if (!gameStartTimestamp) return;
 
-    startTime = parseInt(localStorage.getItem("startTime"), 10);
-    timerInterval = setInterval(updateGameTimer, 1000);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const now = Date.now();
+        const elapsed = Math.floor((now - gameStartTimestamp) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 }
 
-function updateGameTimer() {
-    let currentTime = Date.now();
-    let elapsedTime = Math.floor((currentTime - startTime) / 1000);
-
-    let minutes = Math.floor(elapsedTime / 60);
-    let seconds = elapsedTime % 60;
-
+function updateGameTimer(gameId) {
+    const startTime = parseInt(localStorage.getItem(`startTime_${gameId}`), 10);
+    const currentTime = Date.now();
+    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = elapsedTime % 60;
     document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function stopGameTimer() {
     clearInterval(timerInterval);
-    let endTime = Date.now();
-    let totalTime = Math.floor((endTime - startTime) / 1000);
-
-    let minutes = Math.floor(totalTime / 60);
-    let seconds = totalTime % 60;
-    let finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    console.log(`Partita conclusa! Tempo totale: ${finalTime}`);
+    const end = Date.now();
+    const elapsed = Math.floor((end - gameStartTimestamp) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    const finalTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     localStorage.setItem("finalTime", finalTime);
-
-    localStorage.removeItem("startTime");
+    localStorage.removeItem("startTimestamp");
 }
 
 function checkWin() {
@@ -409,11 +415,11 @@ function showGameOverPopup(winner) {
 }
 
 function restartGame() {
-    localStorage.removeItem("startTime");
-    localStorage.removeItem("finalTime");
+    const gameId = localStorage.getItem("currentGameId");
     localStorage.removeItem("gameState");
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("game-over").style.display = "none";
+    localStorage.removeItem(`startTime_${gameId}`);
+    localStorage.removeItem("finalTime");
+    localStorage.removeItem("currentGameId");
     window.location.href = "index.html";
 }
 
@@ -499,7 +505,8 @@ function findOpponent() {
 
         if (data.type === 'matchFound') {
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
-
+            localStorage.setItem("startTimestamp", data.startTime);
+            gameStartTimestamp = parseInt(data.startTime, 10);
             showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente
             localStorage.setItem("player1", data.currentPlayer);

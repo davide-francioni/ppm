@@ -4,17 +4,49 @@
   <meta charset="UTF-8">
   <title>Gestione Opere</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
+  <script>
+    // Controlla se esiste una sessione salvata (es: tramite flag custom)
+    fetch('/admin/check-session')
+            .then(res => {
+              if (!res.ok) {
+                // Se non è autenticato, reindirizza
+                window.location.href = "/admin/login.html";
+              }else{
+                document.getElementById("body").style.display = "block";
+              }
+            })
+  </script>
 </head>
-<body>
+<body id="body" style="display: none">
 <div class="index">
-  <h1>Gestione Database</h1>
+  <a href="/index.html" class="home-button">Torna alla<br>Homepage</a>
+  <h1 class="dash-title">Gestione Database</h1><br>
   <div>
-    <button class="adm-button" onclick="window.location.href='/admin/new.html'"><h1>+</h1>Aggiungi Nuova Opera</button><br> <!--style="position: relative;width: fit-content;left: 50%;transform: translateX(-50%);"-->
+    <button class="adm-button" onclick="window.location.href='/admin/new.html'" style="font-size: 18px"><h1 style="margin: 10px">+</h1>Aggiungi Nuova Opera</button><br><br><br>
   </div>
-  <h2>Elenco delle Opere</h2>
   <div id="opera-list"></div>
+
+  <div id="overlay" class="overlay" style="display: none;"></div>
+  <div id="description-popup" class="popup" style="display: none;">
+    <button id="close-popup" class="close-btn">&times;</button>
+    <h1 id="popup-name"></h1>
+    <p id="popup-description"></p>
+  </div>
 </div>
 <script>
+  fetch("/opere", { method: "GET" })
+          .then(res => {
+            if (res.status === 401 || res.redirected) {
+              console.warn("Sessione non valida. Reindirizzo...");
+              window.location.href = "/admin/login.html";
+            }
+          })
+          .catch(err => {
+            console.error("Errore nel controllo sessione:", err);
+            window.location.href = "/admin/login.html";
+          });
+
   fetch("/puzzle-data")
           .then(res => res.json())
           .then(data => {
@@ -22,8 +54,9 @@
             data.puzzleImages.forEach((opera, index) => {
               const box = document.createElement("div");
               box.innerHTML = `<br>
-                    <img src="${opera.path}" style="width:300px; max-height: 300px;"><br>
+                    <img src="${opera.path}" class="preview-image"><br>
                     <h3>${opera.name}</h3><br>
+                    <button class="adm-button" onclick="openDescription(this)" data-name="${opera.name}" data-description="${opera.description}">Visualizza Descrizione</button>
                     <button class="adm-button" onclick="editOpera(${opera.id})">Modifica</button>
                     <button class="adm-button" onclick="confirmDelete(${opera.id})">Elimina</button>
                     ${index < data.puzzleImages.length - 1 ? '<br><br><hr>' : ''}
@@ -41,7 +74,7 @@
     confirmBox.className = "confirm-overlay";
     confirmBox.innerHTML = `
             <div class="confirm-box">
-                <p>Sei sicuro di voler eliminare questa opera?</p>
+                <p class="comf-delete">Sei sicuro di voler eliminare questa opera?</p>
                 <button class="adm-button" onclick="deleteOpera(${id})">Sì, elimina</button>
                 <button class="adm-button" onclick="this.parentElement.parentElement.remove()">Annulla</button>
             </div>
@@ -53,6 +86,21 @@
     fetch(`/admin/opera/${id}`, { method: "DELETE" })
             .then(() => location.reload());
   }
+
+  function openDescription(button) {
+    const name = button.getAttribute("data-name");
+    const description = button.getAttribute("data-description");
+
+    document.getElementById("popup-name").textContent = name;
+    document.getElementById("popup-description").textContent = description;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("description-popup").style.display = "block";
+  }
+
+  document.getElementById("close-popup").addEventListener("click", function() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("description-popup").style.display = "none";
+  });
 </script>
 </body>
 </html>

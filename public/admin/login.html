@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <title>Login Admin</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
 </head>
 <body>
 <div class="index">
-    <h2>Accesso come Amministratore</h2>
-    <form id="login-form">
-        <strong>Username: </strong>
+    <a href="/index.html" class="home-button">Torna alla<br>Homepage</a><br>
+    <h1>Accesso come<br>Amministratore</h1>
+    <form id="login-form" method="POST" action="/admin/login">
+        <br><strong>Username: </strong>
         <input type="text" id="admin-username" placeholder="Username" required><br><br>
         <strong>Password: </strong>
-        <input type="password" id="admin-password" placeholder="Password" required><br><br>
+        <input type="password" id="admin-password" placeholder="Password" required><br><br><br>
         <button class="adm-button" type="submit">Accedi</button>
     </form>
     <p id="login-error" style="color: red; display: none;">Credenziali errate</p>

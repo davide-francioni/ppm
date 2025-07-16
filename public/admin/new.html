@@ -4,19 +4,32 @@
   <meta charset="UTF-8">
   <title>Nuova Opera</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
+  <script>
+    // Controlla se esiste una sessione salvata (es: tramite flag custom)
+    fetch('/admin/check-session')
+            .then(res => {
+              if (!res.ok) {
+                // Se non è autenticato, reindirizza
+                window.location.href = "/admin/login.html";
+              }else{
+                document.getElementById("body").style.display = "block";
+              }
+            })
+  </script>
 </head>
-<body>
+<body id="body" style="display: none">
 <div class="index">
-  <h2>Aggiungi Nuova Opera</h2>
+  <h1>Aggiungi Nuova Opera</h1>
   <form id="new-form" enctype="multipart/form-data">
     <strong>Inserisci Nome: </strong><br>
-    <input type="text" id="name" placeholder="Nome Opera" required style="width:100%;"><br><br>
+    <input type="text" id="name" placeholder="Nome Opera" required><br><br>
     <strong>Inserisci Descrizione: </strong><br>
-    <textarea id="description" placeholder="Descrizione (max 1500 caratteri)" maxlength="1500" required style="width:100%; height:120px;"></textarea><br><br>
+    <textarea id="description" placeholder="Descrizione (max 1500 caratteri)" maxlength="1500" required></textarea><br><br>
     <strong>Inserisci Immagine: </strong>
     <input type="file" id="image" accept=".png, .jpg, .jpeg" required><br><br>
     <div style="text-align: center;">
-      <img id="preview" src="" style="max-width: 300px; max-height: 300px; display: none; margin-top: 10px;"><br><br>
+      <img id="preview" src="" class="preview-image" style="display: none; margin: 10px;"><br><br><br>
 
       <button class="adm-button" type="submit">Salva</button>
       <button class="adm-button" type="button" onclick="window.location.href='/admin/dashboard.html'">Annulla</button>
@@ -26,34 +39,39 @@
 </div>
 
 <script>
-  document.getElementById("image").addEventListener("change", function() {
-    const file = this.files[0];
-    const preview = document.getElementById("preview");
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = "unset";
-      };
-      reader.readAsDataURL(file);
-    } else {
-      preview.style.display = "none";
-    }
-  });
+  fetch("/opere", { method: "GET" })
+          .then(res => {
+            if (res.status === 401 || res.redirected) {
+              console.warn("Sessione non valida. Reindirizzo...");
+              window.location.href = "/admin/login.html";
+            }
+          })
+          .catch(err => {
+            console.error("Errore nel controllo sessione:", err);
+            window.location.href = "/admin/login.html";
+          });
 
   document.addEventListener("DOMContentLoaded", function() {
-    console.log("✅ DOM completamente caricato!");
-
     const form = document.getElementById("new-form");
-    if (!form) {
-      console.error("❌ Form #new-form non trovato!");
-      return;
-    }
+
+    document.getElementById("image").addEventListener("change", function() {
+      const file = this.files[0];
+      const preview = document.getElementById("preview");
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = "unset";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = "none";
+      }
+    });
 
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
-      console.log("🟢 FORM SUBMIT INTERCETTATO!");
 
       const name = document.getElementById("name").value.trim();
       const description = document.getElementById("description").value.trim();
@@ -84,10 +102,9 @@
         });
 
         if (response.ok) {
-          console.log("✅ Salvataggio riuscito! Redirect in corso...");
           window.location.href = "/admin/dashboard.html";
         } else {
-          throw new Error("Errore nell'upload");
+          throw new Error("Errore di upload!");
         }
       } catch (err) {
         console.error(err);

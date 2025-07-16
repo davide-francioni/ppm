@@ -4,18 +4,31 @@
   <meta charset="UTF-8">
   <title>Modifica Opera</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
+  <script>
+    // Controlla se esiste una sessione salvata (es: tramite flag custom)
+    fetch('/admin/check-session')
+            .then(res => {
+              if (!res.ok) {
+                // Se non è autenticato, reindirizza
+                window.location.href = "/admin/login.html";
+              }else{
+                document.getElementById("body").style.display = "block";
+              }
+            })
+  </script>
 </head>
-<body>
+<body id="body" style="display: none">
 <div class="index">
-  <h2>Modifica Opera</h2>
+  <h1>Modifica Opera</h1>
   <form id="edit-form">
     <strong>Nome:</strong><br>
-    <input type="text" id="name" required style="width:100%;"><br><br>
+    <input type="text" id="name" required><br><br>
 
     <strong>Descrizione:</strong><br>
-    <textarea id="description" maxlength="1500" required style="width:100%; height:120px;"></textarea><br><br>
+    <textarea id="description" maxlength="1500" required></textarea><br><br>
     <div style="text-align: center;">
-      <img id="preview" src="" style="max-width: 300px; max-height: 300px; margin-bottom: 10px;"><br>
+      <img id="preview" src="" class="preview-image" style="margin-top: 10px; margin-bottom: 10px;"><br><br>
 
       <button class="adm-button" type="submit">Aggiorna</button>
       <button class="adm-button" type="button" onclick="window.location.href='/admin/dashboard.html'">Annulla</button>
@@ -25,51 +38,66 @@
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  fetch("/puzzle-data")
-          .then(res => res.json())
-          .then(data => {
-            const opera = data.puzzleImages.find(op => op.id == id);
-            if (opera) {
-              document.getElementById("name").value = opera.name;
-              document.getElementById("description").value = opera.description;
-              document.getElementById("preview").src = opera.path;
+  fetch("/opere", { method: "GET" })
+          .then(res => {
+            if (res.status === 401 || res.redirected) {
+              console.warn("Sessione non valida. Reindirizzo...");
+              window.location.href = "/admin/login.html";
             }
+          })
+          .catch(err => {
+            console.error("Errore nel controllo sessione:", err);
+            window.location.href = "/admin/login.html";
           });
 
-  document.getElementById("edit-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("✅ SCRIPT FUNZIONANTE!");
-    const name = document.getElementById("name").value;
-    const description = document.getElementById("description").value;
-    const errorMsg = document.getElementById("error-msg");
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-    if (description.length > 1500) {
-      errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
-      errorMsg.style.display = "block";
-      return;
-    }
+    fetch("/puzzle-data")
+            .then(res => res.json())
+            .then(data => {
+              const opera = data.puzzleImages.find(op => op.id == id);
+              if (opera) {
+                document.getElementById("name").value = opera.name;
+                document.getElementById("description").value = opera.description;
+                document.getElementById("preview").src = opera.path;
+              }
+            });
 
-    try {
-      const response = await fetch(`/admin/opera/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description })
-      });
+    const form = document.getElementById("edit-form");
 
-      if (response.ok) {
-        console.log("✅ Salvataggio riuscito! Redirect in corso...");
-        window.location.href = "/admin/dashboard.html";
-      } else {
-        throw new Error("Errore aggiornamento!");
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const errorMsg = document.getElementById("error-msg");
+
+      if (description.length > 1500) {
+        errorMsg.textContent = "La descrizione non può superare i 1500 caratteri.";
+        errorMsg.style.display = "block";
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "Errore durante l'aggiornamento.";
-      errorMsg.style.display = "block";
-    }
+
+      try {
+        const response = await fetch(`/admin/opera/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, description })
+        });
+
+        if (response.ok) {
+          window.location.href = "/admin/dashboard.html";
+        } else {
+          throw new Error("Errore aggiornamento!");
+        }
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "Errore durante l'aggiornamento.";
+        errorMsg.style.display = "block";
+      }
+    });
   });
 </script>
 </body>

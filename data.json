@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Uomo vitruviano",
       "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle1.png",
-      "description": "L'Uomo vitruviano è un disegno a penna e inchiostro su carta di Leonardo da Vinci, conservato, ma non esposto, nel Gabinetto dei Disegni e delle Stampe delle Gallerie dell'Accademia di Venezia. Celeberrima rappresentazione delle proporzioni ideali del corpo umano, cerca di dimostrare come possa essere armoniosamente inscritto nelle due figure perfette del cerchio, che simboleggia il Cielo, la perfezione divina, e del quadrato, che simboleggia la Terra. La scelta di questa geometria non è frutto del caso, bensì di studi precisi. Il cerchio infatti rappresenta il cosmo, il divino: gli antichi ritenevano che fosse simbolo di perfezione. In contrapposizione si trova il quadrato, simbolo del mondo terreno. L’uomo quindi rappresenterebbe l'unione tra microcosmo e macrocosmo, quindi l’idea stessa di mondo. Riconducendo tale visione alla filosofia platonica, aristotelica e neoplatonica, l’uomo viene considerato “specchio dell’universo”. Egli è il riflesso di un ordine superiore, il quale contiene gli elementi che compongono il mondo intero. L’uomo vitruviano è simbolo dell’arte rinascimentale, con esso si analizzano le proporzioni del corpo umano secondo gli scritti dell'architetto romano Vitruvio. Il genio artistico voleva rappresentare, in accordo con il periodo da lui vissuto, l’uomo come “misura di tutte le cose”."
+      "description": "L'Uomo vitruviano è un disegno a penna e inchiostro su carta di Leonardo da Vinci, conservato, ma non esposto, nel Gabinetto dei Disegni e delle Stampe delle Gallerie dell'Accademia di Venezia. Celeberrima rappresentazione delle proporzioni ideali del corpo umano, cerca di dimostrare come possa essere armoniosamente inscritto nelle due figure perfette del cerchio, che simboleggia il Cielo, la perfezione divina, e del quadrato, che simboleggia la Terra. La scelta di questa geometria non è frutto del caso, bensì di studi precisi. Il cerchio infatti rappresenta il cosmo, il divino: gli antichi ritenevano che fosse simbolo di perfezione. In contrapposizione si trova il quadrato, simbolo del mondo terreno. L’uomo quindi rappresenterebbe l'unione tra microcosmo e macrocosmo, quindi l’idea stessa di mondo. Riconducendo tale visione alla filosofia platonica, aristotelica e neoplatonica, l’uomo viene considerato “specchio dell’universo”. Egli è il riflesso di un ordine superiore, il quale contiene gli elementi che compongono il mondo intero. L’uomo vitruviano è simbolo dell’arte rinascimentale, con esso si analizzano le proporzioni del corpo umano secondo gli scritti dell'architetto romano Vitruvio. Il genio artistico voleva rappresentare, in accordo con il periodo da lui vissuto, l’uomo come “misura di tutte le cose”. Prova"
     },
     {
       "id": 2,
@@ -29,6 +29,22 @@
       "name": "La Libertà che guida il popolo",
       "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/puzzle5.png",
       "description": "La Libertà che guida il popolo (La Liberté guidant le peuple) è un dipinto a olio su tela del pittore francese Eugène Delacroix, realizzato nel 1830 e conservato nel museo del Louvre a Parigi. La Libertà che guida il popolo raffigura tutte le classi sociali unite in lotta contro l'oppressore, guidate dalla personificazione speciale della Francia, Marianne, che in quest'opera assurge anche a simbolo della Libertà. Marianne è colta nell'attimo in cui avanza sicura sulla barricata, sventolando con la mano destra il Tricolore francese e impugnando con la sinistra un fucile con baionetta. Indossa abiti contemporanei e anche un berretto frigio, ha il seno scoperto e i piedi nudi ed è realistica sino alla peluria sotto le ascelle, particolare che non fu apprezzato dai contemporanei. La Libertà è circondata da una folla tumultuosa: a destra della donna troviamo un ragazzino armato di pistole, alla sinistra, invece, è visibile un intellettuale borghese con un elegante cilindro in testa e una doppietta da caccia in mano. Ai piedi della Libertà infine troviamo una giovane manovale con un grembiule di cuoio, che guarda la fanciulla piena di speranza. Dietro questi personaggi si dispiega una massa indistinta di uomini, fucili, e spade. Alla base del quadro poi giacciono tre cadaveri: a sinistra vi è un insorto dal corpo seminudo, mentre a destra troviamo un corazziere e una guardia svizzera, appartenenti alla guardia reale che combatté la rivoluzione di quei giorni."
+    },
+    {
+      "id": 7,
+      "name": "prova",
+      "description": "prova",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/1751472228811-dipinti-1.jpg"
+    }
+  ],
+  "admins": [
+    {
+      "username": "admin",
+      "password": "1234"
+    },
+    {
+      "username": "editor",
+      "password": "abcd"
     }
   ]
 }

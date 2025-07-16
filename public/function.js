@@ -481,7 +481,6 @@ socket.onmessage = (event) => {
         showGameOverPopup(data.winner);
     }
     else if (data.type === "opponentScoreUpdate") {
-        console.log(localStorage.getItem("player1"), localStorage.getItem("username"));
         const opponentUsername = localStorage.getItem("player1") === localStorage.getItem("username")
             ? localStorage.getItem("player2")
             : localStorage.getItem("player1");

@@ -454,7 +454,7 @@ wss.on("connection", (ws) => {
                     }));
                 }
             });
-        } else if (data.type === "updateScore") {
+        } else if (data.type === "scoreUpdate") {
             console.log(`Punteggio aggiornato da ${data.username}: ${data.score}`);
             // Invia il punteggio all'altro giocatore
             wss.clients.forEach(client => {

@@ -605,6 +605,29 @@ img.preview-image {
         transform-origin: top center;
     }
 
+    .name-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+    .player-name, .opponent-name {
+        text-align: center;
+        flex: none;
+        margin: 0 auto;
+    }
+
+    .score {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight: bold;
+        color: #3a3a3a;
+    }
+
     .player-section, .opponent-section {
         width: 100%;
         margin-top:8%;
@@ -876,33 +899,7 @@ body {
     .game {
         transform: scale(0.4);
         transform-origin: top center;
-        /*flex-direction: row;*/
     }
-    /*
-    .player-section, .opponent-section {
-        width: 100%;
-        margin-top:0;
-        padding: 0 20px;
-        left:0;
-        transform: translateX(0%);
-    }
-
-    .split {
-        width: 3px;
-        height: 90%;
-        position: absolute;
-        top: 10%;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    #player-name {
-        text-align: left;
-    }
-
-    #opponent-name {
-        text-align: right;
-    }*/
 }
 
 

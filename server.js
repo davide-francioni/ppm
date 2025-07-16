@@ -114,11 +114,11 @@ app.use((req, res, next) => {
 });
 
 function checkAuth(req, res, next) {
-    console.log("🔐 checkAuth chiamato - Sessione:", req.session);
+    console.log("checkAuth chiamato - Sessione:", req.session);
     if (req.session && req.session.authenticated) {
         next();
     } else {
-        console.log("🚫 Accesso negato: utente non autenticato");
+        console.log("Accesso negato: utente non autenticato");
         res.redirect("/admin/login.html");
     }
 }
@@ -138,7 +138,7 @@ app.post('/admin/login', (req, res) => {
 
     fs.readFile(DATA_FILE_PATH, 'utf8', (err, rawData) => {
         if (err) {
-            console.error("❌ Errore lettura data.json:", err);
+            console.error("Errore lettura data.json:", err);
             return res.status(500).send("Errore interno nel server");
         }
 
@@ -161,7 +161,7 @@ app.post('/admin/login', (req, res) => {
             }
 
         } catch (parseError) {
-            console.error("❌ Errore parsing JSON:", parseError);
+            console.error("Errore parsing JSON:", parseError);
             return res.status(500).send("Errore parsing database");
         }
     });
@@ -240,10 +240,10 @@ app.post('/admin/upload', upload.single('image'), async (req, res) => {
 
         saveLocalJson(data);
 
-        console.log("✅ Upload immagine e aggiornamento data.json completato");
+        console.log("Upload immagine e aggiornamento data.json completato");
         res.sendStatus(201);
     } catch (error) {
-        console.error("❌ Errore durante upload su GitHub:", error.response?.data || error.message);
+        console.error("Errore durante upload su GitHub:", error.response?.data || error.message);
         res.status(500).send("Errore durante upload su GitHub");
     }
 });
@@ -289,7 +289,7 @@ app.put('/admin/opera/:id', upload.none(), async (req, res) => {
             res.status(404).send("Opera non trovata");
         }
     } catch (error) {
-        console.error("❌ Errore modifica opera:", error.response?.data || error.message);
+        console.error("Errore modifica opera:", error.response?.data || error.message);
         res.status(500).send("Errore durante la modifica");
     }
 });
@@ -451,6 +451,18 @@ wss.on("connection", (ws) => {
                     client.send(JSON.stringify({
                         type: "gameWon",
                         winner: data.winner
+                    }));
+                }
+            });
+        } else if (data.type === "updateScore") {
+            console.log(`Punteggio aggiornato da ${data.username}: ${data.score}`);
+            // Invia il punteggio all'altro giocatore
+            wss.clients.forEach(client => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: "opponentScoreUpdate",
+                        score: data.score,
+                        username: data.username
                     }));
                 }
             });

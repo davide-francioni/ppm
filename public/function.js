@@ -271,6 +271,33 @@ function swapTiles(tile1, tile2) {
             console.warn("WebSocket non ancora connesso! La mossa non è stata inviata.");
         }
     }
+
+    updateScores()
+}
+
+function updateScores() {
+    const tiles = document.querySelectorAll(".table-player-board td");
+    let correct = 0;
+
+    tiles.forEach((tile, index) => {
+        const expected = `tile${index + 1}`;
+        if (tile.classList.contains(expected) && expected !== "tile9") {
+            correct++;
+        }
+    });
+
+    // Aggiorna il punteggio locale
+    const scoreEl = document.getElementById("player-score");
+    if (scoreEl) scoreEl.textContent = `${correct}/8`;
+
+    // Invia il punteggio all'avversario
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+            type: "scoreUpdate",
+            score: correct,
+            username: localStorage.getItem("username")
+        }));
+    }
 }
 
 // Funzione per salvare lo stato del gioco
@@ -452,6 +479,12 @@ socket.onmessage = (event) => {
         console.log(`Game Over! Winner: ${data.winner}`);
         stopGameTimer();
         showGameOverPopup(data.winner);
+    }
+    else if (data.type === "scoreUpdate") {
+        const opponentScoreEl = document.getElementById("opponent-score");
+        if (opponentScoreEl) {
+            opponentScoreEl.textContent = `${data.score}/8`;
+        }
     }
 };
 

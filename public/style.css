@@ -101,6 +101,21 @@ textarea{
     padding: 10px 0;
 }
 
+#opponent-name {
+    flex-direction: row-reverse;
+}
+
+.score {
+    padding: 10px 0;
+    margin-left: 50px;
+    margin-right: 50px;
+    font-weight: bold;
+}
+
+.player-container{
+    display: flex;
+}
+
 .player-section {
     height: 100%;
     width: 50%;
@@ -115,10 +130,6 @@ textarea{
     padding: 0 50px;
     position: relative;
     z-index: 1;
-}
-
-#opponent-name {
-    text-align: right;
 }
 
 .game_over{
@@ -506,8 +517,8 @@ img.preview-image {
 .comf-delete{
     font-size: 40px;
 }
-/* Media Queries for Responsive Design */
 
+/* Media Queries for Responsive Design */
 @media screen and (max-width: 1600px) {
     .game {
         transform: scale(0.9);

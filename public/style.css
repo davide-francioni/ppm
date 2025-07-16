@@ -98,7 +98,11 @@ textarea{
 }
 
 .player{
+    max-width: 450px;
     padding: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #opponent-container {
@@ -114,6 +118,7 @@ textarea{
 
 .player-container{
     display: flex;
+    align-items: center;
 }
 
 .player-section {
@@ -606,26 +611,26 @@ img.preview-image {
     }
 
     .player-container {
-        display: flex;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        position: relative;
         margin-bottom: 10px;
     }
 
-    .player-name, .opponent-name {
+    .player{
         text-align: center;
-        flex: none;
-        margin: 0 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #opponent-container{
+        flex-direction: unset;
     }
 
     .score {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        font-weight: bold;
-        color: #3a3a3a;
+        text-align: right;
+        padding-right: 10px;
     }
 
     .player-section, .opponent-section {

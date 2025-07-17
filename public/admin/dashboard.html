@@ -70,6 +70,8 @@
   }
 
   function confirmDelete(id) {
+    if (document.querySelector(".confirm-overlay")) return;
+
     const confirmBox = document.createElement("div");
     confirmBox.className = "confirm-overlay";
     confirmBox.innerHTML = `

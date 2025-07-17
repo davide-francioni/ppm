@@ -5,24 +5,7 @@
     <meta name="description" content="A game where 2 players challenges trying to recreate a decomposed artwork" />
     <meta name="keywords" content="game 2 player puzzle artwork art" />
     <link rel="stylesheet" href="style.css" />
-    <script src="function.js">
-        document.addEventListener("DOMContentLoaded", () => {
-            const usernameInput = document.getElementById("username");
-
-            usernameInput.addEventListener("keydown", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault(); // Impedisce il submit/ricarica
-                    const username = usernameInput.value.trim();
-
-                    if (username !== "") {
-                        findOpponent(); // ✅ Simula click su "Cerca Avversario"
-                    } else {
-                        alert("Inserisci un nome utente!");
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="function.js"></script>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/ico.png">
 </head>
 

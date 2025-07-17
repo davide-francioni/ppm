@@ -23,20 +23,22 @@ function ensureUsername() {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Pagina caricata! Verifica elementi...");
 
-    const usernameInput = document.getElementById("username");
+    if (document.getElementById("username")) {
+        const usernameInput = document.getElementById("username");
 
-    usernameInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Impedisce il submit/ricarica
-            const username = usernameInput.value.trim();
+        usernameInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Impedisce il submit/ricarica
+                const username = usernameInput.value.trim();
 
-            if (username !== "") {
-                findOpponent(); // ✅ Simula click su "Cerca Avversario"
-            } else {
-                alert("Inserisci un nome utente!");
+                if (username !== "") {
+                    findOpponent(); // ✅ Simula click su "Cerca Avversario"
+                } else {
+                    alert("Inserisci un nome utente!");
+                }
             }
-        }
-    });
+        });
+    }
 
     ensureUsername();
 

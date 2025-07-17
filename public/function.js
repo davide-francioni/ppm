@@ -594,6 +594,12 @@ function findOpponent() {
 }
 
 function solvePuzzle() {
+    const solveButton = document.getElementById("solve-button");
+
+    // Disabilita il pulsante per evitare chiamate multiple
+    if (solveButton.disabled) return;
+    solveButton.disabled = true;
+
     console.log("Risoluzione automatica del puzzle...");
 
     let tiles = document.querySelectorAll(".table-player-board td");

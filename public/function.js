@@ -91,13 +91,7 @@ function loadPuzzleData() {
     console.log("Immagini assegnate correttamente!");
     startGameTimer(gameId);
 
-    if (localStorage.getItem("gameState")) {
-        console.log("Stato della partita trovato! Ripristino...");
-        loadGameState();
-    } else {
-        console.log("Nessuno stato salvato, eseguo shuffle iniziale...");
-        setTimeout(shuffle, 1000);
-    }
+    setTimeout(shuffle, 1000);
 
     setTimeout(() => {
         attachTileListeners();

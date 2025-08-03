@@ -1,6 +1,10 @@
 let gameStartTimestamp = null;
 let timerInterval;
 
+window.addEventListener("beforeunload", (e) => {
+    localStorage.setItem("isReloading", "true");
+});
+
 function ensureUsername() {
     let savedUsername = localStorage.getItem("username");
     let player1 = localStorage.getItem("player1");
@@ -21,6 +25,7 @@ function ensureUsername() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    localStorage.removeItem("isReloading");
     console.log("Pagina caricata! Verifica elementi...");
 
     if (document.getElementById("username")) {

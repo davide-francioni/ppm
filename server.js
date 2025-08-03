@@ -474,15 +474,28 @@ wss.on("connection", (ws) => {
             console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;
         } else {
-            // Notifica l'altro giocatore che ha perso l'avversario
-            wss.clients.forEach(client => {
-                if (client !== ws && client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        type: "opponentDisconnected",
-                        message: `${ws.username || "Un giocatore"} si è disconnesso`
-                    }));
+            console.log(`In attesa di vedere se ${ws.username} si riconnette...`);
+
+            // Aspetta 3 secondi prima di notificare disconnessione definitiva
+            setTimeout(() => {
+                const stillConnected = Array.from(wss.clients).some(client =>
+                    client.username === ws.username && client.readyState === WebSocket.OPEN
+                );
+
+                if (!stillConnected) {
+                    console.log(`${ws.username} si è disconnesso definitivamente`);
+                    wss.clients.forEach(client => {
+                        if (client.readyState === WebSocket.OPEN) {
+                            client.send(JSON.stringify({
+                                type: "opponentDisconnected",
+                                message: `${ws.username || "Un giocatore"} si è disconnesso`
+                            }));
+                        }
+                    });
+                } else {
+                    console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }
-            });
+            }, 3000);
         }
     });
 });

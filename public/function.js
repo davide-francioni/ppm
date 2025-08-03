@@ -25,7 +25,6 @@ function ensureUsername() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    localStorage.removeItem("isReloading");
     console.log("Pagina caricata! Verifica elementi...");
 
     if (document.getElementById("username")) {
@@ -74,12 +73,8 @@ function loadPuzzleData() {
 
     let savedUsername = localStorage.getItem("username");
     let isPlayer1 = (playerName === player1);
-    let isPlayer2 = (playerName === player2);
     let img1 = localStorage.getItem("image1");
     let img2 = localStorage.getItem("image2");
-
-    console.log("Player1:", player1, "| Player2:", player2);
-    console.log("Immagini ricevute:", img1, img2);
 
     if (!img1 || !img2) {
         console.error("Errore: Mancano le immagini nei dati salvati!");
@@ -89,20 +84,25 @@ function loadPuzzleData() {
     document.getElementById("player-name").textContent = savedUsername;
     document.getElementById("opponent-name").textContent = isPlayer1 ? player2 : player1;
 
-    let playerImg = isPlayer1 ? localStorage.getItem("image1") : localStorage.getItem("image2");
-    let opponentImg = isPlayer1 ? localStorage.getItem("image2") : localStorage.getItem("image1");
+    let playerImg = isPlayer1 ? img1 : img2;
+    let opponentImg = isPlayer1 ? img2 : img1;
 
     setPuzzleImages(playerImg, opponentImg);
-    console.log("Immagini assegnate correttamente!");
     startGameTimer(gameId);
 
-    if (localStorage.getItem("isReloading") === "true" && localStorage.getItem("gameState")) {
+    const isReloading = localStorage.getItem("isReloading") === "true";
+    const savedState = localStorage.getItem("gameState");
+
+    if (isReloading && savedState) {
         console.log("Reload rilevato! Ripristino lo stato del puzzle...");
         loadGameState();
     } else {
         console.log("Avvio nuova partita. Eseguo shuffle iniziale...");
         setTimeout(shuffle, 1000);
     }
+
+    // ✅ Rimuovi ora il flag, dopo il controllo
+    localStorage.removeItem("isReloading");
 
     setTimeout(() => {
         attachTileListeners();

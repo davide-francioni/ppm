@@ -491,6 +491,22 @@ socket.onmessage = (event) => {
                 opponentScoreEl.textContent = `${data.score}/8`;
             }
         }
+    }else if (data.type === "opponentDisconnected") {
+        stopGameTimer();
+
+        const overlay = document.getElementById("overlay");
+        const gameOver = document.getElementById("game-over");
+
+        document.getElementById("win-lose-message").textContent = "Avversario disconnesso";
+        document.getElementById("puzzle-image").src = localStorage.getItem("image1") || "";
+        document.getElementById("puzzle-name").textContent = localStorage.getItem("img1Name") || "";
+        document.getElementById("puzzle-description").textContent = "La partita è stata interrotta perché l'avversario si è disconnesso.";
+
+        const time = document.getElementById("game-time-result");
+        time.textContent = "Partita interrotta";
+
+        overlay.style.display = "block";
+        gameOver.style.display = "flex";
     }
 };
 

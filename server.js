@@ -473,6 +473,16 @@ wss.on("connection", (ws) => {
         if (waitingPlayer === ws) {
             console.log(`${ws.username} ha abbandonato la ricerca.`);
             waitingPlayer = null;
+        } else {
+            // Notifica l'altro giocatore che ha perso l'avversario
+            wss.clients.forEach(client => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: "opponentDisconnected",
+                        message: `${ws.username || "Un giocatore"} si è disconnesso`
+                    }));
+                }
+            });
         }
     });
 });

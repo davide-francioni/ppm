@@ -503,7 +503,7 @@ wss.on("connection", (ws) => {
                     console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }
             }, 3000);
-        }sti
+        }
     });
 });
 

@@ -96,7 +96,13 @@ function loadPuzzleData() {
     console.log("Immagini assegnate correttamente!");
     startGameTimer(gameId);
 
-    setTimeout(shuffle, 1000);
+    if (localStorage.getItem("isReloading") === "true" && localStorage.getItem("gameState")) {
+        console.log("Reload rilevato! Ripristino lo stato del puzzle...");
+        loadGameState();
+    } else {
+        console.log("Avvio nuova partita. Eseguo shuffle iniziale...");
+        setTimeout(shuffle, 1000);
+    }
 
     setTimeout(() => {
         attachTileListeners();

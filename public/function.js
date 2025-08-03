@@ -482,6 +482,15 @@ function showMatchToast(message) {
 
 // Connessione WebSocket
 const socket = new WebSocket(`wss://${window.location.hostname}`);
+socket.addEventListener("open", () => {
+    const username = localStorage.getItem("username");
+    if (username) {
+        socket.send(JSON.stringify({
+            type: "identify",
+            username: username
+        }));
+    }
+});
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);

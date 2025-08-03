@@ -346,6 +346,13 @@ wss.on("connection", (ws) => {
     ws.on("message", (message) => {
         clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);
+
+        if (data.type === "identify") {
+            ws.username = data.username;
+            console.log(`WebSocket identificato come ${data.username}`);
+            return;
+        }
+
         console.log("Messaggio ricevuto:", data);
         console.log(`Client WebSocket connessi: ${wss.clients.size}`);
 
@@ -496,7 +503,7 @@ wss.on("connection", (ws) => {
                     console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }
             }, 3000);
-        }
+        }sti
     });
 });
 

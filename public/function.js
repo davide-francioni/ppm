@@ -23,6 +23,23 @@ function ensureUsername() {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Pagina caricata! Verifica elementi...");
 
+    if (document.getElementById("username")) {
+        const usernameInput = document.getElementById("username");
+
+        usernameInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Impedisce il submit/ricarica
+                const username = usernameInput.value.trim();
+
+                if (username !== "") {
+                    findOpponent(); // ✅ Simula click su "Cerca Avversario"
+                } else {
+                    alert("Inserisci un nome utente!");
+                }
+            }
+        });
+    }
+
     ensureUsername();
 
     if (document.getElementById("player-name")) {
@@ -593,6 +610,12 @@ function findOpponent() {
 }
 
 function solvePuzzle() {
+    const solveButton = document.getElementById("solve-button");
+
+    // Disabilita il pulsante per evitare chiamate multiple
+    if (solveButton.disabled) return;
+    solveButton.disabled = true;
+
     console.log("Risoluzione automatica del puzzle...");
 
     let tiles = document.querySelectorAll(".table-player-board td");

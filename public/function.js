@@ -521,7 +521,6 @@ socket.onmessage = (event) => {
 
         const time = document.getElementById("game-time-result");
         time.textContent = "Partita interrotta";
-
         overlay.style.display = "block";
         gameOver.style.display = "flex";
     }

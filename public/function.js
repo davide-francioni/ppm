@@ -98,7 +98,40 @@ function loadPuzzleData() {
         loadGameState();
     } else {
         console.log("Avvio nuova partita. Eseguo shuffle iniziale...");
-        setTimeout(shuffle, 1000);
+        const savedBoard = JSON.parse(localStorage.getItem("initialBoard"));
+        if (savedBoard) {
+            let playerTiles = document.querySelectorAll(".table-player-board td");
+            let opponentTiles = document.querySelectorAll(".table-opponent-board td");
+
+            // Memorizziamo le posizioni originali del background per poterle riassegnare
+            let originalPositions = Array.from(playerTiles).map(tile => tile.style.backgroundPosition);
+
+            savedBoard.forEach((tileNumber, index) => {
+                let originalIndex = tileNumber - 1; // tile 1 corrisponde all'indice 0 dell'immagine
+
+                // Assegna classe e pezzo di immagine corretti per il Player 1 (tile1 - tile9)
+                playerTiles[index].className = `tile${tileNumber}`;
+                playerTiles[index].style.backgroundPosition = originalPositions[originalIndex];
+
+                // Assegna classe e pezzo di immagine corretti per l'Avversario (tile10 - tile18)
+                opponentTiles[index].className = `tile${tileNumber + 9}`;
+                opponentTiles[index].style.backgroundPosition = originalPositions[originalIndex];
+            });
+        }
+
+        const startTime = parseInt(localStorage.getItem("gameStartTime"), 10);
+        gameStartTimestamp = startTime; // Lo salviamo nella variabile globale perché serve a stopGameTimer()
+
+        timerInterval = setInterval(() => {
+            let now = Date.now();
+            let elapsed = Math.floor((now - startTime) / 1000);
+
+            if (elapsed >= 0) { // Il timer parte solo quando il tempo del server è raggiunto
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
     }
 
     // ✅ Rimuovi ora il flag, dopo il controllo
@@ -589,8 +622,10 @@ function findOpponent() {
         console.log("Risposta ricevuta dal server:", data);
 
         if (data.type === 'matchFound') {
+            localStorage.setItem("gameStartTime", data.startTime);
+            localStorage.setItem("initialBoard", JSON.stringify(data.board));
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
-            localStorage.setItem("startTimestamp", data.startTime);
+            //localStorage.setItem("startTimestamp", data.startTime);
             gameStartTimestamp = parseInt(data.startTime, 10);
             showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente

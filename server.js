@@ -361,10 +361,17 @@ wss.on("connection", (ws) => {
             ws.username = data.username;
 
             if (waitingPlayer) {
-                const player1 = waitingPlayer;
-                const player2 = ws;
+                const p1 = waitingPlayer.username;
+                const p2 = ws.username;
 
-                console.log(`Match trovato: ${player1.username} vs ${player2.username}`);
+                // Genera il timestamp di inizio e la board mischiata lato server
+                const serverStartTime = Date.now() + 4000; // +4 secondi per compensare il redirect e l'animazione
+
+                // Generiamo un array da 1 a 9 e lo mischiamo
+                let initialBoard = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                initialBoard.sort(() => Math.random() - 0.5);
+
+                console.log(`Match trovato: ${p1} vs ${p2}`);
 
                 fs.readFile("data.json", "utf8", (err, jsonData) => {
                     if (err) {
@@ -397,8 +404,8 @@ wss.on("connection", (ws) => {
                     activeGames.set(gameId, {
                         img1,
                         img2,
-                        player1: player1.username,
-                        player2: player2.username,
+                        player1: p1,
+                        player2: p2,
                         startTime
                     });
 
@@ -409,32 +416,53 @@ wss.on("connection", (ws) => {
                     };
 
                     // Invia i dati ai due giocatori
-                    player1.send(JSON.stringify({
+                    /*waitingPlayer.send(JSON.stringify({
                         ...gameInfo,
-                        currentPlayer: player1.username,
-                        opponent: player2.username,
+                        currentPlayer: p1,
+                        opponent: p2,
                         currentImage:img1,
                         opponentImage:img2,
                         imgCName: img1Name,
                         imgCDesc: img1Desc,
                         imgOName: img2Name,
                         imgODesc: img2Desc
-                    }));
+                    })); */
 
-                    player2.send(JSON.stringify({
+                    const matchDataP1 = {
+                        type: "matchFound", gameId, opponent: p2, currentPlayer: p1,
+                        currentImage:img1, opponentImage:img2,
+                        imgCName: img1Name, imgOName: img2Name,
+                        mgCDesc: img1Desc, imgODesc: img2Desc,
+                        startTime: serverStartTime,
+                        board: initialBoard
+                    };
+
+                    /* ws.send(JSON.stringify({
                         ...gameInfo,
-                        currentPlayer: player2.username,
-                        opponent: player1.username,
+                        currentPlayer: p2,
+                        opponent: p1,
                         currentImage:img2,
                         opponentImage:img1,
                         imgCName: img2Name,
                         imgCDesc: img2Desc,
                         imgOName: img1Name,
                         imgODesc: img1Desc
-                    }));
+                    }));*/
 
-                    console.log(`Inviato a Player1: ${player1.username}, currentPlayer=${player1.username}`);
-                    console.log(`Inviato a Player2: ${player2.username}, currentPlayer=${player2.username}`);
+                    const matchDataP2 = {
+                        type: "matchFound", gameId, opponent: p1, currentPlayer: p2,
+                        currentImage:img2, opponentImage:img1,
+                        imgCName: img2Name, imgOName: img1Name,
+                        imgCDesc: img2Desc, imgODesc: img1Desc,
+                        startTime: serverStartTime,
+                        board: initialBoard
+                    };
+
+                    ws.send(JSON.stringify(matchDataP2));
+                    waitingPlayer.send(JSON.stringify(matchDataP1));
+
+                    console.log(`Inviato a Player1: ${p1}, currentPlayer=${p1}`);
+                    console.log(`Inviato a Player2: ${p2}, currentPlayer=${p2}`);
 
                     waitingPlayer = null;
                 });

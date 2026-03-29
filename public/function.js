@@ -622,7 +622,7 @@ function findOpponent() {
         console.log("Risposta ricevuta dal server:", data);
 
         if (data.type === 'matchFound') {
-            localStorage.setItem("gameStartTime", data.startTime);
+            localStorage.setItem("gameStartTime", Date.now() + 3000);
             localStorage.setItem("initialBoard", JSON.stringify(data.board));
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
             //localStorage.setItem("startTimestamp", data.startTime);

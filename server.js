@@ -432,7 +432,7 @@ wss.on("connection", (ws) => {
                         type: "matchFound", gameId, opponent: p2, currentPlayer: p1,
                         currentImage:img1, opponentImage:img2,
                         imgCName: img1Name, imgOName: img2Name,
-                        mgCDesc: img1Desc, imgODesc: img2Desc,
+                        imgCDesc: img1Desc, imgODesc: img2Desc,
                         startTime: serverStartTime,
                         board: initialBoard
                     };

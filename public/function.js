@@ -218,33 +218,6 @@ function attachTileListeners() {
     console.log("Eventi di click collegati!");
 }
 
-function shuffle() {
-    let player1Tiles = [
-        "cell11", "cell12", "cell13",
-        "cell21", "cell22", "cell23",
-        "cell31", "cell32"
-    ];
-
-    function safeSwap(tileId1, tileId2) {
-        let tile1 = document.getElementById(tileId1);
-        let tile2 = document.getElementById(tileId2);
-
-        if (!tile1 || !tile2) {
-            console.warn(`Tentativo di scambio fallito: ${tileId1} o ${tileId2} non esistono.`);
-            return;
-        }
-
-        swapTiles(tile1, tile2);
-    }
-
-    for (let i = player1Tiles.length - 1; i > 0; i--) {
-        let randIndex = Math.floor(Math.random() * (i + 1));
-        safeSwap(player1Tiles[i], player1Tiles[randIndex]);
-    }
-
-    console.log("Shuffle completato!");
-}
-
 function moveTile(row, column) {
     let cell = document.getElementById(`cell${row}${column}`);
     let blankTile = Array.from(document.querySelectorAll("td")).find(tile =>
@@ -428,15 +401,6 @@ function startGameTimer() {
         const seconds = elapsed % 60;
         document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }, 1000);
-}
-
-function updateGameTimer(gameId) {
-    const startTime = parseInt(localStorage.getItem(`startTime_${gameId}`), 10);
-    const currentTime = Date.now();
-    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
-    const minutes = Math.floor(elapsedTime / 60);
-    const seconds = elapsedTime % 60;
-    document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function stopGameTimer() {
@@ -625,7 +589,6 @@ function findOpponent() {
             localStorage.setItem("gameStartTime", Date.now() + 3000);
             localStorage.setItem("initialBoard", JSON.stringify(data.board));
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
-            //localStorage.setItem("startTimestamp", data.startTime);
             gameStartTimestamp = parseInt(data.startTime, 10);
             showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);
             // Salva i dati localmente

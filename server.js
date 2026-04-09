@@ -36,7 +36,6 @@ app.get('/puzzle-data', (req, res) => {
     });
 });
 
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -63,14 +62,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 
 app.use(cors({ origin: true, credentials: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(
     session({
@@ -105,8 +101,6 @@ app.get("/admin/new.html", checkAuth, (req, res) => {
 app.get("/admin/edit.html", checkAuth, (req, res) => {
     res.sendFile(path.join(adminPath, "edit.html"));
 });
-
-//app.use("/admin", express.static("admin")); // solo per file CSS, JS, immagini
 
 app.use((req, res, next) => {
     res.setHeader("Cache-Control", "no-store");
@@ -415,19 +409,6 @@ wss.on("connection", (ws) => {
                         startTime,
                     };
 
-                    // Invia i dati ai due giocatori
-                    /*waitingPlayer.send(JSON.stringify({
-                        ...gameInfo,
-                        currentPlayer: p1,
-                        opponent: p2,
-                        currentImage:img1,
-                        opponentImage:img2,
-                        imgCName: img1Name,
-                        imgCDesc: img1Desc,
-                        imgOName: img2Name,
-                        imgODesc: img2Desc
-                    })); */
-
                     const matchDataP1 = {
                         type: "matchFound", gameId, opponent: p2, currentPlayer: p1,
                         currentImage:img1, opponentImage:img2,
@@ -436,18 +417,6 @@ wss.on("connection", (ws) => {
                         startTime: serverStartTime,
                         board: initialBoard
                     };
-
-                    /* ws.send(JSON.stringify({
-                        ...gameInfo,
-                        currentPlayer: p2,
-                        opponent: p1,
-                        currentImage:img2,
-                        opponentImage:img1,
-                        imgCName: img2Name,
-                        imgCDesc: img2Desc,
-                        imgOName: img1Name,
-                        imgODesc: img1Desc
-                    }));*/
 
                     const matchDataP2 = {
                         type: "matchFound", gameId, opponent: p1, currentPlayer: p2,

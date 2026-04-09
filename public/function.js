@@ -71,7 +71,6 @@ function loadPuzzleData() {
     let player1 = localStorage.getItem("player1") || "Player 1";
     let player2 = localStorage.getItem("player2") || "Player 2";
 
-    let savedUsername = localStorage.getItem("username");
     let isPlayer1 = (playerName === player1);
     let img1 = localStorage.getItem("image1");
     let img2 = localStorage.getItem("image2");
@@ -81,7 +80,7 @@ function loadPuzzleData() {
         return;
     }
 
-    document.getElementById("player-name").textContent = savedUsername;
+    document.getElementById("player-name").textContent = playerName;
     document.getElementById("opponent-name").textContent = isPlayer1 ? player2 : player1;
 
     let playerImg = isPlayer1 ? img1 : img2;
@@ -354,10 +353,6 @@ function loadGameState() {
     let gameState = JSON.parse(savedState);
     console.log("Ripristino stato della partita...", gameState);
 
-    let playerName = localStorage.getItem("username");
-    let player1 = localStorage.getItem("player1");
-    let player2 = localStorage.getItem("player2");
-
     gameState.forEach(tileData => {
         let tile = document.getElementById(tileData.id);
         if (tile) {
@@ -461,9 +456,8 @@ function showGameOverPopup(winner) {
 }
 
 function restartGame() {
-    const gameId = localStorage.getItem("currentGameId");
     localStorage.removeItem("gameState");
-    localStorage.removeItem(`startTime_${gameId}`);
+    localStorage.removeItem("gameStartTime");
     localStorage.removeItem("finalTime");
     localStorage.removeItem("currentGameId");
     window.location.href = "index.html";

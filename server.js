@@ -352,6 +352,8 @@ wss.on("connection", (ws) => {
                 const p1 = waitingPlayer.username;
                 const p2 = ws.username;
 
+                let activeGames = new Map();
+
                 // Genera il timestamp di inizio e la board mischiata lato server
                 const serverStartTime = Date.now() + 4000; // +4 secondi per compensare il redirect e l'animazione
 
@@ -431,6 +433,9 @@ wss.on("connection", (ws) => {
                     console.log(`Inviato a Player1: ${p1}, currentPlayer=${p1}`);
                     console.log(`Inviato a Player2: ${p2}, currentPlayer=${p2}`);
 
+                    activeGames.set(p1, p2);
+                    activeGames.set(p2, p1);
+
                     waitingPlayer = null;
                 });
             } else {
@@ -438,9 +443,18 @@ wss.on("connection", (ws) => {
                 waitingPlayer = ws;
             }
         } else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
-            // Invia i dati SOLO al giocatore che abbiamo salvato come "opponent"
-            if (ws.opponent && ws.opponent.readyState === WebSocket.OPEN) {
-                ws.opponent.send(JSON.stringify(data));
+            // 1. Troviamo il nome dell'avversario tramite la mappa
+            const opponentName = activeGames.get(ws.username);
+
+            if (opponentName) {
+                // 2. Cerchiamo tra tutti i client connessi quello che ha quel nome
+                const opponentSocket = Array.from(wss.clients).find(client =>
+                    client.username === opponentName && client.readyState === WebSocket.OPEN
+                );
+
+                if (opponentSocket) {
+                    opponentSocket.send(JSON.stringify(data));
+                }
             }
         }
     });
@@ -459,15 +473,17 @@ wss.on("connection", (ws) => {
                 );
 
                 if (!stillConnected) {
-                    console.log(`${ws.username} si è disconnesso definitivamente`);
-                    wss.clients.forEach(client => {
-                        if (client.readyState === WebSocket.OPEN) {
-                            client.send(JSON.stringify({
+                    const opponentName = activeGames.get(ws.username);
+                    if (opponentName) {
+                        const opponentSocket = Array.from(wss.clients).find(c => c.username === opponentName);
+                        if (opponentSocket) {
+                            opponentSocket.send(JSON.stringify({
                                 type: "opponentDisconnected",
-                                message: `${ws.username || "Un giocatore"} si è disconnesso`
+                                message: `${ws.username || "L'avversario"} si è disconnesso`
                             }));
                         }
-                    });
+                    }
+                    activeGames.delete(ws.username); // Pulizia
                 } else {
                     console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }

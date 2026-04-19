@@ -74,6 +74,7 @@ app.use(
             path: "./sessions",
             logFn: function () {}, // silenzioso
             retries: 1,
+            ttl: 7200
         }),
         secret: "ppm_super_secret_key",
         resave: false,
@@ -361,9 +362,8 @@ wss.on("connection", (ws) => {
                 // Genera il timestamp di inizio e la board mischiata lato server
                 const serverStartTime = Date.now() + 4000; // +4 secondi per compensare il redirect e l'animazione
 
-                // Generiamo un array da 1 a 9 e lo mischiamo
-                let initialBoard = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-                initialBoard.sort(() => Math.random() - 0.5);
+                let boardP1 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+                let boardP2 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
 
                 console.log(`Match trovato: ${p1} vs ${p2}`);
 
@@ -415,7 +415,7 @@ wss.on("connection", (ws) => {
                         imgCName: img1Name, imgOName: img2Name,
                         imgCDesc: img1Desc, imgODesc: img2Desc,
                         startTime: serverStartTime,
-                        board: initialBoard
+                        board: boardP1
                     };
 
                     const matchDataP2 = {
@@ -424,7 +424,7 @@ wss.on("connection", (ws) => {
                         imgCName: img2Name, imgOName: img1Name,
                         imgCDesc: img2Desc, imgODesc: img1Desc,
                         startTime: serverStartTime,
-                        board: initialBoard
+                        board: boardP2
                     };
 
                     ws.send(JSON.stringify(matchDataP2));

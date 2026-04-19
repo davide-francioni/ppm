@@ -483,7 +483,7 @@ function showMatchToast(message) {
 }
 
 // Connessione WebSocket
-const socket = new WebSocket(`wss://${window.location.hostname}`);
+const socket = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host);
 socket.addEventListener("open", () => {
     const username = localStorage.getItem("username");
     if (username) {

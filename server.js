@@ -487,7 +487,7 @@ wss.on("connection", (ws) => {
                 } else {
                     console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }
-            }, 10000);
+            }, 45000);
         }
     });
 });

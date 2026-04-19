@@ -615,7 +615,6 @@ function findOpponent() {
                 window.location.href = "game.html";
             }, 3000);
             // Reindirizza alla pagina di gioco
-
         }
     };
 }
@@ -638,3 +637,9 @@ function solvePuzzle() {
     console.log("Puzzle risolto!");
     checkWin();
 }
+
+setInterval(() => {
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: "ping" }));
+    }
+}, 30000);

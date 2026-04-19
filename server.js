@@ -64,18 +64,11 @@ app.use(express.static('public'));
 
 const cors = require("cors");
 const session = require("express-session");
-const FileStore = require("session-file-store")(session);
 
 app.use(cors({ origin: true, credentials: true }));
 
 app.use(
     session({
-        store: new FileStore({
-            path: "./sessions",
-            logFn: function () {}, // silenzioso
-            retries: 1,
-            ttl: 7200
-        }),
         secret: "ppm_super_secret_key",
         resave: false,
         saveUninitialized: false,
@@ -432,6 +425,9 @@ wss.on("connection", (ws) => {
                     ws.send(JSON.stringify(matchDataP2));
                     waitingPlayer.send(JSON.stringify(matchDataP1));
 
+                    ws.opponent = waitingPlayer;
+                    waitingPlayer.opponent = ws;
+
                     console.log(`Inviato a Player1: ${p1}, currentPlayer=${p1}`);
                     console.log(`Inviato a Player2: ${p2}, currentPlayer=${p2}`);
 
@@ -441,37 +437,11 @@ wss.on("connection", (ws) => {
                 console.log(`${ws.username} è in attesa di un avversario...`);
                 waitingPlayer = ws;
             }
-        }else if (data.type === "move") {
-            wss.clients.forEach(client => {
-                if (client !== ws && client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        type: "move",
-                        from: data.from,
-                        to: data.to
-                    }));
-                }
-            });
-        } else if (data.type === 'gameWon') {
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        type: "gameWon",
-                        winner: data.winner
-                    }));
-                }
-            });
-        } else if (data.type === "scoreUpdate") {
-            console.log(`Punteggio aggiornato da ${data.username}: ${data.score}`);
-            // Invia il punteggio all'altro giocatore
-            wss.clients.forEach(client => {
-                if (client !== ws && client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        type: "opponentScoreUpdate",
-                        score: data.score,
-                        username: data.username
-                    }));
-                }
-            });
+        } else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
+            // Invia i dati SOLO al giocatore che abbiamo salvato come "opponent"
+            if (ws.opponent && ws.opponent.readyState === WebSocket.OPEN) {
+                ws.opponent.send(JSON.stringify(data));
+            }
         }
     });
 

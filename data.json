@@ -35,6 +35,12 @@
       "name": "prova",
       "description": "pr\nova",
       "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/1776593933626-ico.png"
+    },
+    {
+      "id": 7,
+      "name": "Uomo vitruviano",
+      "description": "lplplp",
+      "path": "https://raw.githubusercontent.com/davide-francioni/ppm/main/public/image/1776593975366-20240603_232415.jpg"
     }
   ],
   "admins": [

@@ -415,7 +415,8 @@ wss.on("connection", (ws) => {
                         imgCName: img1Name, imgOName: img2Name,
                         imgCDesc: img1Desc, imgODesc: img2Desc,
                         startTime: serverStartTime,
-                        board: boardP1
+                        myBoard: boardP1,
+                        opponentBoard: boardP2
                     };
 
                     const matchDataP2 = {
@@ -424,7 +425,8 @@ wss.on("connection", (ws) => {
                         imgCName: img2Name, imgOName: img1Name,
                         imgCDesc: img2Desc, imgODesc: img1Desc,
                         startTime: serverStartTime,
-                        board: boardP2
+                        myBoard: boardP2,
+                        opponentBoard: boardP1
                     };
 
                     ws.send(JSON.stringify(matchDataP2));

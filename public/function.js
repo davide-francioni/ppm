@@ -97,22 +97,27 @@ function loadPuzzleData() {
         loadGameState();
     } else {
         console.log("Avvio nuova partita. Eseguo shuffle iniziale...");
-        const savedBoard = JSON.parse(localStorage.getItem("initialBoard"));
-        if (savedBoard) {
+        const myBoard = JSON.parse(localStorage.getItem("myBoard"));
+        const opponentBoard = JSON.parse(localStorage.getItem("opponentBoard"));
+
+        if (myBoard && opponentBoard) {
             let playerTiles = document.querySelectorAll(".table-player-board td");
             let opponentTiles = document.querySelectorAll(".table-opponent-board td");
 
             // Memorizziamo le posizioni originali del background per poterle riassegnare
             let originalPositions = Array.from(playerTiles).map(tile => tile.style.backgroundPosition);
 
-            savedBoard.forEach((tileNumber, index) => {
-                let originalIndex = tileNumber - 1; // tile 1 corrisponde all'indice 0 dell'immagine
-
-                // Assegna classe e pezzo di immagine corretti per il Player 1 (tile1 - tile9)
+            // 1. Assegna i pezzi alla scacchiera del Giocatore (myBoard)
+            myBoard.forEach((tileNumber, index) => {
+                let originalIndex = tileNumber - 1;
                 playerTiles[index].className = `tile${tileNumber}`;
                 playerTiles[index].style.backgroundPosition = originalPositions[originalIndex];
+            });
 
-                // Assegna classe e pezzo di immagine corretti per l'Avversario (tile10 - tile18)
+            // 2. Assegna i pezzi alla scacchiera dell'Avversario (opponentBoard)
+            opponentBoard.forEach((tileNumber, index) => {
+                let originalIndex = tileNumber - 1;
+                // Aggiungiamo +9 perché le classi dell'avversario vanno da tile10 a tile18
                 opponentTiles[index].className = `tile${tileNumber + 9}`;
                 opponentTiles[index].style.backgroundPosition = originalPositions[originalIndex];
             });
@@ -581,7 +586,8 @@ function findOpponent() {
 
         if (data.type === 'matchFound') {
             localStorage.setItem("gameStartTime", Date.now() + 3000);
-            localStorage.setItem("initialBoard", JSON.stringify(data.board));
+            localStorage.setItem("myBoard", JSON.stringify(data.myBoard));
+            localStorage.setItem("opponentBoard", JSON.stringify(data.opponentBoard));
             console.log("Giocatori assegnati:", data.currentPlayer, data.opponent);
             gameStartTimestamp = parseInt(data.startTime, 10);
             showMatchToast(`Partita trovata! Giocherai contro ${data.opponent || "sconosciuto"}`);

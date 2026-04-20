@@ -615,6 +615,7 @@ function findOpponent() {
                 if (socket.readyState === WebSocket.OPEN) {
                     socket.close();
                 }
+
                 window.location.href = "game.html";
             }, 3000);
             // Reindirizza alla pagina di gioco

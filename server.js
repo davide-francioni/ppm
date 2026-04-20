@@ -331,7 +331,7 @@ wss.on("connection", (ws) => {
         }
     }, 20 * 60 * 1000);
 
-    ws.on("message", (message) => {
+    /*ws.on("message", (message) => {
         clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);
 
@@ -351,8 +351,6 @@ wss.on("connection", (ws) => {
             if (waitingPlayer) {
                 const p1 = waitingPlayer.username;
                 const p2 = ws.username;
-
-                let activeGames = new Map();
 
                 // Genera il timestamp di inizio e la board mischiata lato server
                 const serverStartTime = Date.now() + 4000; // +4 secondi per compensare il redirect e l'animazione
@@ -458,6 +456,97 @@ wss.on("connection", (ws) => {
             }
         }
 
+    });*/
+    ws.on("message", (message) => {
+        clearTimeout(inactivityTimeout);
+        const data = JSON.parse(message);
+
+        // 1. Identificazione del nuovo socket (dopo il cambio pagina)
+        if (data.type === "identify") {
+            ws.username = data.username;
+            console.log(`[IDENTIFY] Socket agganciato all'utente: ${ws.username}`);
+            return;
+        }
+
+        // Evitiamo di intaserare i log con i ping
+        if (data.type !== "ping") {
+            console.log(`[MESSAGGIO] Da ${ws.username || 'Sconosciuto'}:`, data.type);
+        }
+
+        // 2. Creazione della partita
+        if (data.type === "findOpponent") {
+            ws.username = data.username;
+
+            if (waitingPlayer) {
+                const p1 = waitingPlayer.username;
+                const p2 = ws.username;
+
+                console.log(`[MATCHMAKING] Trovato match: ${p1} vs ${p2}`);
+
+                // SALVATAGGIO FONDAMENTALE IN MEMORIA:
+                activeGames.set(p1, p2);
+                activeGames.set(p2, p1);
+
+                const serverStartTime = Date.now() + 4000;
+                let boardP1 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+                let boardP2 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+
+                fs.readFile("data.json", "utf8", (err, jsonData) => {
+                    if (err) return console.error("Errore file JSON:", err);
+                    const images = JSON.parse(jsonData).puzzleImages;
+                    if (images.length < 2) return;
+
+                    let img1Index = Math.floor(Math.random() * images.length);
+                    let img2Index;
+                    do { img2Index = Math.floor(Math.random() * images.length); } while (img2Index === img1Index);
+
+                    const matchDataP1 = {
+                        type: "matchFound", opponent: p2, currentPlayer: p1,
+                        currentImage: images[img1Index].path, opponentImage: images[img2Index].path,
+                        imgCName: images[img1Index].name, imgOName: images[img2Index].name,
+                        imgCDesc: images[img1Index].description, imgODesc: images[img2Index].description,
+                        startTime: serverStartTime, myBoard: boardP1, opponentBoard: boardP2
+                    };
+
+                    const matchDataP2 = {
+                        type: "matchFound", opponent: p1, currentPlayer: p2,
+                        currentImage: images[img2Index].path, opponentImage: images[img1Index].path,
+                        imgCName: images[img2Index].name, imgOName: images[img1Index].name,
+                        imgCDesc: images[img2Index].description, imgODesc: images[img1Index].description,
+                        startTime: serverStartTime, myBoard: boardP2, opponentBoard: boardP1
+                    };
+
+                    ws.send(JSON.stringify(matchDataP2));
+                    waitingPlayer.send(JSON.stringify(matchDataP1));
+
+                    waitingPlayer = null;
+                });
+            } else {
+                console.log(`[WAITING] ${ws.username} in attesa...`);
+                waitingPlayer = ws;
+            }
+        }
+
+        // 3. Gestione Mosse e Sincronizzazione
+        else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
+            const opponentName = activeGames.get(ws.username);
+
+            if (!opponentName) {
+                console.log(`[ERRORE] Mosse perse! Nessun avversario in memoria per: ${ws.username}`);
+                return;
+            }
+
+            // Filtriamo tutti i socket aperti appartenenti all'avversario
+            const opponentSockets = Array.from(wss.clients).filter(client =>
+                client.username === opponentName && client.readyState === WebSocket.OPEN
+            );
+
+            if (opponentSockets.length > 0) {
+                opponentSockets.forEach(socket => socket.send(JSON.stringify(data)));
+            } else {
+                console.log(`[ATTENZIONE] Mossa trattenuta: ${opponentName} non ha socket attivi al momento.`);
+            }
+        }
     });
 
     ws.on("close", () => {

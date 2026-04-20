@@ -542,6 +542,10 @@ wss.on("connection", (ws) => {
             );
 
             if (opponentSockets.length > 0) {
+                if (data.type === "scoreUpdate") {
+                    data.type = "opponentScoreUpdate";
+                }
+
                 opponentSockets.forEach(socket => socket.send(JSON.stringify(data)));
             } else {
                 console.log(`[ATTENZIONE] Mossa trattenuta: ${opponentName} non ha socket attivi al momento.`);

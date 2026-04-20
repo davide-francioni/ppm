@@ -433,7 +433,7 @@ function checkWin() {
             type: "gameWon",
             winner: winner
         }));
-        showGameOverPopup();
+        showGameOverPopup(winner);
     }
 }
 

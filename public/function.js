@@ -612,6 +612,9 @@ function findOpponent() {
             // Nasconde il messaggio di ricerca
             searchMessage.textContent = "";
             setTimeout(() => {
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.close();
+                }
                 window.location.href = "game.html";
             }, 3000);
             // Reindirizza alla pagina di gioco

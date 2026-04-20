@@ -443,18 +443,18 @@ wss.on("connection", (ws) => {
                 waitingPlayer = ws;
             }
         } else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
-            // 1. Troviamo il nome dell'avversario tramite la mappa
             const opponentName = activeGames.get(ws.username);
 
             if (opponentName) {
-                // 2. Cerchiamo tra tutti i client connessi quello che ha quel nome
-                const opponentSocket = Array.from(wss.clients).find(client =>
+                // INVECE DI .find(), USIAMO .filter() per prendere tutti i socket validi
+                const opponentSockets = Array.from(wss.clients).filter(client =>
                     client.username === opponentName && client.readyState === WebSocket.OPEN
                 );
 
-                if (opponentSocket) {
+                // Mandiamo il messaggio a tutti i socket attivi di quell'utente
+                opponentSockets.forEach(opponentSocket => {
                     opponentSocket.send(JSON.stringify(data));
-                }
+                });
             }
         }
     });

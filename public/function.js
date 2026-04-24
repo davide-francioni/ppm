@@ -87,11 +87,11 @@ function loadPuzzleData() {
     let opponentImg = isPlayer1 ? img2 : img1;
 
     setPuzzleImages(playerImg, opponentImg);
-    startGameTimer(gameId);
 
     const isReloading = localStorage.getItem("isReloading") === "true";
     const savedState = localStorage.getItem("gameState");
 
+    // CARICAMENTO POSIZIONE TESSERE
     if (isReloading && savedState) {
         console.log("Reload rilevato! Ripristino lo stato del puzzle...");
         loadGameState();
@@ -104,41 +104,54 @@ function loadPuzzleData() {
             let playerTiles = document.querySelectorAll(".table-player-board td");
             let opponentTiles = document.querySelectorAll(".table-opponent-board td");
 
-            // Memorizziamo le posizioni originali del background per poterle riassegnare
             let originalPositions = Array.from(playerTiles).map(tile => tile.style.backgroundPosition);
 
-            // 1. Assegna i pezzi alla scacchiera del Giocatore (myBoard)
             myBoard.forEach((tileNumber, index) => {
                 let originalIndex = tileNumber - 1;
                 playerTiles[index].className = `tile${tileNumber}`;
                 playerTiles[index].style.backgroundPosition = originalPositions[originalIndex];
             });
 
-            // 2. Assegna i pezzi alla scacchiera dell'Avversario (opponentBoard)
             opponentBoard.forEach((tileNumber, index) => {
                 let originalIndex = tileNumber - 1;
-                // Aggiungiamo +9 perché le classi dell'avversario vanno da tile10 a tile18
                 opponentTiles[index].className = `tile${tileNumber + 9}`;
                 opponentTiles[index].style.backgroundPosition = originalPositions[originalIndex];
             });
         }
+    }
 
-        const startTime = parseInt(localStorage.getItem("gameStartTime"), 10);
-        gameStartTimestamp = startTime; // Lo salviamo nella variabile globale perché serve a stopGameTimer()
+    // --- NUOVO: RIPRISTINO PUNTEGGI ---
+    const savedMyScore = localStorage.getItem("myScore") || "0";
+    const savedOpponentScore = localStorage.getItem("opponentScore") || "0";
+    if (document.getElementById("player-score")) {
+        document.getElementById("player-score").textContent = `${savedMyScore}/8`;
+    }
+    if (document.getElementById("opponent-score")) {
+        document.getElementById("opponent-score").textContent = `${savedOpponentScore}/8`;
+    }
+
+    // --- NUOVO: RIPRISTINO E AVVIO TIMER (Eseguito sempre) ---
+    const startTime = parseInt(localStorage.getItem("gameStartTime"), 10);
+    if (startTime) {
+        gameStartTimestamp = startTime; // Lo salviamo nella variabile globale per calcolare la fine nel popup
+        clearInterval(timerInterval); // Pulisce timer vecchi per evitare che vadano più veloci
 
         timerInterval = setInterval(() => {
             let now = Date.now();
             let elapsed = Math.floor((now - startTime) / 1000);
 
-            if (elapsed >= 0) { // Il timer parte solo quando il tempo del server è raggiunto
+            if (elapsed >= 0) {
                 const minutes = Math.floor(elapsed / 60);
                 const seconds = elapsed % 60;
-                document.getElementById("game-timer").textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const timerElement = document.getElementById("game-timer");
+                if (timerElement) {
+                    timerElement.textContent = `Tempo: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
             }
         }, 1000);
     }
 
-    // ✅ Rimuovi ora il flag, dopo il controllo
+    // Rimuovi flag di ricaricamento
     localStorage.removeItem("isReloading");
 
     setTimeout(() => {
@@ -309,8 +322,9 @@ function swapTiles(tile1, tile2) {
 
 function updateScores() {
     const tiles = document.querySelectorAll(".table-player-board td");
-    let correct = 0;
+    let correct = 0; // Riparte sempre da zero a ogni mossa
 
+    // Riconta tutta la scacchiera da capo
     tiles.forEach((tile, index) => {
         const expected = `tile${index + 1}`;
         if (tile.classList.contains(expected) && expected !== "tile9") {
@@ -318,11 +332,12 @@ function updateScores() {
         }
     });
 
-    // Aggiorna il punteggio locale
+    // Aggiorna il testo e lo salva fisicamente nel browser (sia in salita che in discesa!)
     const scoreEl = document.getElementById("player-score");
     if (scoreEl) scoreEl.textContent = `${correct}/8`;
+    localStorage.setItem("myScore", correct);
 
-    // Invia il punteggio all'avversario
+    // Invia il punteggio attuale all'avversario
     if (socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({
             type: "scoreUpdate",
@@ -465,6 +480,8 @@ function restartGame() {
     localStorage.removeItem("gameStartTime");
     localStorage.removeItem("finalTime");
     localStorage.removeItem("currentGameId");
+    localStorage.removeItem("myScore");
+    localStorage.removeItem("opponentScore");
     window.location.href = "index.html";
 }
 
@@ -517,6 +534,7 @@ socket.onmessage = (event) => {
             if (opponentScoreEl) {
                 opponentScoreEl.textContent = `${data.score}/8`;
             }
+            localStorage.setItem("opponentScore", data.score);
         }
     }else if (data.type === "opponentDisconnected") {
         stopGameTimer();

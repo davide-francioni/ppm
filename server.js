@@ -111,6 +111,24 @@ function checkAuth(req, res, next) {
     }
 }
 
+async function getLatestDataFromGitHub() {
+    try {
+        const response = await axios.get(`${GITHUB_API}${DATA_JSON}`, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json"
+            }
+        });
+        const content = Buffer.from(response.data.content, 'base64').toString('utf-8');
+        return JSON.parse(content);
+    } catch (error) {
+        console.error("Errore nel recupero dati da GitHub, uso file locale:", error.message);
+        // Fallback: se GitHub fallisce, legge il file locale
+        const localData = fs.readFileSync(DATA_FILE_PATH, "utf8");
+        return JSON.parse(localData);
+    }
+}
+
 app.get("/admin/check-session", (req, res) => {
     if (req.session && req.session.authenticated) {
         res.sendStatus(200);
@@ -156,18 +174,14 @@ app.post('/admin/login', (req, res) => {
 });
 
 
-app.get("/opere", (req, res) => {
-    fs.readFile(DATA_FILE_PATH, "utf8", (err, data) => {
-        if (err) return res.status(500).send("Errore nel leggere il database.");
-        res.json(JSON.parse(data));
-    });
+app.get("/opere", async (req, res) => {
+    const data = await getLatestDataFromGitHub();
+    res.json(data);
 });
 
-app.get("/admin/logout", (req, res) => {
-    req.session.destroy(() => {
-        req.session.authenticated = false;
-        res.redirect("/admin/login.html");
-    });
+app.get('/puzzle-data', async (req, res) => {
+    const data = await getLatestDataFromGitHub();
+    res.json(data);
 });
 
 const saveLocalJson = (data) => {
@@ -331,132 +345,6 @@ wss.on("connection", (ws) => {
         }
     }, 20 * 60 * 1000);
 
-    /*ws.on("message", (message) => {
-        clearTimeout(inactivityTimeout);
-        const data = JSON.parse(message);
-
-        if (data.type === "identify") {
-            ws.username = data.username;
-            console.log(`WebSocket identificato come ${data.username}`);
-            return;
-        }
-
-        console.log("Messaggio ricevuto:", data);
-        console.log(`Client WebSocket connessi: ${wss.clients.size}`);
-
-        if (data.type === "findOpponent") {
-            console.log(`${data.username} sta cercando un avversario...`);
-            ws.username = data.username;
-
-            if (waitingPlayer) {
-                const p1 = waitingPlayer.username;
-                const p2 = ws.username;
-
-                // Genera il timestamp di inizio e la board mischiata lato server
-                const serverStartTime = Date.now() + 4000; // +4 secondi per compensare il redirect e l'animazione
-
-                let boardP1 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
-                let boardP2 = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
-
-                console.log(`Match trovato: ${p1} vs ${p2}`);
-
-                fs.readFile("data.json", "utf8", (err, jsonData) => {
-                    if (err) {
-                        console.error("Errore nel caricamento delle immagini:", err);
-                        return;
-                    }
-                    const images = JSON.parse(jsonData).puzzleImages;
-
-                    if (images.length < 2) {
-                        console.error("Non ci sono abbastanza immagini!");
-                        return;
-                    }
-
-                    let img1Index = Math.floor(Math.random() * images.length);
-                    let img2Index;
-                    do {
-                        img2Index = Math.floor(Math.random() * images.length);
-                    } while (img2Index === img1Index);
-
-                    let img1 = images[img1Index].path;
-                    let img2 = images[img2Index].path;
-                    let img1Name = images[img1Index].name;
-                    let img1Desc = images[img1Index].description;
-                    let img2Name = images[img2Index].name;
-                    let img2Desc = images[img2Index].description;
-
-                    const gameId = Date.now();
-                    const startTime = Date.now();
-
-                    activeGames.set(gameId, {
-                        img1,
-                        img2,
-                        player1: p1,
-                        player2: p2,
-                        startTime
-                    });
-
-                    const gameInfo = {
-                        type: "matchFound",
-                        gameId,
-                        startTime,
-                    };
-
-                    const matchDataP1 = {
-                        type: "matchFound", gameId, opponent: p2, currentPlayer: p1,
-                        currentImage:img1, opponentImage:img2,
-                        imgCName: img1Name, imgOName: img2Name,
-                        imgCDesc: img1Desc, imgODesc: img2Desc,
-                        startTime: serverStartTime,
-                        myBoard: boardP1,
-                        opponentBoard: boardP2
-                    };
-
-                    const matchDataP2 = {
-                        type: "matchFound", gameId, opponent: p1, currentPlayer: p2,
-                        currentImage:img2, opponentImage:img1,
-                        imgCName: img2Name, imgOName: img1Name,
-                        imgCDesc: img2Desc, imgODesc: img1Desc,
-                        startTime: serverStartTime,
-                        myBoard: boardP2,
-                        opponentBoard: boardP1
-                    };
-
-                    ws.send(JSON.stringify(matchDataP2));
-                    waitingPlayer.send(JSON.stringify(matchDataP1));
-
-                    ws.opponent = waitingPlayer;
-                    waitingPlayer.opponent = ws;
-
-                    console.log(`Inviato a Player1: ${p1}, currentPlayer=${p1}`);
-                    console.log(`Inviato a Player2: ${p2}, currentPlayer=${p2}`);
-
-                    activeGames.set(p1, p2);
-                    activeGames.set(p2, p1);
-
-                    waitingPlayer = null;
-                });
-            } else {
-                console.log(`${ws.username} è in attesa di un avversario...`);
-                waitingPlayer = ws;
-            }
-        } else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
-            const opponentName = activeGames.get(ws.username);
-
-            if (opponentName) {
-                // INVECE DI .find(), USIAMO .filter() per prendere tutti i socket validi
-                const opponentSockets = Array.from(wss.clients).filter(client =>
-                    client.username === opponentName && client.readyState === WebSocket.OPEN
-                );
-
-                // Mandiamo il messaggio a tutti i socket attivi di quell'utente
-                opponentSockets.forEach(opponentSocket => {
-                    opponentSocket.send(JSON.stringify(data));
-                });
-            }
-        }
-
-    });*/
     ws.on("message", (message) => {
         clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);

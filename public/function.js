@@ -118,6 +118,19 @@ function loadPuzzleData() {
                 opponentTiles[index].className = `tile${tileNumber + 9}`;
                 opponentTiles[index].style.backgroundPosition = originalPositions[originalIndex];
             });
+
+            let initialMyScore = 0;
+            myBoard.forEach((tileNumber, index) => {
+                if (tileNumber === index + 1 && tileNumber !== 9) initialMyScore++;
+            });
+
+            let initialOppScore = 0;
+            opponentBoard.forEach((tileNumber, index) => {
+                if (tileNumber === index + 1 && tileNumber !== 9) initialOppScore++;
+            });
+
+            localStorage.setItem("myScore", initialMyScore);
+            localStorage.setItem("opponentScore", initialOppScore);
         }
     }
 
@@ -154,7 +167,6 @@ function loadPuzzleData() {
 
     setTimeout(() => {
         attachTileListeners();
-        updateScores();
     }, 300);
 }
 

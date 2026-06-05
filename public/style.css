@@ -523,7 +523,7 @@ img.preview-image {
     font-size: 40px;
 }
 
-/* Media Queries for Responsive Design */
+/* Design Responsive */
 @media screen and (max-width: 1600px) {
     .game {
         transform: scale(0.9);

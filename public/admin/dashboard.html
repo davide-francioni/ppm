@@ -10,7 +10,6 @@
     fetch('/admin/check-session')
             .then(res => {
               if (!res.ok) {
-                // Se non è autenticato, reindirizza
                 window.location.href = "/admin/login.html";
               }else{
                 document.getElementById("body").style.display = "block";

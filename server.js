@@ -3,6 +3,7 @@ const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
 const fs = require('fs');
+const sharp = require('sharp');
 if (!fs.existsSync("./sessions")) {
     fs.mkdirSync("./sessions");
 }
@@ -123,7 +124,6 @@ async function getLatestDataFromGitHub() {
         return JSON.parse(content);
     } catch (error) {
         console.error("Errore nel recupero dati da GitHub, uso file locale:", error.message);
-        // Fallback: se GitHub fallisce, legge il file locale
         const localData = fs.readFileSync(DATA_FILE_PATH, "utf8");
         return JSON.parse(localData);
     }
@@ -163,7 +163,7 @@ app.post('/admin/login', (req, res) => {
                 req.session.username = username;
                 return res.sendStatus(200);
             } else {
-                return res.sendStatus(401); // credenziali errate
+                return res.sendStatus(401);
             }
 
         } catch (parseError) {
@@ -196,7 +196,19 @@ app.post('/admin/upload', upload.single('image'), async (req, res) => {
 
         if (!file) return res.status(400).send("Nessun file caricato");
 
-        const base64Image = file.buffer.toString('base64');
+        const imageBuffer = file.buffer;
+        const metadata = await sharp(imageBuffer).metadata();
+        const size = Math.min(metadata.width, metadata.height);
+
+        const extractOptions = {
+            left: Math.floor((metadata.width - size) / 2),
+            top: Math.floor((metadata.height - size) / 2),
+            width: size,
+            height: size
+        };
+
+        const croppedBuffer = await sharp(imageBuffer).extract(extractOptions).toBuffer();
+        const base64Image = croppedBuffer.toString('base64');
         const timestamp = Date.now();
         const safeFileName = `${timestamp}-${file.originalname.replace(/\s+/g, '_')}`;
         const githubImagePath = `${IMAGE_FOLDER}${safeFileName}`;
@@ -349,19 +361,16 @@ wss.on("connection", (ws) => {
         clearTimeout(inactivityTimeout);
         const data = JSON.parse(message);
 
-        // 1. Identificazione del nuovo socket (dopo il cambio pagina)
         if (data.type === "identify") {
             ws.username = data.username;
             console.log(`[IDENTIFY] Socket agganciato all'utente: ${ws.username}`);
             return;
         }
-
-        // Evitiamo di intaserare i log con i ping
         if (data.type !== "ping") {
             console.log(`[MESSAGGIO] Da ${ws.username || 'Sconosciuto'}:`, data.type);
         }
 
-        // 2. Creazione della partita
+        //Creazione della partita
         if (data.type === "findOpponent") {
             ws.username = data.username;
 
@@ -371,7 +380,6 @@ wss.on("connection", (ws) => {
 
                 console.log(`[MATCHMAKING] Trovato match: ${p1} vs ${p2}`);
 
-                // SALVATAGGIO FONDAMENTALE IN MEMORIA:
                 activeGames.set(p1, p2);
                 activeGames.set(p2, p1);
 
@@ -415,7 +423,6 @@ wss.on("connection", (ws) => {
             }
         }
 
-        // 3. Gestione Mosse e Sincronizzazione
         else if (data.type === "move" || data.type === "gameWon" || data.type === "scoreUpdate") {
             const opponentName = activeGames.get(ws.username);
 
@@ -423,8 +430,6 @@ wss.on("connection", (ws) => {
                 console.log(`[ERRORE] Mosse perse! Nessun avversario in memoria per: ${ws.username}`);
                 return;
             }
-
-            // Filtriamo tutti i socket aperti appartenenti all'avversario
             const opponentSockets = Array.from(wss.clients).filter(client =>
                 client.username === opponentName && client.readyState === WebSocket.OPEN
             );
@@ -448,7 +453,6 @@ wss.on("connection", (ws) => {
         } else {
             console.log(`In attesa di vedere se ${ws.username} si riconnette...`);
 
-            // Aspetta 3 secondi prima di notificare disconnessione definitiva
             setTimeout(() => {
                 const stillConnected = Array.from(wss.clients).some(client =>
                     client.username === ws.username && client.readyState === WebSocket.OPEN
@@ -465,7 +469,7 @@ wss.on("connection", (ws) => {
                             }));
                         }
                     }
-                    activeGames.delete(ws.username); // Pulizia
+                    activeGames.delete(ws.username);
                 } else {
                     console.log(`${ws.username} si è ricollegato, nessuna notifica inviata`);
                 }

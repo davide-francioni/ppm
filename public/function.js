@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const username = usernameInput.value.trim();
 
                 if (username !== "") {
-                    findOpponent(); // ✅ Simula click su "Cerca Avversario"
+                    findOpponent();
                 } else {
                     alert("Inserisci un nome utente!");
                 }
@@ -91,7 +91,7 @@ function loadPuzzleData() {
     const isReloading = localStorage.getItem("isReloading") === "true";
     const savedState = localStorage.getItem("gameState");
 
-    // CARICAMENTO POSIZIONE TESSERE
+    // Caricamento posizione tessere
     if (isReloading && savedState) {
         console.log("Reload rilevato! Ripristino lo stato del puzzle...");
         loadGameState();
@@ -120,7 +120,6 @@ function loadPuzzleData() {
         }
     }
 
-    // --- NUOVO: RIPRISTINO PUNTEGGI ---
     const savedMyScore = localStorage.getItem("myScore") || "0";
     const savedOpponentScore = localStorage.getItem("opponentScore") || "0";
     if (document.getElementById("player-score")) {
@@ -130,7 +129,6 @@ function loadPuzzleData() {
         document.getElementById("opponent-score").textContent = `${savedOpponentScore}/8`;
     }
 
-    // --- NUOVO: RIPRISTINO E AVVIO TIMER (Eseguito sempre) ---
     const startTime = parseInt(localStorage.getItem("gameStartTime"), 10);
     if (startTime) {
         gameStartTimestamp = startTime; // Lo salviamo nella variabile globale per calcolare la fine nel popup
@@ -151,7 +149,6 @@ function loadPuzzleData() {
         }, 1000);
     }
 
-    // Rimuovi flag di ricaricamento
     localStorage.removeItem("isReloading");
 
     setTimeout(() => {
@@ -332,12 +329,10 @@ function updateScores() {
         }
     });
 
-    // Aggiorna il testo e lo salva fisicamente nel browser (sia in salita che in discesa!)
     const scoreEl = document.getElementById("player-score");
     if (scoreEl) scoreEl.textContent = `${correct}/8`;
     localStorage.setItem("myScore", correct);
 
-    // Invia il punteggio attuale all'avversario
     if (socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({
             type: "scoreUpdate",
@@ -556,8 +551,6 @@ socket.onmessage = (event) => {
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Funzione collegata correttamente!");
-
-    // Controlla se il bottone esiste prima di collegare l'evento
     const newGameButton = document.querySelector(".new_game");
     if (newGameButton) {
         newGameButton.addEventListener("click", findOpponent);
@@ -567,7 +560,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// 🔹 Funzione per cercare un avversario e avviare la partita
+//Funzione per cercare un avversario e avviare la partita
 function findOpponent() {
     console.log("findOpponent() è stata chiamata!");
 
@@ -579,7 +572,6 @@ function findOpponent() {
 
     console.log(`Invio richiesta al server con username: ${username}`);
 
-    // Mostra il messaggio "Ricerca in corso..."
     const searchMessage = document.getElementById('search-message');
     if (!searchMessage) {
         console.error("Errore: 'search-message' non trovato nel DOM");
@@ -594,15 +586,18 @@ function findOpponent() {
         return;
     }
 
-    // Invia richiesta al server per trovare un avversario
     socket.send(JSON.stringify({ type: 'findOpponent', username }));
 
-    // Riceve la risposta dal server
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         console.log("Risposta ricevuta dal server:", data);
 
         if (data.type === 'matchFound') {
+            localStorage.removeItem("gameState");
+            localStorage.removeItem("myScore");
+            localStorage.removeItem("opponentScore");
+            localStorage.removeItem("isReloading");
+
             localStorage.setItem("gameStartTime", Date.now() + 3000);
             localStorage.setItem("myBoard", JSON.stringify(data.myBoard));
             localStorage.setItem("opponentBoard", JSON.stringify(data.opponentBoard));
@@ -627,7 +622,6 @@ function findOpponent() {
                 console.error("Errore: Il giocatore corrente non è tra i partecipanti!");
             }
 
-            // Nasconde il messaggio di ricerca
             searchMessage.textContent = "";
             setTimeout(() => {
                 if (socket.readyState === WebSocket.OPEN) {
@@ -636,28 +630,31 @@ function findOpponent() {
 
                 window.location.href = "game.html";
             }, 3000);
-            // Reindirizza alla pagina di gioco
         }
     };
 }
 
-function solvePuzzle() {
-    const solveButton = document.getElementById("solve-button");
+function surrenderGame() {
+    const surrenderButton = document.getElementById("surrender-button");
+    if (surrenderButton && surrenderButton.disabled) return;
+    if (surrenderButton) surrenderButton.disabled = true;
 
-    // Disabilita il pulsante per evitare chiamate multiple
-    if (solveButton.disabled) return;
-    solveButton.disabled = true;
+    console.log("Mi arrendo... vittoria all'avversario.");
 
-    console.log("Risoluzione automatica del puzzle...");
+    stopGameTimer();
 
-    let tiles = document.querySelectorAll(".table-player-board td");
+    let opponentUsername = localStorage.getItem("player1") === localStorage.getItem("username")
+        ? localStorage.getItem("player2")
+        : localStorage.getItem("player1");
 
-    tiles.forEach((tile, index) => {
-        tile.className = `tile${index + 1}`;
-    });
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+            type: "gameWon",
+            winner: opponentUsername
+        }));
+    }
 
-    console.log("Puzzle risolto!");
-    checkWin();
+    showGameOverPopup(opponentUsername);
 }
 
 setInterval(() => {

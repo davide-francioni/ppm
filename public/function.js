@@ -1,5 +1,6 @@
 let gameStartTimestamp = null;
 let timerInterval;
+let isGameOver = false;
 
 window.addEventListener("beforeunload", (e) => {
     localStorage.setItem("isReloading", "true");
@@ -153,6 +154,7 @@ function loadPuzzleData() {
 
     setTimeout(() => {
         attachTileListeners();
+        updateScores();
     }, 300);
 }
 
@@ -507,6 +509,8 @@ socket.addEventListener("open", () => {
 });
 
 socket.onmessage = (event) => {
+    if (isGameOver) return;
+
     const data = JSON.parse(event.data);
 
     if (data.type === "move") {
@@ -516,6 +520,7 @@ socket.onmessage = (event) => {
         swapTiles(cellOppF, cellOppT);
     } else if (data.type === "gameWon") {
         console.log(`Game Over! Winner: ${data.winner}`);
+        isGameOver = true;
         stopGameTimer();
         showGameOverPopup(data.winner);
     }
@@ -532,6 +537,7 @@ socket.onmessage = (event) => {
             localStorage.setItem("opponentScore", data.score);
         }
     }else if (data.type === "opponentDisconnected") {
+        isGameOver = true;
         stopGameTimer();
 
         const overlay = document.getElementById("overlay");
